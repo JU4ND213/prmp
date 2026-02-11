@@ -1,34 +1,19 @@
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
+import mapboxgl from "mapbox-gl";
 
-export function createMap(container) {
-  const map = new maplibregl.Map({
+mapboxgl.accessToken = "TU_TOKEN_MAPBOX";
+
+export function initMap(container) {
+  return new mapboxgl.Map({
     container,
-    center: [-78.4547, -0.0023], // centro inicial
-    zoom: 16,
-    pitch: 45,
-    style: {
-      version: 8,
-      sources: {
-        osm: {
-          type: "raster",
-          tiles: [
-            "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          ],
-          tileSize: 256,
-        },
-      },
-      layers: [
-        {
-          id: "osm",
-          type: "raster",
-          source: "osm",
-        },
-      ],
-    },
+    style: "mapbox://styles/mapbox/streets-v12",
+    center: [-78.45572, -0.00202],
+    zoom: 15,
   });
+}
 
-  map.addControl(new maplibregl.NavigationControl(), "top-right");
-
-  return map;
+export function addMarker(map, lng, lat, label) {
+  new mapboxgl.Marker()
+    .setLngLat([lng, lat])
+    .setPopup(new mapboxgl.Popup().setText(label))
+    .addTo(map);
 }
