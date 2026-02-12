@@ -1,21 +1,31 @@
 import L from "leaflet";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-let DefaultIcon = L.icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+/* ---------------- ICONOS ---------------- */
+
+const DefaultIcon = L.icon({
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
   shadowUrl: markerShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  shadowSize: [41, 41],
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
+/* ---------------- DATOS ---------------- */
 
-// --- Datos y circuitos  ---
 export const DESTINOS = [
-  { id: 7, nombre: "Punto 7 Monumento", lat: -0.0020218, lng: -78.4557291 },
+  {
+  id: 7,
+  nombre: "Punto 7 Monumento",
+  imagen: "/images/Mitad_del_Mundo_01.jpg", 
+  lat: -0.0020218,
+  lng: -78.4557291
+},
+
   { id: 1, nombre: "Punto 1 Viviendas", lat: -0.0026339, lng: -78.4536447 },
   { id: 2, nombre: "Punto 2 Museo Fiestas", lat: -0.00254709, lng: -78.45416508 },
   { id: 3, nombre: "Punto 3 Tiangues", lat: -0.002408226, lng: -78.45456037 },
@@ -32,7 +42,8 @@ export const DESTINOS = [
   { id: 15, nombre: "Punto 15 Av. Geodésicos", lat: -0.0031959, lng: -78.45422637 },
 ];
 
-// Clase Circuito 
+/* ---------------- CIRCUITOS ---------------- */
+
 export class Circuito {
   constructor(ids, color) {
     this.ids = ids;
@@ -49,31 +60,54 @@ export const CIRCUITOS_OBJ = {
   KILLA: new Circuito([15, 14, 13, 12, 11, 10, 7], "#f39c12"),
 };
 
-// --- Función principal  ---
+/* ---------------- MAPA ---------------- */
+
 export function startMap(container) {
   if (!container) return;
 
-  // 1. Inicializar mapa 
   const map = L.map(container).setView([-0.0025133, -78.4549464], 16);
 
   L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { attribution: "Tiles © Esri - Ciudad Mitad Del Mundo" }
+    { attribution: "Ciudad Mitad Del Mundo" }
   ).addTo(map);
 
-  // 2. Marcadores base 
+  /* ---- MARCADORES BASE ---- */
+  const baseLayer = L.layerGroup().addTo(map);
   const marcadores = {};
-  DESTINOS.forEach(d => {
-    marcadores[d.id] = L.marker([d.lat, d.lng], { icon: DefaultIcon })
-      .addTo(map)
-      .bindPopup(d.nombre);
-  });
 
-  // 3. Usuario y GPS 
+  DESTINOS.forEach(d => {
+  const popupHTML = `
+    <div style="text-align:center; max-width:180px">
+      <h4 style="margin:4px 0">${d.nombre}</h4>
+
+      ${d.imagen ? `
+        <a href="${d.link}" target="_blank" rel="noopener noreferrer">
+          <img 
+            src="${d.imagen}" 
+            alt="${d.nombre}"
+            style="width:100%; border-radius:8px; margin-top:6px"
+          />
+        </a>
+      ` : ""}
+    </div>
+  `;
+
+  const marker = L.marker([d.lat, d.lng]).bindPopup(popupHTML);
+  marcadores[d.id] = marker;
+  baseLayer.addLayer(marker);
+});
+
+
+  function toggleMarcadoresBase(mostrar) {
+    mostrar ? baseLayer.addTo(map) : map.removeLayer(baseLayer);
+  }
+
+  /* ---- GPS ---- */
   const userMarker = L.circleMarker([0, 0], {
     radius: 10,
     color: "white",
-    fillColor: "#000000",
+    fillColor: "#000",
     fillOpacity: 1,
   }).addTo(map);
 
@@ -86,62 +120,51 @@ export function startMap(container) {
     );
   }
 
-  // 4. Lógica de Circuitos 
+  /* ---- CIRCUITOS ---- */
   let lineaCircuito = null;
 
   function dibujarCircuito(circuito) {
     if (lineaCircuito) map.removeLayer(lineaCircuito);
 
-    const puntos = circuito.getPuntos(DESTINOS).map(p => [p.lat, p.lng]);
-    lineaCircuito = L.polyline(puntos, { color: circuito.color, weight: 5 }).addTo(map);
-    map.fitBounds(lineaCircuito.getBounds(), { padding: [50, 50] });
+    const puntos = circuito
+      .getPuntos(DESTINOS)
+      .map(p => [p.lat, p.lng]);
 
-    // Cambiar colores de marcadores 
-    DESTINOS.forEach(d => {
-      if (circuito.ids.includes(d.id)) {
-        marcadores[d.id].setIcon(L.icon({
-          iconUrl: markerIcon,
-          shadowUrl: markerShadow,
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          className: "marker-active", // Asegúrate de tener CSS para esto o usa filter
-        }));
-      } else {
-        marcadores[d.id].setIcon(DefaultIcon);
-      }
-    });
+    lineaCircuito = L.polyline(puntos, {
+      color: circuito.color,
+      weight: 5,
+    }).addTo(map);
+
+    map.fitBounds(lineaCircuito.getBounds(), { padding: [50, 50] });
   }
 
-  // ---------------------------------------------------------
-  // ✅ NUEVO: Lógica para Puntos de Categoría (Baños, etc.)
-  // Usamos un LayerGroup para poder borrar todos los puntos de golpe fácilmente
+  /* ---- CATEGORÍAS ---- */
   const categoryLayer = L.layerGroup().addTo(map);
 
   function dibujarPuntos(listaPuntos) {
-    categoryLayer.clearLayers(); // Borra los anteriores
+    categoryLayer.clearLayers();
 
-    listaPuntos.forEach(punto => {
-      L.circleMarker([punto.lat, punto.lng], {
+    listaPuntos.forEach(p => {
+      L.circleMarker([p.lat, p.lng], {
         radius: 8,
-        fillColor: punto.color,
+        fillColor: p.color,
         color: "#fff",
         weight: 2,
-        opacity: 1,
-        fillOpacity: 0.9
+        fillOpacity: 0.9,
       })
-      .bindPopup(`<b>${punto.name}</b>`)
-      .addTo(categoryLayer);
+        .bindPopup(`<b>${p.name}</b>`)
+        .addTo(categoryLayer);
     });
   }
-  // ---------------------------------------------------------
 
+  /* ---- CLEANUP ---- */
   return {
-    map,
     dibujarCircuito,
-    dibujarPuntos, // ✅ Exportamos la nueva función
+    dibujarPuntos,
+    toggleMarcadoresBase,
     cleanup: () => {
       map.remove();
-      if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+      if (watchId) navigator.geolocation.clearWatch(watchId);
     },
   };
 }

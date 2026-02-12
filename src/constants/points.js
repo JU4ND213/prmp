@@ -1,8 +1,8 @@
 // src/constants/points.js
 
 export const POINTS_BY_COLOR = {
-  // 🟥 Servicios médicos
-  servicios_medicos: [
+  // 🟥 Servicios 
+  servicios: [
     { name: "Centro Médico", lat: -0.0024711, lng: -78.4541513, color: "#ff5252" },
     { name: "Lactario", lat: -0.0024388, lng: -78.4541916, color: "#ffd600" },
     { name: "Cajero banco Guayaquil", lat: -0.0024103, lng: -78.4545376, color: "#01579b" },
@@ -93,7 +93,7 @@ export const POINTS_BY_COLOR = {
 
 // MEJORA: Objeto de configuración para Títulos y Colores de botones
 export const CATEGORY_DETAILS = {
-  servicios_medicos: { label: "Servicios Médicos", color: "#ff5252" },
+  servicios: { label: "Servicios", color: "#ff5252" },
   banos: { label: "Baños", color: "#ffea00" },
   atracciones_museos: { label: "Atracciones", color: "#0288d1" },
   restaurantes: { label: "Comida", color: "#f9a825" },

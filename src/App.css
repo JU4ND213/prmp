@@ -8,15 +8,12 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-
-  /* 👇 Esto permite que los botones y selects reciban clics */
   pointer-events: auto;
 }
 
 /* --- ESTILO ESCRITORIO (PC) --- */
 @media (min-width: 769px) {
-  .toggle-btn { display: none; } /* Ocultar botón en PC */
-  
+  .toggle-btn { display: none; }
   .controls-panel {
     top: 20px;
     left: 20px;
@@ -28,76 +25,59 @@
   }
 }
 
-/* --- ESTILO MÓVIL (Bottom Sheet / Panel Inferior) --- */
+/* --- ESTILO MÓVIL --- */
 @media (max-width: 768px) {
   .controls-panel {
-    top: auto;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: auto;
     max-height: 60vh;
     border-radius: 20px 20px 0 0;
-    padding: 20px 20px 30px 20px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    padding: 20px 20px 30px;
     transform: translateY(120%);
-    pointer-events: auto; 
   }
-
   .controls-panel.open { transform: translateY(0); }
   .controls-panel.closed { transform: translateY(120%); }
 }
 
 /* ================= ELEMENTOS INTERNOS ================= */
-.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .panel-header h3 { margin: 0; font-size: 1.2rem; color: #2c3e50; }
+.divider { height: 1px; background: #ffffff; margin: 10px 0; }
+.circuits-grid { display: flex; gap: 8px; overflow-x: auto; }
 
-.status-indicator { font-size: 0.75rem; padding: 4px 8px; border-radius: 12px; background: #eee; color: #777; }
-.status-indicator.active { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-
-.select-box { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; background: #f8f9fa; font-size: 1rem; outline: none; pointer-events: auto; }
-
-.action-grid { display: flex; gap: 10px; margin-top: 5px; pointer-events: auto; }
-
-.btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  pointer-events: auto; /* 👈 importante */
-}
-
-.btn:active { transform: scale(0.98); }
-
-.btn-primary { background: #3498db; color: white; }
-.btn-secondary { background: #ecf0f1; color: #2c3e50; }
-
-.divider { height: 1px; background: #eee; margin: 10px 0; }
-.circuits-grid { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; pointer-events: auto; }
-
+/* ================= BOTONES CHIP (BASE) ================= */
 .chip {
   padding: 8px 16px;
   border: none;
   border-radius: 50px;
-  color: white;
   font-size: 0.85rem;
   white-space: nowrap;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  pointer-events: auto; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #000000; /* gris base */
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.pacha { background: linear-gradient(135deg, #2b6cff, #1a4dbf); }
-.inti { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-.killa { background: linear-gradient(135deg, #f39c12, #d35400); }
+.chip:hover {
+  opacity: 0.85;
+}
 
-/* Marker GPS */
-.marker-gps { animation: pulse 2s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); } }
+/* ================= COLORES DE RUTAS  ================= */
+.chip.pacha {
+  background: linear-gradient(135deg, #2b6cff, #1a4dbf);
+}
 
-/* Botón flotante */
+.chip.inti {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.chip.killa {
+  background: linear-gradient(135deg, #f39c12, #d35400);
+}
+
+/* ================= BOTÓN FLOTANTE ================= */
 .toggle-btn {
   position: absolute;
   bottom: 20px;
@@ -110,143 +90,102 @@
   border-radius: 50px;
   font-weight: bold;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  pointer-events: auto; /* 👈 importante */
 }
 
-/* Cambio de estilo cuando el panel se abre */
 .controls-panel.open ~ .toggle-btn {
   background-color: #e74c3c;
   bottom: 62vh;
 }
 
-/* ============================================================
-   NUEVOS ESTILOS: FILTROS DE CATEGORÍAS (Web & Hybrid App)
-   ============================================================ */
-
-.categories-container {
-  position: absolute;
-  z-index: 1000; /* Igual que tu panel, flotando sobre el mapa */
-  pointer-events: none; /* ¡Vital! Permite tocar el mapa a través de los huecos */
-  
-  /* --- MÓVIL (Por defecto) --- */
-  /* Barra horizontal en la parte superior */
-  top: 10px;     /* Un poco separado del borde superior */
-  left: 0;
-  width: 100%;
-  padding: 5px 0;
-}
-
-.categories-scroll {
-  display: flex;
-  gap: 10px;       /* Espacio entre botones */
-  padding: 0 15px; /* Margen lateral para que no se pegue a los bordes */
-  
-  /* Comportamiento móvil: Scroll Horizontal */
-  flex-direction: row;
-  overflow-x: auto; 
-  pointer-events: auto; /* Reactivamos el touch SOLO en los botones */
-  
-  /* Ocultar barra de scroll (Estética App Nativa) */
-  scrollbar-width: none;  /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
-}
-
-/* Ocultar barra scroll en Chrome/Safari */
-.categories-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-/* --- DISEÑO DEL BOTÓN (CHIP) --- */
+/* ================= FILTROS DE CATEGORÍAS ================= */
 .category-chip {
-  flex: 0 0 auto; /* Evita que el botón se aplaste si hay muchos */
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  
-  /* Tamaño táctil amigable */
   padding: 8px 16px;
-  border-radius: 50px; /* Bordes totalmente redondos */
-  
-  /* Estilo visual */
-  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50px;
+  background: rgba(255,255,255,0.95);
   border: 1px solid #ddd;
-  color: #333;
-  font-size: 0.9rem;
   font-weight: 600;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-  
   cursor: pointer;
   transition: all 0.2s ease;
-  user-select: none; /* Evita seleccionar texto al hacer tap */
-  -webkit-tap-highlight-color: transparent; /* Quita flash azul en Android */
 }
 
-/* Estado Activo (Seleccionado) */
 .category-chip.active {
-  background-color: var(--chip-color); /* Color dinámico (JS) */
+  background-color: var(--chip-color);
   border-color: var(--chip-color);
   color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.ruta-pacha,
+.ruta-inti,
+.ruta-killa {
+  width: 100%;
+  padding: 12px 18px;
+
+  border: none;
+  border-radius: 999px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ruta-pacha,
+.ruta-inti,
+.ruta-killa {
+  width: 100%;
+  padding: 12px 18px;
+
+  border: none;
+  border-radius: 999px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ruta-pacha:hover,
+.ruta-inti:hover,
+.ruta-killa:hover {
   transform: translateY(-1px);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Estado presionado (Feedback táctil) */
-.category-chip:active {
-  transform: scale(0.96);
+.ruta-pacha:active,
+.ruta-inti:active,
+.ruta-killa:active {
+  transform: scale(0.97);
 }
 
-/* El puntito de color decorativo */
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,0,0,0.1);
-  flex-shrink: 0;
+/* ===== COLORES POR CIRCUITO ===== */
+.ruta-pacha {
+  background: linear-gradient(180deg, #2b6cff, #1a4dbf);
+  color: #ffffff;
 }
 
-/* ============================================================
-   AJUSTES PARA ESCRITORIO (PC / PANTALLA GRANDE)
-   ============================================================ */
-@media (min-width: 769px) {
-  .categories-container {
-    /* En PC, movemos los filtros a la DERECHA para no tapar 
-       tu panel de control que está a la izquierda */
-    top: 20px;
-    right: 20px; 
-    left: auto;   /* Anulamos el left:0 del móvil */
-    width: auto;  /* Anulamos el width:100% del móvil */
-    max-width: 200px; /* Ancho máximo de la columna */
-    bottom: 20px; /* Para que no crezca infinito hacia abajo */
-    height: auto;
-    overflow: hidden; /* Contenemos el scroll vertical */
-  }
-  
-  .categories-scroll {
-    /* Convertimos la fila en columna vertical */
-    flex-direction: column; 
-    align-items: flex-end; /* Alineamos a la derecha (opcional) */
-    
-    overflow-x: hidden;
-    overflow-y: auto; /* Scroll vertical si hay muchas categorías */
-    max-height: 80vh;
-    padding: 5px; /* Espacio para la sombra */
-  }
+.ruta-inti {
+  background: linear-gradient(180deg, #2ecc71, #27ae60);
+  color: #ffffff;
+}
 
-  .category-chip {
-    width: 100%; /* Que ocupen todo el ancho de la columna */
-    justify-content: flex-start; /* Texto alineado a la izquierda */
-  }
-  
-  /* Pequeño ajuste visual en PC: Scrollbar fina visible */
-  .categories-scroll::-webkit-scrollbar {
-    display: block;
-    width: 6px;
-  }
-  .categories-scroll::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 3px;
-  }
+.ruta-killa {
+  background: linear-gradient(180deg, #f39c12, #d35400);
+  color: #ffffff;
 }
