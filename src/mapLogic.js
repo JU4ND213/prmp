@@ -1,19 +1,19 @@
 import L from "leaflet";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-// --- Icono base (TU CÓDIGO ORIGINAL) ---
 let DefaultIcon = L.icon({
-  iconUrl: markerIcon,
+  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
   shadowUrl: markerShadow,
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
+
 L.Marker.prototype.options.icon = DefaultIcon;
 
-// --- Datos y circuitos (TU CÓDIGO ORIGINAL) ---
+
+// --- Datos y circuitos  ---
 export const DESTINOS = [
   { id: 7, nombre: "Punto 7 Monumento", lat: -0.0020218, lng: -78.4557291 },
   { id: 1, nombre: "Punto 1 Viviendas", lat: -0.0026339, lng: -78.4536447 },
@@ -32,7 +32,7 @@ export const DESTINOS = [
   { id: 15, nombre: "Punto 15 Av. Geodésicos", lat: -0.0031959, lng: -78.45422637 },
 ];
 
-// Clase Circuito (TU CÓDIGO ORIGINAL)
+// Clase Circuito 
 export class Circuito {
   constructor(ids, color) {
     this.ids = ids;
@@ -49,19 +49,19 @@ export const CIRCUITOS_OBJ = {
   KILLA: new Circuito([15, 14, 13, 12, 11, 10, 7], "#f39c12"),
 };
 
-// --- Función principal (AQUÍ INTEGRAMOS) ---
+// --- Función principal  ---
 export function startMap(container) {
   if (!container) return;
 
-  // 1. Inicializar mapa (TU CÓDIGO ORIGINAL)
+  // 1. Inicializar mapa 
   const map = L.map(container).setView([-0.0025133, -78.4549464], 16);
 
   L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { attribution: "Tiles © Esri" }
+    { attribution: "Tiles © Esri - Ciudad Mitad Del Mundo" }
   ).addTo(map);
 
-  // 2. Marcadores base (TU CÓDIGO ORIGINAL)
+  // 2. Marcadores base 
   const marcadores = {};
   DESTINOS.forEach(d => {
     marcadores[d.id] = L.marker([d.lat, d.lng], { icon: DefaultIcon })
@@ -69,11 +69,11 @@ export function startMap(container) {
       .bindPopup(d.nombre);
   });
 
-  // 3. Usuario y GPS (TU CÓDIGO ORIGINAL)
+  // 3. Usuario y GPS 
   const userMarker = L.circleMarker([0, 0], {
     radius: 10,
     color: "white",
-    fillColor: "#01004d",
+    fillColor: "#000000",
     fillOpacity: 1,
   }).addTo(map);
 
@@ -86,7 +86,7 @@ export function startMap(container) {
     );
   }
 
-  // 4. Lógica de Circuitos (TU CÓDIGO ORIGINAL)
+  // 4. Lógica de Circuitos 
   let lineaCircuito = null;
 
   function dibujarCircuito(circuito) {
@@ -96,7 +96,7 @@ export function startMap(container) {
     lineaCircuito = L.polyline(puntos, { color: circuito.color, weight: 5 }).addTo(map);
     map.fitBounds(lineaCircuito.getBounds(), { padding: [50, 50] });
 
-    // Cambiar colores de marcadores (TU LÓGICA)
+    // Cambiar colores de marcadores 
     DESTINOS.forEach(d => {
       if (circuito.ids.includes(d.id)) {
         marcadores[d.id].setIcon(L.icon({
