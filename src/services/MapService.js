@@ -1,19 +1,35 @@
-import mapboxgl from "mapbox-gl";
+import L from "leaflet";
 
-mapboxgl.accessToken = "TU_TOKEN_MAPBOX";
+// --- AGREGA ESTE BLOQUE ---
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+let DefaultIcon = L.icon({
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
+// ---------------------------
 
 export function initMap(container) {
-  return new mapboxgl.Map({
-    container,
-    style: "mapbox://styles/mapbox/streets-v12",
-    center: [-78.45572, -0.00202],
-    zoom: 15,
-  });
+  // Verificamos si ya existe mapa para evitar error, aunque lo ideal es limpiar en el useEffect
+  if (container._leaflet_id) return null; 
+
+  const map = L.map(container).setView(
+    [-0.00202, -78.45572],
+    15
+  );
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors",
+  }).addTo(map);
+
+  return map;
 }
 
-export function addMarker(map, lng, lat, label) {
-  new mapboxgl.Marker()
-    .setLngLat([lng, lat])
-    .setPopup(new mapboxgl.Popup().setText(label))
-    .addTo(map);
-}
+// ... (resto de funciones addMarker, addUserMarker, moveMarker igual que antes)

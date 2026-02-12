@@ -1,18 +1,22 @@
 export function startGps(onUpdate) {
-  if (!("geolocation" in navigator)) {
+  if (!navigator.geolocation) {
     console.warn("Geolocation no soportado");
     return;
   }
 
   return navigator.geolocation.watchPosition(
     (pos) => {
-      onUpdate([
-        pos.coords.longitude,
-        pos.coords.latitude
-      ]);
+      onUpdate({
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+      });
     },
-    (err) => console.warn("GPS error:", err),
-    { enableHighAccuracy: true }
+    (err) => console.error("GPS error:", err),
+    {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000,
+    }
   );
 }
 
