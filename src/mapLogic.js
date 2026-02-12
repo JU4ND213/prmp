@@ -18,26 +18,83 @@ L.Marker.prototype.options.icon = DefaultIcon;
 /* ---------------- DATOS ---------------- */
 
 export const DESTINOS = [
-  {
-  id: 7,
-  nombre: "Punto 7 Monumento",
-  imagen: "/images/Mitad_del_Mundo_01.jpg", 
-  lat: -0.0020218,
-  lng: -78.4557291
-},
-
-  { id: 1, nombre: "Punto 1 Viviendas", lat: -0.0026339, lng: -78.4536447 },
-  { id: 2, nombre: "Punto 2 Museo Fiestas", lat: -0.00254709, lng: -78.45416508 },
-  { id: 3, nombre: "Punto 3 Tiangues", lat: -0.002408226, lng: -78.45456037 },
-  { id: 4, nombre: "Punto 4 Capilla", lat: -0.00217993, lng: -78.45443815 },
-  { id: 5, nombre: "Punto 5 Museo Cerveza", lat: -0.00172532, lng: -78.45456769 },
-  { id: 6, nombre: "Punto 6 Museo Cacao", lat: -0.00144343, lng: -78.45508843 },
-  { id: 8, nombre: "Punto 8 Tienda Pichincha", lat: -0.00194292, lng: -78.45494728 },
-  { id: 9, nombre: "Punto 9 Exp. Huevo", lat: -0.00210687, lng: -78.45492085 },
-  { id: 10, nombre: "Punto 10 Legado Virtual", lat: -0.00270064, lng: -78.45528725 },
-  { id: 11, nombre: "Punto 11 Pab. Ecuador", lat: -0.00295948, lng: -78.45520276 },
-  { id: 12, nombre: "Punto 12 Planetario", lat: -0.00287231, lng: -78.45505122 },
-  { id: 13, nombre: "Punto 13 Pab. Francia", lat: -0.00308018, lng: -78.45503877 },
+  { id: 7,
+    nombre: "Punto 7 Monumento",
+    imagen: "/images/Mitad_del_Mundo_01.jpg", 
+    lat: -0.0020218,
+    lng: -78.4557291
+  },
+  { id: 1, 
+    nombre: "Punto 1 Viviendas", 
+    imagen:"/images/Viviendas.png",
+    lat: -0.0026339, 
+    lng: -78.4536447 
+  },
+  { id: 2, 
+    nombre: "Punto 2 Museo Fiestas", 
+    imagen: "/images/Museo Fiestas.png",
+    lat: -0.00254709, 
+    lng: -78.45416508 
+  },
+  { id: 3, 
+    nombre: "Punto 3 Tiangues", 
+    imagen: "/images/Tiangues.png",
+    lat: -0.002408226, 
+    lng: -78.45456037 
+  },
+  { id: 4, 
+    nombre: "Punto 4 Capilla", 
+    imagen: "/images/Capilla.png",
+    lat: -0.00217993, 
+    lng: -78.45443815 
+  },
+  { id: 5,
+    nombre: "Punto 5 Museo Cerveza", 
+    lat: -0.00172532, 
+    lng: -78.45456769 
+  },
+  { id: 6, 
+    nombre: "Punto 6 Museo Cacao", 
+    imagen: "/images/Museo Cacao.png",
+    lat: -0.00144343, 
+    lng: -78.45508843 
+  },
+  { id: 8, 
+    nombre: "Punto 8 Tienda Pichincha", 
+    imagen: "/images/Tienda Pichincha.png",
+    lat: -0.00194292, 
+    lng: -78.45494728 
+  },
+  { id: 9, 
+    nombre: "Punto 9 Exp. Huevo", 
+    imagen: "/images/Exp. Huevo.png",
+    lat: -0.00210687, 
+    lng: -78.45492085 
+  },
+  { id: 10, 
+    nombre: "Punto 10 Legado Virtual", 
+    imagen: "/images/Legado Virtual.png",
+    lat: -0.00270064, 
+    lng: -78.45528725 
+  },
+  { id: 11, 
+    nombre: "Punto 11 Pab. Ecuador", 
+    imagen: "/images/Pab. Ecuador.png",
+    lat: -0.00295948, 
+    lng: -78.45520276 
+  },
+  { id: 12, 
+    nombre: "Punto 12 Planetario", 
+    imagen: "/images/Planetario.png",
+    lat: -0.00287231, 
+    lng: -78.45505122 
+  },
+  { id: 13, 
+    nombre: "Punto 13 Pab. Francia", 
+    imagen: "/images/Pab. Francia.png",
+    lat: -0.00308018,
+    lng: -78.45503877 
+  },
   { id: 14, 
     nombre: "Punto 14 Pab. Guayasamín", 
     imagen: "/images/PabellónGuayasamín.png", 
