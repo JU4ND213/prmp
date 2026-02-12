@@ -2,27 +2,68 @@ import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
 import { startMap, CIRCUITOS_OBJ } from "../MapLogic";
 
+// ✅ 1. NUEVOS IMPORTS
+import CategoryButtons from "../components/CategoryButtons";
+import { POINTS_BY_COLOR } from "../constants/points";
+
 export default function MapView() {
   const mapContainerRef = useRef(null);
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const mapRef = useRef(null);
+  
+  // ✅ 2. NUEVO ESTADO PARA CATEGORÍAS
+  const [activeCategories, setActiveCategories] = useState([]);
+
+  // Referencia para guardar las funciones del mapa
+  const mapRef = useRef(null); 
 
   useEffect(() => {
-    const { dibujarCircuito, cleanup } = startMap(mapContainerRef.current);
-    mapRef.current = dibujarCircuito; // Guardamos la función para los botones
+    // Obtenemos todas las funciones (incluida la nueva dibujarPuntos)
+    const { dibujarCircuito, dibujarPuntos, cleanup } = startMap(mapContainerRef.current);
+    
+    // ✅ 3. GUARDAMOS EL OBJETO COMPLETO EN EL REF
+    mapRef.current = { dibujarCircuito, dibujarPuntos };
 
     return () => cleanup();
   }, []);
 
-  // Función que se pasa a los botones
+  // ✅ 4. ADAPTAMOS ESTA FUNCIÓN (porque mapRef.current ahora es un objeto)
   const seleccionarCircuito = circuito => {
-    if (mapRef.current) mapRef.current(circuito);
+    if (mapRef.current && mapRef.current.dibujarCircuito) {
+      mapRef.current.dibujarCircuito(circuito);
+    }
   };
+
+  // ✅ 5. NUEVA LÓGICA DE FILTRADO
+  const toggleCategory = (category) => {
+    setActiveCategories(prev => {
+      if (prev.includes(category)) return prev.filter(c => c !== category);
+      return [...prev, category];
+    });
+  };
+
+  // ✅ 6. EFECTO PARA PINTAR PUNTOS AL TOCAR BOTONES
+  useEffect(() => {
+    if (mapRef.current && mapRef.current.dibujarPuntos) {
+      // Aplanamos el array de puntos según categorías activas
+      const puntos = activeCategories.flatMap(cat => POINTS_BY_COLOR[cat] || []);
+      mapRef.current.dibujarPuntos(puntos);
+    }
+  }, [activeCategories]);
+
+  const allCategories = Object.keys(POINTS_BY_COLOR);
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100vh" }}>
       <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
 
+      {/* ✅ 7. AQUÍ AGREGAMOS LOS BOTONES FLOTANTES */}
+      <CategoryButtons 
+        categories={allCategories}
+        activeCategories={activeCategories}
+        toggleCategory={toggleCategory}
+      />
+
+      {/* --- TU INTERFAZ ORIGINAL INTACTA --- */}
       <button className="toggle-btn" onClick={() => setMenuAbierto(!menuAbierto)}>
         {menuAbierto ? "✕" : "☰ Opciones"}
       </button>

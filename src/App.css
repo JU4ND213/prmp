@@ -121,3 +121,132 @@
   background-color: #e74c3c;
   bottom: 62vh;
 }
+
+/* ============================================================
+   NUEVOS ESTILOS: FILTROS DE CATEGORÍAS (Web & Hybrid App)
+   ============================================================ */
+
+.categories-container {
+  position: absolute;
+  z-index: 1000; /* Igual que tu panel, flotando sobre el mapa */
+  pointer-events: none; /* ¡Vital! Permite tocar el mapa a través de los huecos */
+  
+  /* --- MÓVIL (Por defecto) --- */
+  /* Barra horizontal en la parte superior */
+  top: 10px;     /* Un poco separado del borde superior */
+  left: 0;
+  width: 100%;
+  padding: 5px 0;
+}
+
+.categories-scroll {
+  display: flex;
+  gap: 10px;       /* Espacio entre botones */
+  padding: 0 15px; /* Margen lateral para que no se pegue a los bordes */
+  
+  /* Comportamiento móvil: Scroll Horizontal */
+  flex-direction: row;
+  overflow-x: auto; 
+  pointer-events: auto; /* Reactivamos el touch SOLO en los botones */
+  
+  /* Ocultar barra de scroll (Estética App Nativa) */
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Ocultar barra scroll en Chrome/Safari */
+.categories-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- DISEÑO DEL BOTÓN (CHIP) --- */
+.category-chip {
+  flex: 0 0 auto; /* Evita que el botón se aplaste si hay muchos */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  /* Tamaño táctil amigable */
+  padding: 8px 16px;
+  border-radius: 50px; /* Bordes totalmente redondos */
+  
+  /* Estilo visual */
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ddd;
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none; /* Evita seleccionar texto al hacer tap */
+  -webkit-tap-highlight-color: transparent; /* Quita flash azul en Android */
+}
+
+/* Estado Activo (Seleccionado) */
+.category-chip.active {
+  background-color: var(--chip-color); /* Color dinámico (JS) */
+  border-color: var(--chip-color);
+  color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transform: translateY(-1px);
+}
+
+/* Estado presionado (Feedback táctil) */
+.category-chip:active {
+  transform: scale(0.96);
+}
+
+/* El puntito de color decorativo */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   AJUSTES PARA ESCRITORIO (PC / PANTALLA GRANDE)
+   ============================================================ */
+@media (min-width: 769px) {
+  .categories-container {
+    /* En PC, movemos los filtros a la DERECHA para no tapar 
+       tu panel de control que está a la izquierda */
+    top: 20px;
+    right: 20px; 
+    left: auto;   /* Anulamos el left:0 del móvil */
+    width: auto;  /* Anulamos el width:100% del móvil */
+    max-width: 200px; /* Ancho máximo de la columna */
+    bottom: 20px; /* Para que no crezca infinito hacia abajo */
+    height: auto;
+    overflow: hidden; /* Contenemos el scroll vertical */
+  }
+  
+  .categories-scroll {
+    /* Convertimos la fila en columna vertical */
+    flex-direction: column; 
+    align-items: flex-end; /* Alineamos a la derecha (opcional) */
+    
+    overflow-x: hidden;
+    overflow-y: auto; /* Scroll vertical si hay muchas categorías */
+    max-height: 80vh;
+    padding: 5px; /* Espacio para la sombra */
+  }
+
+  .category-chip {
+    width: 100%; /* Que ocupen todo el ancho de la columna */
+    justify-content: flex-start; /* Texto alineado a la izquierda */
+  }
+  
+  /* Pequeño ajuste visual en PC: Scrollbar fina visible */
+  .categories-scroll::-webkit-scrollbar {
+    display: block;
+    width: 6px;
+  }
+  .categories-scroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+  }
+}
