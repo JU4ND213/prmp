@@ -1,6 +1,8 @@
 import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import "../app.css";
+
 
 // --- 1. CONFIGURACIÓN DE ICONOS (Para que no salgan rotos) ---
 let DefaultIcon = L.icon({

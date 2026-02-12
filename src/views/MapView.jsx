@@ -1,33 +1,46 @@
-import { useEffect, useRef } from "react";
-import { startMap } from "../controllers/MapController";
+import React, { useEffect, useRef, useState } from "react";
+import "../App.css";
+import { startMap, CIRCUITOS_OBJ } from "../MapLogic";
 
 export default function MapView() {
   const mapContainerRef = useRef(null);
-  // Usamos una ref para guardar la función de limpieza y evitar re-ejecuciones locas
-  const cleanupRef = useRef(null);
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const mapRef = useRef(null);
 
   useEffect(() => {
-    // Si ya hay un mapa o no hay contenedor, no hacemos nada
-    if (!mapContainerRef.current) return;
+    const { dibujarCircuito, cleanup } = startMap(mapContainerRef.current);
+    mapRef.current = dibujarCircuito; // Guardamos la función para los botones
 
-    console.log("Montando mapa...");
-    // Iniciamos y guardamos la función de limpieza que nos devuelve el controller
-    cleanupRef.current = startMap(mapContainerRef.current);
+    return () => cleanup();
+  }, []);
 
-    // Esto se ejecuta SOLO cuando el componente se desmonta (cierras la app o cambias de vista)
-    return () => {
-      if (cleanupRef.current) {
-        cleanupRef.current();
-        cleanupRef.current = null;
-      }
-    };
-  }, []); // El array vacío [] asegura que solo pase 1 vez al inicio
+  // Función que se pasa a los botones
+  const seleccionarCircuito = circuito => {
+    if (mapRef.current) mapRef.current(circuito);
+  };
 
   return (
-    <div 
-      ref={mapContainerRef} 
-      style={{ width: "100vw", height: "100vh" }} 
-      id="map-container"
-    />
+    <div style={{ position: "relative", width: "100%", height: "100vh" }}>
+      <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
+
+      <button className="toggle-btn" onClick={() => setMenuAbierto(!menuAbierto)}>
+        {menuAbierto ? "✕" : "☰ Opciones"}
+      </button>
+
+      <div className={`controls-panel ${menuAbierto ? "open" : "closed"}`}>
+        <div className="panel-header">
+          <h3>Panel de Control</h3>
+        </div>
+
+        <div className="divider"></div>
+
+        <label>Circuitos Turísticos:</label>
+        <div className="circuits-grid">
+          <button className="chip pacha" onClick={() => seleccionarCircuito(CIRCUITOS_OBJ.PACHA)}>Ruta Pacha</button>
+          <button className="chip inti" onClick={() => seleccionarCircuito(CIRCUITOS_OBJ.INTI)}>Ruta Inti</button>
+          <button className="chip killa" onClick={() => seleccionarCircuito(CIRCUITOS_OBJ.KILLA)}>Ruta Killa</button>
+        </div>
+      </div>
+    </div>
   );
 }
