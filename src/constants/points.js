@@ -13,7 +13,7 @@ export const POINTS_BY_COLOR = {
     { name: "Baño", lat: -0.002868, lng: -78.4540173, color: "#ffea00" },
     { name: "Baño", lat: -0.0025649, lng: -78.4555165, color: "#ffea00" },
     { name: "Baño", lat: -0.0018595, lng: -78.45485, color: "#ffea00" },
-    { name: "Baño", lat: -0.0015322, lng: -78.4557687, color: "#ffea00" },
+    { name: "Baño", lat: -0.0015322, lng: -78.4557687, color: "#ffea00" }, 
   ],
 
   // 🟦 Atracciones y Museos

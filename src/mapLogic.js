@@ -38,8 +38,18 @@ export const DESTINOS = [
   { id: 11, nombre: "Punto 11 Pab. Ecuador", lat: -0.00295948, lng: -78.45520276 },
   { id: 12, nombre: "Punto 12 Planetario", lat: -0.00287231, lng: -78.45505122 },
   { id: 13, nombre: "Punto 13 Pab. Francia", lat: -0.00308018, lng: -78.45503877 },
-  { id: 14, nombre: "Punto 14 Pab. Guayasamín", lat: -0.0030547, lng: -78.45482457 },
-  { id: 15, nombre: "Punto 15 Av. Geodésicos", lat: -0.0031959, lng: -78.45422637 },
+  { id: 14, 
+    nombre: "Punto 14 Pab. Guayasamín", 
+    imagen: "/images/PabellónGuayasamín.png", 
+    lat: -0.0030547, 
+    lng: -78.45482457 
+  },
+  { id: 15, 
+    nombre: "Punto 15 Av. Geodésicos", 
+    imagen: "/images/Av. Geodésicos.png",
+    lat: -0.0031959, 
+    lng: -78.45422637 
+  },
 ];
 
 /* ---------------- CIRCUITOS ---------------- */
