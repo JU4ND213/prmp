@@ -9,6 +9,7 @@
   flex-direction: column;
   gap: 12px;
   pointer-events: auto;
+  box-sizing: border-box;
 }
 
 /* --- ESTILO ESCRITORIO (PC) --- */

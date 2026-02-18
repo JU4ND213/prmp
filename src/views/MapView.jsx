@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
 
-import { startMap, CIRCUITOS_OBJ } from "../MapLogic";
+import { startMap, CIRCUITOS_OBJ } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 
 export default function MapView() {
@@ -10,8 +10,8 @@ export default function MapView() {
 
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [activeCategories, setActiveCategories] = useState([]);
-
   const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(true);
+  const [activeCircuitos, setActiveCircuitos] = useState([]);
 
   /* ===============================
      INICIALIZAR MAPA (UNA SOLA VEZ)
@@ -34,14 +34,31 @@ export default function MapView() {
   }, []);
 
   /* ===============================
-     CIRCUITOS
+     CIRCUITOS (TOGGLE)
   =============================== */
-  const seleccionarCircuito = (circuito) => {
-    mapRef.current?.dibujarCircuito(circuito);
+  const toggleCircuito = (circuitoKey) => {
+    setActiveCircuitos(prev =>
+      prev.includes(circuitoKey)
+        ? prev.filter(c => c !== circuitoKey)
+        : [...prev, circuitoKey]
+    );
   };
 
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    if (activeCircuitos.length === 0) {
+      mapRef.current.dibujarCircuito(null); // limpiar
+      return;
+    }
+
+    activeCircuitos.forEach(key => {
+      mapRef.current.dibujarCircuito(CIRCUITOS_OBJ[key]);
+    });
+  }, [activeCircuitos]);
+
   /* ===============================
-     CATEGORÍAS
+     CATEGORÍAS (TOGGLE)
   =============================== */
   const toggleCategory = (categoryKey) => {
     setActiveCategories(prev =>
@@ -123,30 +140,30 @@ export default function MapView() {
         <div className="divider"></div>
 
         {/* ===== CIRCUITOS ===== */}
-<label>Circuitos Turísticos:</label>
+        <label>Circuitos Turísticos:</label>
+        <div className="circuits-grid">
+          {[
+            { key: "PACHA", label: "Ruta Pacha", class: "ruta-pacha" },
+            { key: "INTI", label: "Ruta Inti", class: "ruta-inti" },
+            { key: "KILLA", label: "Ruta Killa", class: "ruta-killa" }
+          ].map(({ key, label, class: cls }) => {
+            const isActive = activeCircuitos.includes(key);
 
-<div className="circuits-grid">
-  <button
-    className="control-btn ruta-pacha"
-    onClick={() => seleccionarCircuito(CIRCUITOS_OBJ.PACHA)}
-  >
-    Ruta Pacha
-  </button>
-
-  <button
-    className="control-btn ruta-inti"
-    onClick={() => seleccionarCircuito(CIRCUITOS_OBJ.INTI)}
-  >
-    Ruta Inti
-  </button>
-
-  <button
-    className="control-btn ruta-killa"
-    onClick={() => seleccionarCircuito(CIRCUITOS_OBJ.KILLA)}
-  >
-    Ruta Killa
-  </button>
-      </div>
+            return (
+              <button
+                key={key}
+                className={`control-btn ${cls}`}
+                onClick={() => toggleCircuito(key)}
+                style={{
+                  opacity: isActive ? 1 : 0.6,
+                  border: isActive ? "2px solid #000" : "2px solid transparent"
+                }}
+              >
+                {label} {isActive && "✓"}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

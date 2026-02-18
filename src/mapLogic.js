@@ -188,22 +188,29 @@ export function startMap(container) {
   }
 
   /* ---- CIRCUITOS ---- */
-  let lineaCircuito = null;
+  const circuitosLayer = L.layerGroup().addTo(map);
 
-  function dibujarCircuito(circuito) {
-    if (lineaCircuito) map.removeLayer(lineaCircuito);
+function dibujarCircuito(circuito) {
+  // siempre limpiar primero
+  circuitosLayer.clearLayers();
 
-    const puntos = circuito
-      .getPuntos(DESTINOS)
-      .map(p => [p.lat, p.lng]);
+  // si React manda null → solo limpiar
+  if (!circuito) return;
 
-    lineaCircuito = L.polyline(puntos, {
-      color: circuito.color,
-      weight: 5,
-    }).addTo(map);
+  const puntos = circuito
+    .getPuntos(DESTINOS)
+    .filter(Boolean)
+    .map(p => [p.lat, p.lng]);
 
-    map.fitBounds(lineaCircuito.getBounds(), { padding: [50, 50] });
-  }
+  if (puntos.length === 0) return;
+
+  const linea = L.polyline(puntos, {
+    color: circuito.color,
+    weight: 5,
+  }).addTo(circuitosLayer);
+
+  map.fitBounds(linea.getBounds(), { padding: [50, 50] });
+}
 
   /* ---- CATEGORÍAS ---- */
   const categoryLayer = L.layerGroup().addTo(map);
