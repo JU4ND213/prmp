@@ -16,7 +16,7 @@ const DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 /* ---------------- DATOS ---------------- */
-
+ 
 export const DESTINOS = [
   { id: 7,
     nombre: "Punto 7 Monumento",
@@ -219,6 +219,7 @@ function dibujarCircuito(circuito) {
     categoryLayer.clearLayers();
 
     listaPuntos.forEach(p => {
+      console.log(p);
       L.circleMarker([p.lat, p.lng], {
         radius: 8,
         fillColor: p.color,
@@ -226,8 +227,13 @@ function dibujarCircuito(circuito) {
         weight: 2,
         fillOpacity: 0.9,
       })
-        .bindPopup(`<b>${p.name}</b>`)
-        .addTo(categoryLayer);
+        .bindPopup(`
+        <div>
+          <strong>${p.name}</strong>
+          ${p.description ? `<p>${p.description}</p>` : ""}
+        </div>
+      `)
+      .addTo(categoryLayer);
     });
   }
 
@@ -242,3 +248,4 @@ function dibujarCircuito(circuito) {
     },
   };
 }
+
