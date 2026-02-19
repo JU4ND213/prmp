@@ -123,12 +123,10 @@ export default function MapView() {
           }}
           title="Puntos base"
         >
-          {mostrarMarcadoresBase ? "📍" : "✕"}
+          {mostrarMarcadoresBase ? "📍" : "✔"}
         </button>
 
         {/* ===== NAVEGACIÓN GPS ===== */}
-        <label>Ir a un lugar:</label>
-        <div style={{ display: "flex", gap: "8px" }}>
           <select
             value={destinoId}
             onChange={(e) => setDestinoId(e.target.value)}
@@ -143,13 +141,12 @@ export default function MapView() {
           </select>
 
           <button
-            className="chip chip--pill"
+            className="chip chip--circle"
             onClick={irAlDestino}
             disabled={!destinoId}
           >
             Ir
           </button>
-        </div>
 
         <div className="divider"></div>
 
