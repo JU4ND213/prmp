@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
 
-import { startMap, CIRCUITOS_OBJ } from "../mapLogic";
+import { startMap, CIRCUITOS_OBJ, DESTINOS } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 
 export default function MapView() {
@@ -13,28 +13,32 @@ export default function MapView() {
   const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(true);
   const [activeCircuitos, setActiveCircuitos] = useState([]);
 
+  const [destinoId, setDestinoId] = useState("");
+
   /* ===============================
-     INICIALIZAR MAPA (UNA SOLA VEZ)
+     INICIALIZAR MAPA
   =============================== */
   useEffect(() => {
     const {
       dibujarCircuito,
       dibujarPuntos,
       toggleMarcadoresBase,
+      dibujarRutaDesdeGps,
       cleanup
     } = startMap(mapContainerRef.current);
 
     mapRef.current = {
       dibujarCircuito,
       dibujarPuntos,
-      toggleMarcadoresBase
+      toggleMarcadoresBase,
+      dibujarRutaDesdeGps
     };
 
     return () => cleanup();
   }, []);
 
   /* ===============================
-     CIRCUITOS (TOGGLE)
+     CIRCUITOS
   =============================== */
   const toggleCircuito = (circuitoKey) => {
     setActiveCircuitos(prev =>
@@ -48,7 +52,7 @@ export default function MapView() {
     if (!mapRef.current) return;
 
     if (activeCircuitos.length === 0) {
-      mapRef.current.dibujarCircuito(null); // limpiar
+      mapRef.current.dibujarCircuito(null);
       return;
     }
 
@@ -58,7 +62,7 @@ export default function MapView() {
   }, [activeCircuitos]);
 
   /* ===============================
-     CATEGORÍAS (TOGGLE)
+     CATEGORÍAS
   =============================== */
   const toggleCategory = (categoryKey) => {
     setActiveCategories(prev =>
@@ -77,6 +81,18 @@ export default function MapView() {
 
     mapRef.current.dibujarPuntos(puntos);
   }, [activeCategories]);
+
+  /* ===============================
+     RUTA GPS → DESTINO
+  =============================== */
+  const irAlDestino = () => {
+    if (!destinoId) return;
+
+    const destino = DESTINOS.find(d => d.id === Number(destinoId));
+    if (!destino) return;
+
+    mapRef.current?.dibujarRutaDesdeGps(destino);
+  };
 
   /* ===============================
      UI
@@ -99,16 +115,41 @@ export default function MapView() {
 
         {/* ===== PUNTOS BASE ===== */}
         <button
-  className="chip chip--circle"
-  onClick={() => {
-    const nuevoEstado = !mostrarMarcadoresBase;
-    setMostrarMarcadoresBase(nuevoEstado);
-    mapRef.current?.toggleMarcadoresBase(nuevoEstado);
-  }}
-  title="Puntos base"
->
-  {mostrarMarcadoresBase ? "📍" : "✕"}
-</button>
+          className="chip chip--circle"
+          onClick={() => {
+            const nuevoEstado = !mostrarMarcadoresBase;
+            setMostrarMarcadoresBase(nuevoEstado);
+            mapRef.current?.toggleMarcadoresBase(nuevoEstado);
+          }}
+          title="Puntos base"
+        >
+          {mostrarMarcadoresBase ? "📍" : "✕"}
+        </button>
+
+        {/* ===== NAVEGACIÓN GPS ===== */}
+        <label>Ir a un lugar:</label>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <select
+            value={destinoId}
+            onChange={(e) => setDestinoId(e.target.value)}
+            style={{ flex: 1, padding: "8px", borderRadius: "8px" }}
+          >
+            <option value="">Selecciona un lugar</option>
+            {DESTINOS.map(d => (
+              <option key={d.id} value={d.id}>
+                {d.nombre}
+              </option>
+            ))}
+          </select>
+
+          <button
+            className="chip chip--pill"
+            onClick={irAlDestino}
+            disabled={!destinoId}
+          >
+            Ir
+          </button>
+        </div>
 
         <div className="divider"></div>
 
@@ -124,14 +165,14 @@ export default function MapView() {
                 className="chip chip--pill"
                 onClick={() => toggleCategory(key)}
                 style={{
-                    backgroundColor: config.color,
-                    color: "#ffffff",
-                    border: isActive ? "2px solid #000" : "2px solid transparent",
-                    opacity: isActive ? 1 : 0.6
-                  }}
-            > 
-          {config.label} {isActive && "✓"}
-        </button>
+                  backgroundColor: config.color,
+                  color: "#fff",
+                  border: isActive ? "2px solid #000" : "2px solid transparent",
+                  opacity: isActive ? 1 : 0.6
+                }}
+              >
+                {config.label} {isActive && "✓"}
+              </button>
             );
           })}
         </div>

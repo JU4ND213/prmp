@@ -188,3 +188,33 @@
   text-align: center;
   pointer-events: none; /* opcional: evita clicks raros */
 }
+
+/* ================= RUTA GPS UI ================= */
+.route-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.route-select {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+}
+
+.go-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  background: #000;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.go-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
