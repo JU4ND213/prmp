@@ -1,6 +1,6 @@
 import L from "leaflet";
 
-/* ---------------- ICONOS ---------------- */
+/* ================= ICONO POR DEFECTO ================= */
 
 const DefaultIcon = L.divIcon({
   html: "📍",
@@ -12,7 +12,7 @@ const DefaultIcon = L.divIcon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-/* ---------------- DATOS ---------------- */
+/* ================= DATOS ================= */
 
 export const DESTINOS = [
   { id: 7, nombre: "Punto 7 Monumento", imagen: "/images/Mitad_del_Mundo_01.jpg", lat: -0.0020218, lng: -78.4557291 },
@@ -32,7 +32,7 @@ export const DESTINOS = [
   { id: 15, nombre: "Punto 15 Av. Geodésicos", imagen: "/images/Av. Geodésicos.png", lat: -0.0031959, lng: -78.45422637 }
 ];
 
-/* ---------------- CIRCUITOS ---------------- */
+/* ================= CIRCUITOS ================= */
 
 export class Circuito {
   constructor(ids, color) {
@@ -40,7 +40,7 @@ export class Circuito {
     this.color = color;
   }
   getPuntos(destinos) {
-    return this.ids.map(id => destinos.find(d => d.id === id));
+    return this.ids.map(id => destinos.find(d => d.id === id)).filter(Boolean);
   }
 }
 
@@ -50,7 +50,7 @@ export const CIRCUITOS_OBJ = {
   KILLA: new Circuito([15, 14, 13, 12, 11, 10, 7], "#f39c12")
 };
 
-/* ---------------- MAPA ---------------- */
+/* ================= MAPA ================= */
 
 export function startMap(container) {
   if (!container) return;
@@ -62,17 +62,14 @@ export function startMap(container) {
     { attribution: "Ciudad Mitad Del Mundo" }
   ).addTo(map);
 
-  /* ---- MARCADORES BASE ---- */
+  /* ---------- MARCADORES BASE ---------- */
   const baseLayer = L.layerGroup().addTo(map);
 
   DESTINOS.forEach(d => {
     const popupHTML = `
       <div style="text-align:center; max-width:180px">
-        <h4 style="margin:4px 0">${d.nombre}</h4>
-        ${d.imagen ? `
-          <img src="${d.imagen}" alt="${d.nombre}"
-            style="width:100%; border-radius:8px; margin-top:6px" />
-        ` : ""}
+        <h4>${d.nombre}</h4>
+        ${d.imagen ? `<img src="${d.imagen}" style="width:100%; border-radius:8px" />` : ""}
       </div>
     `;
     L.marker([d.lat, d.lng]).bindPopup(popupHTML).addTo(baseLayer);
@@ -82,76 +79,137 @@ export function startMap(container) {
     mostrar ? baseLayer.addTo(map) : map.removeLayer(baseLayer);
   }
 
-  /* ---- GPS ---- */
+  /* ---------- GPS ---------- */
   const userMarker = L.circleMarker([0, 0], {
     radius: 10,
-    color: "white",
+    color: "#fff",
     fillColor: "#000",
     fillOpacity: 1
   }).addTo(map);
 
+  let routeLine = null;
+  let routePoints = [];
+
+  /* ---------- DISTANCIA ---------- */
+  function distanceMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  /* ---------- RUTA INTERPOLADA ---------- */
+  function generarRutaInterpolada(origen, destino, pasos = 150) {
+    const puntos = [];
+    for (let i = 0; i <= pasos; i++) {
+      const t = i / pasos;
+      puntos.push([
+        origen.lat + (destino.lat - origen.lat) * t,
+        origen.lng + (destino.lng - origen.lng) * t
+      ]);
+    }
+    return puntos;
+  }
+
+  /* ---------- ACTUALIZAR RUTA ---------- */
+  function actualizarRutaConUsuario(lat, lng) {
+    if (!routeLine || routePoints.length === 0) return;
+
+    let closestIndex = 0;
+    let minDist = Infinity;
+
+    routePoints.forEach((p, i) => {
+      const d = distanceMeters(lat, lng, p[0], p[1]);
+      if (d < minDist) {
+        minDist = d;
+        closestIndex = i;
+      }
+    });
+
+    routePoints = routePoints.slice(closestIndex);
+    routeLine.setLatLngs(routePoints);
+  }
+
   let watchId = null;
   if ("geolocation" in navigator) {
     watchId = navigator.geolocation.watchPosition(
-      pos => userMarker.setLatLng([pos.coords.latitude, pos.coords.longitude]),
-      err => console.error("Error GPS:", err),
+      pos => {
+        const { latitude, longitude } = pos.coords;
+        userMarker.setLatLng([latitude, longitude]);
+        actualizarRutaConUsuario(latitude, longitude);
+      },
+      err => console.error("GPS error:", err),
       { enableHighAccuracy: true }
     );
   }
 
-  /* ---- RUTA DIRECTA GPS → DESTINO ---- */
-  const rutaLayer = L.layerGroup().addTo(map);
-
+  /* ---------- RUTA GPS → DESTINO ---------- */
   function dibujarRutaDesdeGps(destino) {
-    rutaLayer.clearLayers();
     if (!destino) return;
 
     const userLatLng = userMarker.getLatLng();
     if (!userLatLng) return;
 
-    const linea = L.polyline(
-      [[userLatLng.lat, userLatLng.lng], [destino.lat, destino.lng]],
-      { color: "#000", weight: 4, dashArray: "8 6" }
-    ).addTo(rutaLayer);
+    routePoints = generarRutaInterpolada(
+      userLatLng,
+      { lat: destino.lat, lng: destino.lng },
+      150
+    );
 
-    map.fitBounds(linea.getBounds(), { padding: [50, 50] });
+    if (routeLine) routeLine.remove();
+
+    routeLine = L.polyline(routePoints, {
+      color: "#000",
+      weight: 4,
+      dashArray: "8 6"
+    }).addTo(map);
+
+    map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
   }
 
-  /* ---- CIRCUITOS ---- */
+  /* ---------- CIRCUITOS ---------- */
   const circuitosLayer = L.layerGroup().addTo(map);
 
   function dibujarCircuito(circuito) {
     circuitosLayer.clearLayers();
     if (!circuito) return;
 
-    const puntos = circuito.getPuntos(DESTINOS).filter(Boolean).map(p => [p.lat, p.lng]);
-    if (!puntos.length) return;
-
+    const puntos = circuito.getPuntos(DESTINOS).map(p => [p.lat, p.lng]);
     L.polyline(puntos, { color: circuito.color, weight: 5 })
       .addTo(circuitosLayer);
 
     map.fitBounds(L.latLngBounds(puntos), { padding: [50, 50] });
   }
 
-  /* ---- CATEGORÍAS ---- */
+  /* ---------- CATEGORÍAS ---------- */
   const categoryLayer = L.layerGroup().addTo(map);
 
-  function dibujarPuntos(listaPuntos) {
-    categoryLayer.clearLayers();
-    listaPuntos.forEach(p => {
-      L.circleMarker([p.lat, p.lng], {
-        radius: 8,
-        fillColor: p.color,
-        color: "#fff",
-        weight: 2,
-        fillOpacity: 0.9
-      })
-      .bindPopup(`<strong>${p.name}</strong>`)
-      .addTo(categoryLayer);
-    });
-  }
+  function dibujarPuntos(lista) {
+  categoryLayer.clearLayers();
+  lista.forEach(p => {
+    L.circleMarker([p.lat, p.lng], {
+      radius: 8,
+      fillColor: p.color,
+      color: "#fff",
+      weight: 2,
+      fillOpacity: 0.9
+    })
+    .bindPopup(`
+      <div style="max-width:200px">
+        <strong>${p.name}</strong><br/>
+        <small>${p.description ?? ""}</small>
+      </div>
+    `)
+    .addTo(categoryLayer);
+  });
+}
 
-  /* ---- CLEANUP ---- */
+  /* ---------- CLEANUP ---------- */
   return {
     dibujarCircuito,
     dibujarPuntos,
