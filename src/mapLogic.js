@@ -3,14 +3,12 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 /* ---------------- ICONOS ---------------- */
 
-const DefaultIcon = L.icon({
-  iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
-  shadowUrl: markerShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
+const DefaultIcon = L.divIcon({
+  html: "📍",
+  className: "emoji-marker",
+  iconSize: [24, 24],
+  iconAnchor: [12, 24],
+  popupAnchor: [0, -24]
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;

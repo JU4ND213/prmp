@@ -48,16 +48,12 @@
 
 /* ================= BOTONES CHIP (BASE) ================= */
 .chip {
-  padding: 8px 16px;
   border: none;
-  border-radius: 50px;
   font-size: 0.85rem;
-  white-space: nowrap;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  background-color: #000000; /* gris base */
-  color: rgb(255, 255, 255);
   font-weight: bold;
   cursor: pointer;
+  color: #8e7171;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
 }
 
@@ -65,7 +61,27 @@
   opacity: 0.85;
 }
 
-/* ================= COLORES DE RUTAS  ================= */
+/* ================= CHIP CIRCULAR (SOLO BOTÓN NEGRO) ================= */
+.chip--circle {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background-color: #000000;
+}
+
+/* ================= CHIP PÍLDORA (PUNTOS DE INTERÉS) ================= */
+.chip--pill {
+  padding: 8px 16px;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+
+/* ================= COLORES DE RUTAS ================= */
 .chip.pacha {
   background: linear-gradient(135deg, #2b6cff, #1a4dbf);
 }
@@ -116,47 +132,21 @@
   color: white;
 }
 
+/* ================= BOTONES DE RUTAS ================= */
 .ruta-pacha,
 .ruta-inti,
 .ruta-killa {
   width: 100%;
   padding: 12px 18px;
-
   border: none;
   border-radius: 999px;
-
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.3px;
-
   cursor: pointer;
-
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
-
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.ruta-pacha,
-.ruta-inti,
-.ruta-killa {
-  width: 100%;
-  padding: 12px 18px;
-
-  border: none;
-  border-radius: 999px;
-
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -189,4 +179,12 @@
 .ruta-killa {
   background: linear-gradient(180deg, #f39c12, #d35400);
   color: #ffffff;
+}
+
+/* ================= EMOJI MARKER (LEAFLET) ================= */
+.emoji-marker {
+  font-size: 22px;
+  line-height: 1;
+  text-align: center;
+  pointer-events: none; /* opcional: evita clicks raros */
 }

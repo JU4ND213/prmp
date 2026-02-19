@@ -99,17 +99,16 @@ export default function MapView() {
 
         {/* ===== PUNTOS BASE ===== */}
         <button
-          className="chip"
-          onClick={() => {
-            const nuevoEstado = !mostrarMarcadoresBase;
-            setMostrarMarcadoresBase(nuevoEstado);
-            mapRef.current?.toggleMarcadoresBase(nuevoEstado);
-          }}
-        >
-          {mostrarMarcadoresBase
-            ? "Ocultar puntos base"
-            : "Mostrar puntos base"}
-        </button>
+  className="chip chip--circle"
+  onClick={() => {
+    const nuevoEstado = !mostrarMarcadoresBase;
+    setMostrarMarcadoresBase(nuevoEstado);
+    mapRef.current?.toggleMarcadoresBase(nuevoEstado);
+  }}
+  title="Puntos base"
+>
+  {mostrarMarcadoresBase ? "📍" : "✕"}
+</button>
 
         <div className="divider"></div>
 
@@ -122,17 +121,17 @@ export default function MapView() {
             return (
               <button
                 key={key}
-                className="chip"
+                className="chip chip--pill"
                 onClick={() => toggleCategory(key)}
                 style={{
-                  backgroundColor: config.color,
-                  color: "#ffffff",
-                  border: isActive ? "2px solid #000" : "2px solid transparent",
-                  opacity: isActive ? 1 : 0.6
-                }}
-              >
-                {config.label} {isActive && "✓"}
-              </button>
+                    backgroundColor: config.color,
+                    color: "#ffffff",
+                    border: isActive ? "2px solid #000" : "2px solid transparent",
+                    opacity: isActive ? 1 : 0.6
+                  }}
+            > 
+          {config.label} {isActive && "✓"}
+        </button>
             );
           })}
         </div>
