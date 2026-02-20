@@ -3,48 +3,72 @@ import "../App.css";
 
 import { startMap, CIRCUITOS_OBJ, DESTINOS } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
+import { useTranslation } from "react-i18next";
 
 export default function MapView() {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
 
+  const { t, i18n } = useTranslation();
+
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [activeCategories, setActiveCategories] = useState([]);
   const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(true);
   const [activeCircuitos, setActiveCircuitos] = useState([]);
-
   const [destinoId, setDestinoId] = useState("");
+  const [idiomaMenuAbierto, setIdiomaMenuAbierto] = useState(false);
+
+  const cambiarIdioma = (lng) => {
+    i18n.changeLanguage(lng);
+    setIdiomaMenuAbierto(false);
+  };
 
   /* ===============================
      INICIALIZAR MAPA
   =============================== */
   useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    const mapApi = startMap(mapContainerRef.current, t);
+    if (!mapApi) return;
+
     const {
       dibujarCircuito,
       dibujarPuntos,
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
+      rotarMapa,
+      resetearNorte,
+      actualizarIdiomaBase,
       cleanup
-    } = startMap(mapContainerRef.current);
+    } = mapApi;
 
     mapRef.current = {
       dibujarCircuito,
       dibujarPuntos,
       toggleMarcadoresBase,
-      dibujarRutaDesdeGps
+      dibujarRutaDesdeGps,
+      rotarMapa,
+      resetearNorte,
+      actualizarIdiomaBase
     };
 
-    return () => cleanup();
+    return () => cleanup?.();
   }, []);
+
+  /* ===============================
+     CAMBIO DE IDIOMA
+  =============================== */
+  useEffect(() => {
+    mapRef.current?.actualizarIdiomaBase?.(t);
+  }, [i18n.language]);
 
   /* ===============================
      CIRCUITOS
   =============================== */
-  const toggleCircuito = (circuitoKey) => {
-    setActiveCircuitos(prev =>
-      prev.includes(circuitoKey)
-        ? prev.filter(c => c !== circuitoKey)
-        : [...prev, circuitoKey]
+  const toggleCircuito = (key) => {
+    setActiveCircuitos((prev) =>
+      prev.includes(key) ? prev.filter((c) => c !== key) : [...prev, key]
     );
   };
 
@@ -56,7 +80,7 @@ export default function MapView() {
       return;
     }
 
-    activeCircuitos.forEach(key => {
+    activeCircuitos.forEach((key) => {
       mapRef.current.dibujarCircuito(CIRCUITOS_OBJ[key]);
     });
   }, [activeCircuitos]);
@@ -64,11 +88,9 @@ export default function MapView() {
   /* ===============================
      CATEGORÍAS
   =============================== */
-  const toggleCategory = (categoryKey) => {
-    setActiveCategories(prev =>
-      prev.includes(categoryKey)
-        ? prev.filter(c => c !== categoryKey)
-        : [...prev, categoryKey]
+  const toggleCategory = (key) => {
+    setActiveCategories((prev) =>
+      prev.includes(key) ? prev.filter((c) => c !== key) : [...prev, key]
     );
   };
 
@@ -76,19 +98,19 @@ export default function MapView() {
     if (!mapRef.current) return;
 
     const puntos = activeCategories.flatMap(
-      cat => POINTS_BY_COLOR[cat] || []
+      (cat) => POINTS_BY_COLOR[cat] || []
     );
 
     mapRef.current.dibujarPuntos(puntos);
   }, [activeCategories]);
 
   /* ===============================
-     RUTA GPS → DESTINO
+     RUTA GPS
   =============================== */
   const irAlDestino = () => {
     if (!destinoId) return;
 
-    const destino = DESTINOS.find(d => d.id === Number(destinoId));
+    const destino = DESTINOS.find((d) => d.id === Number(destinoId));
     if (!destino) return;
 
     mapRef.current?.dibujarRutaDesdeGps(destino);
@@ -98,9 +120,46 @@ export default function MapView() {
      UI
   =============================== */
   return (
-    <div style={{ position: "relative", width: "100%", height: "100vh" }}>
-      <div ref={mapContainerRef} style={{ width: "100%", height: "100%" }} />
+    <div className="map-view">
+      <div ref={mapContainerRef} className="map-container" />
 
+      {/* ===== BOTONES ROTACIÓN ===== */}
+      <div className="rotation-controls">
+        <button
+          className="chip chip--circle rotation-btn"
+          onClick={() => mapRef.current?.rotarMapa(45)}
+          title="Rotar 45°"
+        >
+          🔄
+        </button>
+        <button
+          className="chip chip--circle rotation-btn"
+          onClick={() => mapRef.current?.resetearNorte()}
+          title="Resetear Norte"
+        >
+          🧭
+        </button>
+      </div>
+
+      {/* ===== BOTÓN DE IDIOMA ===== */}
+      <div className="language-wrapper">
+        <button
+          className="chip chip--circle language-icon"
+          onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
+          title="Idioma"
+        >
+          🌐
+        </button>
+
+        {idiomaMenuAbierto && (
+          <div className="language-menu">
+            <button onClick={() => cambiarIdioma("es")}>Español</button>
+            <button onClick={() => cambiarIdioma("en")}>English</button>
+          </div>
+        )}
+      </div>
+
+      {/* ===== BOTÓN PANEL ===== */}
       <button
         className="toggle-btn"
         onClick={() => setMenuAbierto(!menuAbierto)}
@@ -108,50 +167,51 @@ export default function MapView() {
         {menuAbierto ? "✕" : "☰ Opciones"}
       </button>
 
+      {/* ===== PANEL ===== */}
       <div className={`controls-panel ${menuAbierto ? "open" : "closed"}`}>
         <div className="panel-header">
-          <h3>Panel de Control</h3>
+          <h3>{t("controlPanel")}</h3>
         </div>
 
-        {/* ===== PUNTOS BASE ===== */}
+        {/* PUNTOS BASE */}
         <button
           className="chip chip--circle"
           onClick={() => {
-            const nuevoEstado = !mostrarMarcadoresBase;
-            setMostrarMarcadoresBase(nuevoEstado);
-            mapRef.current?.toggleMarcadoresBase(nuevoEstado);
+            const nuevo = !mostrarMarcadoresBase;
+            setMostrarMarcadoresBase(nuevo);
+            mapRef.current?.toggleMarcadoresBase(nuevo);
           }}
           title="Puntos base"
         >
           {mostrarMarcadoresBase ? "📍" : "✔"}
         </button>
 
-        {/* ===== NAVEGACIÓN GPS ===== */}
-          <select
-            value={destinoId}
-            onChange={(e) => setDestinoId(e.target.value)}
-            style={{ flex: 1, padding: "8px", borderRadius: "8px" }}
-          >
-            <option value="">Selecciona un lugar</option>
-            {DESTINOS.map(d => (
-              <option key={d.id} value={d.id}>
-                {d.nombre}
-              </option>
-            ))}
-          </select>
+        {/* GPS */}
+        <select
+          className="route-select"
+          value={destinoId}
+          onChange={(e) => setDestinoId(e.target.value)}
+        >
+          <option value="">{t("selectPlace")}</option>
+          {DESTINOS.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.nombre}
+            </option>
+          ))}
+        </select>
 
-          <button
-            className="chip chip--circle"
-            onClick={irAlDestino}
-            disabled={!destinoId}
-          >
-            Ir
-          </button>
+        <button
+          className="chip chip--circle"
+          onClick={irAlDestino}
+          disabled={!destinoId}
+        >
+          {t("go")}
+        </button>
 
         <div className="divider"></div>
 
-        {/* ===== CATEGORÍAS ===== */}
-        <label>Puntos de Interés:</label>
+        {/* CATEGORÍAS */}
+        <label>{t("pointsOfInterest")}</label>
         <div className="categories-grid">
           {Object.entries(CATEGORY_DETAILS).map(([key, config]) => {
             const isActive = activeCategories.includes(key);
@@ -159,16 +219,13 @@ export default function MapView() {
             return (
               <button
                 key={key}
-                className="chip chip--pill"
+                className={`chip chip--pill category-chip ${
+                  isActive ? "active" : ""
+                }`}
+                style={{ backgroundColor: config.color }}
                 onClick={() => toggleCategory(key)}
-                style={{
-                  backgroundColor: config.color,
-                  color: "#fff",
-                  border: isActive ? "2px solid #000" : "2px solid transparent",
-                  opacity: isActive ? 1 : 0.6
-                }}
               >
-                {config.label} {isActive && "✓"}
+                {t(config.labelKey ?? config.label)} {isActive && "✓"}
               </button>
             );
           })}
@@ -176,8 +233,8 @@ export default function MapView() {
 
         <div className="divider"></div>
 
-        {/* ===== CIRCUITOS ===== */}
-        <label>Circuitos Turísticos:</label>
+        {/* CIRCUITOS */}
+        <label>{t("touristCircuits")}</label>
         <div className="circuits-grid">
           {[
             { key: "PACHA", label: "Ruta Pacha", class: "ruta-pacha" },
@@ -189,12 +246,10 @@ export default function MapView() {
             return (
               <button
                 key={key}
-                className={`control-btn ${cls}`}
+                className={`control-btn ${cls} ${
+                  isActive ? "active" : ""
+                }`}
                 onClick={() => toggleCircuito(key)}
-                style={{
-                  opacity: isActive ? 1 : 0.6,
-                  border: isActive ? "2px solid #000" : "2px solid transparent"
-                }}
               >
                 {label} {isActive && "✓"}
               </button>

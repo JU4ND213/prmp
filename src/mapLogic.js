@@ -1,4 +1,5 @@
 import L from "leaflet";
+import "leaflet-rotate-map";
 
 /* ================= ICONO POR DEFECTO ================= */
 
@@ -52,10 +53,15 @@ export const CIRCUITOS_OBJ = {
 
 /* ================= MAPA ================= */
 
-export function startMap(container) {
+export function startMap(container, initialT) {
   if (!container) return;
 
-  const map = L.map(container).setView([-0.0025133, -78.4549464], 16);
+  const map = L.map(container, {
+    rotate: true,
+    touchRotate: true,
+    shiftKeyRotate: true,
+    bearing: 0
+  }).setView([-0.0025133, -78.4549464], 16);
 
   L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -64,19 +70,37 @@ export function startMap(container) {
 
   /* ---------- MARCADORES BASE ---------- */
   const baseLayer = L.layerGroup().addTo(map);
+  const marcadoresBase = {};
 
-  DESTINOS.forEach(d => {
-    const popupHTML = `
+  function crearPopupBase(d, t) {
+    const nombre = t ? t(`destinos.${d.id}`, d.nombre) : d.nombre;
+    return `
       <div style="text-align:center; max-width:180px">
-        <h4>${d.nombre}</h4>
+        <h4>${nombre}</h4>
         ${d.imagen ? `<img src="${d.imagen}" style="width:100%; border-radius:8px" />` : ""}
       </div>
     `;
-    L.marker([d.lat, d.lng]).bindPopup(popupHTML).addTo(baseLayer);
+  }
+
+  DESTINOS.forEach(d => {
+    const marker = L.marker([d.lat, d.lng])
+      .bindPopup(crearPopupBase(d, initialT))
+      .addTo(baseLayer);
+
+    marcadoresBase[d.id] = marker;
   });
 
   function toggleMarcadoresBase(mostrar) {
     mostrar ? baseLayer.addTo(map) : map.removeLayer(baseLayer);
+  }
+
+  function actualizarIdiomaBase(nuevoT) {
+    Object.entries(marcadoresBase).forEach(([id, marker]) => {
+      const destino = DESTINOS.find(d => d.id === Number(id));
+      if (destino) {
+        marker.setPopupContent(crearPopupBase(destino, nuevoT));
+      }
+    });
   }
 
   /* ---------- GPS ---------- */
@@ -90,7 +114,6 @@ export function startMap(container) {
   let routeLine = null;
   let routePoints = [];
 
-  /* ---------- DISTANCIA ---------- */
   function distanceMeters(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -103,7 +126,6 @@ export function startMap(container) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  /* ---------- RUTA INTERPOLADA ---------- */
   function generarRutaInterpolada(origen, destino, pasos = 150) {
     const puntos = [];
     for (let i = 0; i <= pasos; i++) {
@@ -116,7 +138,6 @@ export function startMap(container) {
     return puntos;
   }
 
-  /* ---------- ACTUALIZAR RUTA ---------- */
   function actualizarRutaConUsuario(lat, lng) {
     if (!routeLine || routePoints.length === 0) return;
 
@@ -148,7 +169,6 @@ export function startMap(container) {
     );
   }
 
-  /* ---------- RUTA GPS → DESTINO ---------- */
   function dibujarRutaDesdeGps(destino) {
     if (!destino) return;
 
@@ -172,7 +192,6 @@ export function startMap(container) {
     map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
   }
 
-  /* ---------- CIRCUITOS ---------- */
   const circuitosLayer = L.layerGroup().addTo(map);
 
   function dibujarCircuito(circuito) {
@@ -186,35 +205,57 @@ export function startMap(container) {
     map.fitBounds(L.latLngBounds(puntos), { padding: [50, 50] });
   }
 
-  /* ---------- CATEGORÍAS ---------- */
   const categoryLayer = L.layerGroup().addTo(map);
 
   function dibujarPuntos(lista) {
-  categoryLayer.clearLayers();
-  lista.forEach(p => {
-    L.circleMarker([p.lat, p.lng], {
-      radius: 8,
-      fillColor: p.color,
-      color: "#fff",
-      weight: 2,
-      fillOpacity: 0.9
-    })
-    .bindPopup(`
-      <div style="max-width:200px">
-        <strong>${p.name}</strong><br/>
-        <small>${p.description ?? ""}</small>
-      </div>
-    `)
-    .addTo(categoryLayer);
-  });
-}
+    categoryLayer.clearLayers();
+    lista.forEach(p => {
+      L.circleMarker([p.lat, p.lng], {
+        radius: 8,
+        fillColor: p.color,
+        color: "#fff",
+        weight: 2,
+        fillOpacity: 0.9
+      })
+        .bindPopup(`
+          <div style="max-width:200px">
+            <strong>${p.name}</strong><br/>
+            <small>${p.description ?? ""}</small>
+          </div>
+        `)
+        .addTo(categoryLayer);
+    });
+  }
 
-  /* ---------- CLEANUP ---------- */
+  /* ---------- CORRECCIÓN DE ROTACIÓN ---------- */
+  function rotarMapa(grados) {
+    // Leemos el bearing actual de las opciones de Leaflet (o 0 si no existe)
+    const currentBearing = map.options.bearing || 0;
+    const nuevoBearing = currentBearing + grados;
+    
+    // Aplicamos la rotación
+    map.setBearing(nuevoBearing);
+    
+    // Guardamos el nuevo valor para la próxima vez que se presione el botón
+    map.options.bearing = nuevoBearing % 360; 
+  }
+
+  function resetearNorte() {
+    map.setBearing(0);
+    map.options.bearing = 0;
+  }
+  /* -------------------------------------------- */
+
   return {
     dibujarCircuito,
     dibujarPuntos,
     toggleMarcadoresBase,
     dibujarRutaDesdeGps,
+    rotarMapa,
+    resetearNorte,
+    actualizarIdiomaBase,
+    // Devolvemos el bearing desde las opciones actualizadas
+    getBearing: () => map.options.bearing || 0,
     cleanup: () => {
       map.remove();
       if (watchId) navigator.geolocation.clearWatch(watchId);

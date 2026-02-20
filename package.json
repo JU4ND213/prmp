@@ -18,6 +18,8 @@
     "i18next-browser-languagedetector": "^8.2.1",
     "i18next-http-backend": "^3.0.2",
     "leaflet": "^1.9.4",
+    "leaflet-rotate": "^0.2.8",
+    "leaflet-rotate-map": "^0.3.1",
     "maplibre-gl": "^5.18.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
