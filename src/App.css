@@ -275,7 +275,7 @@
 }
 
 .emoji-marker {
-    font-size: 32px !important; /* El emoji debe ser un poco menor que el iconSize */
+    font-size: 20px !important; /* El emoji debe ser un poco menor que el iconSize */
     display: flex;
     justify-content: center;
     align-items: center;
