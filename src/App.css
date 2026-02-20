@@ -6,7 +6,6 @@
   --radius-pill: 999px;
   --transition-fast: 0.15s ease;
   --transition-smooth: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-
   /* ===== ULTRA COMPACT ===== */
   --compact-gap: 6px;
   --compact-pad: 10px;
@@ -273,4 +272,17 @@
 .control-btn.active {
   opacity: 1;
   border-color: #000;
+}
+
+.emoji-marker {
+    font-size: 32px !important; /* El emoji debe ser un poco menor que el iconSize */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Efecto de sombra para que resalte sobre el mapa verde/gris */
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    
+    /* Mejora la nitidez en pantallas de alta resolución */
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }

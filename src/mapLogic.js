@@ -6,9 +6,9 @@ import "leaflet-rotate-map";
 const DefaultIcon = L.divIcon({
   html: "📍",
   className: "emoji-marker",
-  iconSize: [24, 24],
-  iconAnchor: [12, 24],
-  popupAnchor: [0, -24]
+  iconSize: [45, 45],
+  iconAnchor: [22, 45],
+  popupAnchor: [0, -45]
 });
 
 L.Marker.prototype.options.icon = DefaultIcon;
