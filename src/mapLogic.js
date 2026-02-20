@@ -51,22 +51,241 @@ export const CIRCUITOS_OBJ = {
   KILLA: new Circuito([15, 14, 13, 12, 11, 10, 7], "#f39c12")
 };
 
-/* ================= MAPA ================= */
-
-export function startMap(container, initialT) {
+/* ---------------- MAPA ---------------- */
+export function startMap(container, initialT, maskOptions = {}) {
   if (!container) return;
 
-  const map = L.map(container, {
-    rotate: true,
-    touchRotate: true,
-    shiftKeyRotate: true,
-    bearing: 0
-  }).setView([-0.0025133, -78.4549464], 16);
+  // Opciones de máscara con valores por defecto
+  const {
+    enabled = true,
+    opacity = 0.7,
+    color = '#aaaaaa',
+  } = maskOptions;
+
+  const map = L.map(container).setView([-0.0025133, -78.4549464], 16);
 
   L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     { attribution: "Ciudad Mitad Del Mundo" }
   ).addTo(map);
+
+     /* ---- MÁSCARA (NEBLINA) ---- */
+  let maskLayer = null;
+  if (enabled) {
+    // Tu GeoJSON con puntos y línea
+    const MASK_GEOJSON = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45619842943364,
+              -0.0009609802142165336
+            ],
+            "type": "Point"
+          },
+          "id": 0
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45678744736264,
+              -0.001861989586245727
+            ],
+            "type": "Point"
+          },
+          "id": 1
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45605907730108,
+              -0.002690215677461083
+            ],
+            "type": "Point"
+          },
+          "id": 2
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45461225653074,
+              -0.004144236995173856
+            ],
+            "type": "Point"
+          },
+          "id": 3
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45345335961741,
+              -0.004057859585643087
+            ],
+            "type": "Point"
+          },
+          "id": 4
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45305133366479,
+              -0.0032438512667170016
+            ],
+            "type": "Point"
+          },
+          "id": 5
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45299919684001,
+              -0.0015707828534345936
+            ],
+            "type": "Point"
+          },
+          "id": 6
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              -78.45489226724959,
+              -0.0012804953382925532
+            ],
+            "type": "Point"
+          },
+          "id": 7
+        },
+        {
+          "type": "Feature",
+          "properties": {},
+          "geometry": {
+            "coordinates": [
+              [
+                -78.45679157002252,
+                -0.0018459378029831441
+              ],
+              [
+                -78.45637152324308,
+                -0.0024088433768696405
+              ],
+              [
+                -78.45604350736448,
+                -0.0027040576676569117
+              ],
+              [
+                -78.45556460418155,
+                -0.0028615052885641035
+              ],
+              [
+                -78.45494966228148,
+                -0.003432597058548481
+              ],
+              [
+                -78.4546085257673,
+                -0.004127990719680952
+              ],
+              [
+                -78.45446306805397,
+                -0.004385155274690078
+              ],
+              [
+                -78.45342653787715,
+                -0.004057139396550724
+              ],
+              [
+                -78.45304844893724,
+                -0.003241724006699087
+              ],
+              [
+                -78.45297877995405,
+                -0.001543425430227785
+              ],
+              [
+                -78.45491219927924,
+                -0.00127788736158152
+              ],
+              [
+                -78.45620853235324,
+                -0.0009425192923373515
+              ],
+              [
+                -78.45679495750062,
+                -0.00178707925299193
+              ]
+            ],
+            "type": "LineString"
+          }
+        }
+      ]
+    };
+
+    // Extraemos los puntos de la línea (son los que forman el perímetro)
+    let polygonPoints = [];
+    
+    // Buscar el feature que es LineString (el último)
+    MASK_GEOJSON.features.forEach(feature => {
+      if (feature.geometry.type === 'LineString') {
+        // Los puntos de la línea ya están en orden
+        polygonPoints = feature.geometry.coordinates.map(coord => [coord[1], coord[0]]); // Leaflet usa [lat, lng]
+      }
+    });
+    
+    // Si no hay línea, intentamos con los puntos individuales (pero estarían desordenados)
+    if (polygonPoints.length === 0) {
+      console.warn('No se encontró un LineString en el GeoJSON');
+      // Como fallback, usamos un círculo
+      const centro = [-0.0025133, -78.4549464];
+      polygonPoints = generarCirculo(centro, 190);
+    }
+    
+    // Asegurarnos de que el polígono esté cerrado (primer punto = último punto)
+    if (polygonPoints.length > 0) {
+      const first = polygonPoints[0];
+      const last = polygonPoints[polygonPoints.length - 1];
+      if (first[0] !== last[0] || first[1] !== last[1]) {
+        polygonPoints.push(first);
+      }
+    }
+    
+    // Polígono exterior que cubre todo el mundo (un rectángulo enorme)
+    const exterior = [
+      [-90, -180],
+      [90, -180],
+      [90, 180],
+      [-90, 180],
+      [-90, -180]
+    ];
+    
+    // Creamos el polígono con agujero: exterior + el polígono personalizado como agujero
+    maskLayer = L.polygon([exterior, polygonPoints], {
+      color: 'none',
+      fillColor: color,
+      fillOpacity: opacity,
+      interactive: false,
+    }).addTo(map);
+    
+    maskLayer.bringToBack();
+    
+    // Opcional: dibujar el perímetro para verificar (solo para debug)
+    // L.polyline(polygonPoints, { color: 'red', weight: 2 }).addTo(map);
+  }
 
   /* ---------- MARCADORES BASE ---------- */
   const baseLayer = L.layerGroup().addTo(map);
