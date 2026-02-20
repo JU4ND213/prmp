@@ -200,12 +200,13 @@
 
 /* ================= ROTATION BUTTONS ================= */
 .rotation-controls {
-  position: absolute;
-  bottom: 26px;
-  right: 18px;
+  position: fixed;
+  top: 60px; /* ← NUEVO: Lo posiciona debajo del botón de idioma */
+  right: 14px; /* ← CAMBIADO: Coincide con el "right" del language-wrapper */
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  align-items: center; /* ← NUEVO: Centra los botones de rotación por si varían en ancho */
   gap: 6px;
 }
 
