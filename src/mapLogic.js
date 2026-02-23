@@ -1,5 +1,5 @@
 import L from "leaflet";
-import "leaflet-rotate-map";
+
 
 /* ================= ICONO POR DEFECTO ================= */
 
@@ -446,32 +446,12 @@ export function startMap(container, initialT, maskOptions = {}) {
     });
   }
 
-  /* ---------- CORRECCIÓN DE ROTACIÓN ---------- */
-  function rotarMapa(grados) {
-    // Leemos el bearing actual de las opciones de Leaflet (o 0 si no existe)
-    const currentBearing = map.options.bearing || 0;
-    const nuevoBearing = currentBearing + grados;
-    
-    // Aplicamos la rotación
-    map.setBearing(nuevoBearing);
-    
-    // Guardamos el nuevo valor para la próxima vez que se presione el botón
-    map.options.bearing = nuevoBearing % 360; 
-  }
-
-  function resetearNorte() {
-    map.setBearing(0);
-    map.options.bearing = 0;
-  }
-  /* -------------------------------------------- */
 
   return {
     dibujarCircuito,
     dibujarPuntos,
     toggleMarcadoresBase,
     dibujarRutaDesdeGps,
-    rotarMapa,
-    resetearNorte,
     actualizarIdiomaBase,
     // Devolvemos el bearing desde las opciones actualizadas
     getBearing: () => map.options.bearing || 0,

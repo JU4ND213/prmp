@@ -123,33 +123,19 @@ export default function MapView() {
     <div className="map-view">
       <div ref={mapContainerRef} className="map-container" />
 
-      {/* ===== BOTONES ROTACIÓN ===== */}
-      <div className="rotation-controls">
-        <button
-          className="chip chip--circle rotation-btn"
-          onClick={() => mapRef.current?.rotarMapa(45)}
-          title="Rotar 45°"
-        >
-          🔄
-        </button>
-        <button
-          className="chip chip--circle rotation-btn"
-          onClick={() => mapRef.current?.resetearNorte()}
-          title="Resetear Norte"
-        >
-          🧭
-        </button>
-      </div>
-
       {/* ===== BOTÓN DE IDIOMA ===== */}
       <div className="language-wrapper">
-        <button
-          className="chip chip--circle language-icon"
-          onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
-          title="Idioma"
-        >
-          🌐
-        </button>
+  <button
+    className="chip chip--circle language-icon"
+    onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
+    title="Idioma"
+  >
+    <img
+      src="/images/language.png"   // ruta o URL de la imagen
+      alt="Idioma"
+      className="language-img"
+    />
+  </button>
 
         {idiomaMenuAbierto && (
           <div className="language-menu">

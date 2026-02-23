@@ -197,27 +197,6 @@
   cursor: not-allowed;
 }
 
-/* ================= ROTATION BUTTONS ================= */
-.rotation-controls {
-  position: fixed;
-  top: 60px; /* ← NUEVO: Lo posiciona debajo del botón de idioma */
-  right: 14px; /* ← CAMBIADO: Coincide con el "right" del language-wrapper */
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* ← NUEVO: Centra los botones de rotación por si varían en ancho */
-  gap: 6px;
-}
-
-.rotation-btn {
-  width: 36px;
-  height: 36px;
-  font-size: 16px;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-
 /* ================= IDIOMA ================= */
 .language-wrapper {
   position: fixed;
@@ -226,14 +205,10 @@
   z-index: 2000;
 }
 
-.language-icon {
-  font-size: 16px;
-  background: #fff;
-  border-radius: 50%;
-  padding: 6px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+.language-icon img {
+  width: 1em;
+  height: 1em;
+  display: block;
 }
 
 .language-menu {
@@ -260,6 +235,7 @@
 .language-menu button:hover {
   background: #f2f2f2;
 }
+
 
 /* ================= ESTADOS ================= */
 .category-chip,
