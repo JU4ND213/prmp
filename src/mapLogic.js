@@ -67,7 +67,7 @@ export function startMap(container, initialT, maskOptions = {}) {
   zoomSnap: 0.5,
   zoomDelta: 0.5
 }).setView([-0.0025133, -78.4549464], 16);
-
+ 
   L.tileLayer(
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
   {
