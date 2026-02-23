@@ -37,8 +37,6 @@ export default function MapView() {
       dibujarPuntos,
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
-      rotarMapa,
-      resetearNorte,
       actualizarIdiomaBase,
       cleanup
     } = mapApi;
