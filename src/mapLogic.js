@@ -32,7 +32,7 @@ export const DESTINOS = [
   { id: 14, nombre: "Punto 14 Pab. Guayasamín", imagen: "/images/Pabellon Guayasamin.png", lat: -0.0030547, lng: -78.45482457 },
   { id: 15, nombre: "Punto 15 Av. Geodésicos", imagen: "/images/Av. Geodésicos.png", lat: -0.0031959, lng: -78.45422637 }
 ];
-
+ 
 /* ================= CIRCUITOS ================= */
 
 export class Circuito {
