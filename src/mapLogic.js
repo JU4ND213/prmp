@@ -62,13 +62,22 @@ export function startMap(container, initialT, maskOptions = {}) {
     color = '#aaaaaa',
   } = maskOptions;
 
-  const map = L.map(container).setView([-0.0025133, -78.4549464], 16);
+  const map = L.map(container, {
+  maxZoom: 20,
+  zoomSnap: 0.5,
+  zoomDelta: 0.5
+}).setView([-0.0025133, -78.4549464], 16);
 
   L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    { attribution: "Ciudad Mitad Del Mundo" }
-  ).addTo(map);
+  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+  {
+    maxZoom: 20,        // hasta donde permites zoom
+    maxNativeZoom: 19,  // hasta donde ArcGIS TIENE DATOS
+    attribution: "Ciudad Mitad Del Mundo"
+  }
+).addTo(map);
 
+map.setMaxZoom(20);
      /* ---- MÁSCARA (NEBLINA) ---- */
   let maskLayer = null;
   if (enabled) {

@@ -77,18 +77,6 @@ export const POINTS_BY_COLOR = {
     { name: "Ciudad Mitad del mundo - Estacionamiento", lat: -0.0026365, lng: -78.45301, color: "#0288d1" },
     { name: "Parking", lat: -0.0014961, lng: -78.4536585, color: "#0288d1" },
   ],
-
-  // 🟢 Administración
-  administracion: [
-    { name: "Información Turística", lat: -0.0026264, lng: -78.4543385, color: "#7cb342" },
-    { name: "Comunicación y Marketing", lat: -0.0013751, lng: -78.4559234, color: "#7cb342" },
-    { name: "Infraestructura", lat: -0.0013858, lng: -78.4560133, color: "#7cb342" },
-    { name: "Compras Públicas", lat: -0.0013335, lng: -78.4561447, color: "#7cb342" },
-    { name: "Gerencia", lat: -0.0013027, lng: -78.4562627, color: "#7cb342" },
-    { name: "Juridico y Planificación", lat: -0.0014327, lng: -78.4562775, color: "#7cb342" },
-    { name: "Talento Humano", lat: -0.0015682, lng: -78.4561796, color: "#7cb342" },
-    { name: "Financiero", lat: -0.0013617, lng: -78.4555895, color: "#7cb342" },
-  ],
 };
 
 // MEJORA: Objeto de configuración para Títulos y Colores de botones
@@ -100,5 +88,4 @@ export const CATEGORY_DETAILS = {
   tiendas_artesanias: { label: "Artesanías", color: "#9c27b0" },
   plazas: { label: "Plazas", color: "#afb42b" },
   estacionamiento: { label: "Parking", color: "#607d8b" }, // Cambié color para distinguir
-  administracion: { label: "Administración", color: "#7cb342" },
 };
