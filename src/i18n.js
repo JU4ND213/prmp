@@ -8,7 +8,7 @@ i18n
   .use(LanguageDetector) // detecta idioma del navegador
   .use(initReactI18next)
   .init({
-    fallbackLng: 'es',
+    fallbackLng: 'en',
     debug: true, // quitar en producción
     interpolation: {
       escapeValue: false, // no necesario para React
