@@ -1,40 +1,94 @@
-import L from "leaflet";
-
-
-/* ================= ICONO POR DEFECTO ================= */
-
-const DefaultIcon = L.divIcon({
-  html: "📍",
-  className: "emoji-marker",
-  iconSize: [25, 25],
-  iconAnchor: [12.5, 25],
-  popupAnchor: [0, -25]
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { Geolocation } from "@capacitor/geolocation";
 
 /* ================= DATOS ================= */
-
 export const DESTINOS = [
-  { id: 7, nombre: "Punto 7 Monumento", imagen: "/images/Mitad_del_Mundo_01.png", lat: -0.0021191507224225577, lng: -78.45583279786655 },
-  { id: 1, nombre: "Punto 1 Viviendas", imagen: "/images/Viviendas.png", lat: -0.0026339, lng: -78.4536447 },
-  { id: 2, nombre: "Punto 2 Museo Fiestas", imagen: "/images/Museo Fiestas.png", lat: -0.00254709, lng: -78.45416508 },
-  { id: 3, nombre: "Punto 3 Tiangues", imagen: "/images/Tiangues.png", lat: -0.002419977392211793,  lng: -78.45455274302334 },
-  { id: 4, nombre: "Punto 4 Capilla", imagen: "/images/Iglesia.png", lat: -0.00217993, lng: -78.45443815 },
-  { id: 5, nombre: "Punto 5 Museo Cerveza", imagen: "/images/Museo Cerveza.png", lat: -0.00172532, lng: -78.45456769 },
-  { id: 6, nombre: "Punto 6 Museo Cacao", imagen: "/images/Muiseo cacao.png", lat: -0.0015001643185256258,  lng: -78.45516180961549 },
-  { id: 8, nombre: "Punto 8 Tienda Pichincha", imagen: "/images/Tienda pichincha.png", lat: -0.0019201542192408055,  lng: -78.45507887340779 },
-  { id: 9, nombre: "Punto 9 Exp. Huevo", imagen: "/images/Exp Huevo.png", lat: -0.002128299975813348,  lng: -78.45500898876774 },
-  { id: 10, nombre: "Punto 10 Legado Virtual", imagen: "/images/Legado Virtual.png", lat: -0.0027321406845731214,  lng: -78.45531831507765 },
-  { id: 11, nombre: "Punto 11 Pab. Ecuador", imagen: "/images/PabellonEcu.png", lat: -0.00295948, lng: -78.45520276 },
-  { id: 12, nombre: "Punto 12 Planetario", imagen: "/images/Planetario.png", lat: -0.00287231, lng: -78.45505122 },
-  { id: 13, nombre: "Punto 13 Pab. Francia", imagen: "/images/PabellonFrancia.png", lat: -0.00308018, lng: -78.45503877 },
-  { id: 14, nombre: "Punto 14 Pab. Guayasamín", imagen: "/images/Pabellon Guayasamin.png", lat: -0.0030547, lng: -78.45482457 },
-  { id: 15, nombre: "Punto 15 Av. Geodésicos", imagen: "/images/Av. Geodésicos.png", lat: -0.0031959, lng: -78.45422637 }
+  { 
+    id: 7, 
+    nombre: "Punto 7 Monumento", 
+    imagen: "/images/Mitad_del_Mundo_01.png", 
+    imagenes: [
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ],
+    lat: -0.0021191507224225577, 
+    lng: -78.45583279786655 
+  },
+  { id: 1, nombre: "Punto 1 Viviendas", imagen: "/images/Viviendas.png", imagenes: [
+      "/images/Viviendas.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.0026339, lng: -78.4536447 },
+  { id: 2, nombre: "Punto 2 Museo Fiestas", imagen: "/images/Museo Fiestas.png", imagenes: [
+      "/images/Museo Fiestas.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ],lat: -0.00254709, lng: -78.45416508 },
+  { id: 3, nombre: "Punto 3 Tiangues", imagen: "/images/Tiangues.png", imagenes: [
+      "/images/Tiangues.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.002419977392211793,  lng: -78.45455274302334 },
+  { id: 4, nombre: "Punto 4 Capilla", imagen: "/images/Iglesia.png", imagenes: [
+      "/images/Iglesia.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.00217993, lng: -78.45443815 },
+  { id: 5, nombre: "Punto 5 Museo Cerveza", imagen: "/images/Museo Cerveza.png", imagenes: [
+      "/images/Museo Cerveza.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.00172532, lng: -78.45456769 },
+  { id: 6, nombre: "Punto 6 Museo Cacao", imagen: "/images/Muiseo cacao.png", imagenes: [
+      "/images/Muiseo cacao.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.0015001643185256258,  lng: -78.45516180961549 },
+  { id: 8, nombre: "Punto 8 Tienda Pichincha", imagen: "/images/Tienda pichincha.png", imagenes: [
+      "/images/Tienda pichincha.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.0019201542192408055,  lng: -78.45507887340779 },
+  { id: 9, nombre: "Punto 9 Exp. Huevo", imagen: "/images/Exp Huevo.png", imagenes: [
+      "/images/Exp Huevo.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.002128299975813348,  lng: -78.45500898876774 },
+  { id: 10, nombre: "Punto 10 Legado Virtual", imagen: "/images/Legado Virtual.png", imagenes: [
+      "/images/Legado Virtual.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.0027321406845731214,  lng: -78.45531831507765 },
+  { id: 11, nombre: "Punto 11 Pab. Ecuador", imagen: "/images/PabellonEcu.png", imagenes: [
+      "/images/PabellonEcu.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.00295948, lng: -78.45520276 },
+  { id: 12, nombre: "Punto 12 Planetario", imagen: "/images/Planetario.png", imagenes: [
+      "/images/Planetario.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.00287231, lng: -78.45505122 },
+  { id: 13, nombre: "Punto 13 Pab. Francia", imagen: "/images/PabellonFrancia.png", imagenes: [
+      "/images/PabellonFrancia.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.00308018, lng: -78.45503877 },
+  { id: 14, nombre: "Punto 14 Pab. Guayasamín", imagen: "/images/Pabellon Guayasamin.png", imagenes: [
+      "/images/Pabellon Guayasamin.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.0030547, lng: -78.45482457 },
+  { id: 15, nombre: "Punto 15 Av. Geodésicos", imagen: "/images/Av. Geodésicos.png", imagenes: [
+      "/images/Av. Geodésicos.png", 
+      "/images/Mitad_del_Mundo_01.png", 
+      "/images/Mitad_del_Mundo_01.png"
+    ], lat: -0.0031959, lng: -78.45422637 }
 ];
- 
-/* ================= CIRCUITOS ================= */
 
+/* ================= CIRCUITOS ================= */
 export class Circuito {
   constructor(ids, color) {
     this.ids = ids;
@@ -55,486 +109,256 @@ export const CIRCUITOS_OBJ = {
 export function startMap(container, initialT, maskOptions = {}) {
   if (!container) return;
 
-  // Opciones de máscara con valores por defecto
   const {
     enabled = true,
     opacity = 0.7,
     color = '#aaaaaa',
   } = maskOptions;
 
-  const map = L.map(container, {
-  maxZoom: 20,
-  zoomSnap: 0.5,
-  zoomDelta: 0.5
-}).setView([-0.0025133, -78.4549464], 16);
- 
-  L.tileLayer(
-  "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-  {
-    maxZoom: 20,        // hasta donde permites zoom
-    maxNativeZoom: 19,  // hasta donde ArcGIS TIENE DATOS
-    attribution: "Ciudad Mitad Del Mundo"
-  }
-).addTo(map);
-
-map.setMaxZoom(20);
-     /* ---- MÁSCARA (NEBLINA) ---- */
-  let maskLayer = null;
-  if (enabled) {
-    // Tu GeoJSON con puntos y línea
-    const MASK_GEOJSON = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45626921980826,
-          -0.0009701889351276805
-        ],
-        "type": "Point"
+  // 1. Inicialización de MapLibre
+  const map = new maplibregl.Map({
+    container: container,
+    center: [-78.4549464, -0.0025133], 
+    zoom: 16,
+    maxZoom: 19, 
+    pitch: 50,  
+    style: {
+      version: 8,
+      sources: {
+        satellite: {
+          type: "raster",
+          tiles: [
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          ],
+          tileSize: 256,
+          maxzoom: 19 
+        }
       },
-      "id": 0
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.4573014341726,
-          -0.001968682639699182
-        ],
-        "type": "Point"
-      },
-      "id": 1
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45669215143164,
-          -0.00192806379024546
-        ],
-        "type": "Point"
-      },
-      "id": 2
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45622097277798,
-          -0.002594212919817096
-        ],
-        "type": "Point"
-      },
-      "id": 3
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45481556058816,
-          -0.003715293162244393
-        ],
-        "type": "Point"
-      },
-      "id": 4
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.457366424332,
-          -0.0011563056515342396
-        ],
-        "type": "Point"
-      },
-      "id": 5
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45542484332954,
-          -0.0012375433496600863
-        ],
-        "type": "Point"
-      },
-      "id": 6
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45490492205657,
-          -0.0013269048189243904
-        ],
-        "type": "Point"
-      },
-      "id": 7
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45362136641481,
-          -0.001359399898191782
-        ],
-        "type": "Point"
-      },
-      "id": 8
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.4529958361338,
-          -0.00140814251793131
-        ],
-        "type": "Point"
-      },
-      "id": 9
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45297958859416,
-          -0.0022286432754157204
-        ],
-        "type": "Point"
-      },
-      "id": 10
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45300395990361,
-          -0.0028298022463815187
-        ],
-        "type": "Point"
-      },
-      "id": 11
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45298771236398,
-          -0.0030897628827375456
-        ],
-        "type": "Point"
-      },
-      "id": 12
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45300395990361,
-          -0.0036178079237885186
-        ],
-        "type": "Point"
-      },
-      "id": 13
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45328016807997,
-          -0.004088986576391562
-        ],
-        "type": "Point"
-      },
-      "id": 14
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45373509919355,
-          -0.003829025940248698
-        ],
-        "type": "Point"
-      },
-      "id": 15
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.45418190653689,
-          -0.0036178079237885186
-        ],
-        "type": "Point"
-      },
-      "id": 16
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          -78.4546043425712,
-          -0.004170224275128476
-        ],
-        "type": "Point"
-      },
-      "id": 17
-    },
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "coordinates": [
-          [
-            -78.45735017679192,
-            -0.0011238105713999857
-          ],
-          [
-            -78.45750452841975,
-            -0.001538122835768263
-          ],
-          [
-            -78.45728518663297,
-            -0.001911816250625975
-          ],
-          [
-            -78.45683025551939,
-            -0.0018874449407633165
-          ],
-          [
-            -78.45670027520148,
-            -0.00192806379024546
-          ],
-          [
-            -78.45651342849398,
-            -0.0021555293467088177
-          ],
-          [
-            -78.45631845801665,
-            -0.002504851451504919
-          ],
-          [
-            -78.45600975476106,
-            -0.0027404407780977635
-          ],
-          [
-            -78.45561981380641,
-            -0.0027973071671425487
-          ],
-          [
-            -78.45505927368437,
-            -0.0033740948280183147
-          ],
-          [
-            -78.45479931304811,
-            -0.0037477882423218034
-          ],
-          [
-            -78.45462059011084,
-            -0.004145852965379504
-          ],
-          [
-            -78.45414128768736,
-            -0.003609684154426418
-          ],
-          [
-            -78.45369448034403,
-            -0.003837149710449239
-          ],
-          [
-            -78.45327204430971,
-            -0.004080862806134178
-          ],
-          [
-            -78.45302020744369,
-            -0.0036259316939890596
-          ],
-          [
-            -78.45302833121349,
-            -0.0030491440333122455
-          ],
-          [
-            -78.45301426295887,
-            -0.00274930990684652
-          ],
-          [
-            -78.45299265313656,
-            -0.002199501418047589
-          ],
-          [
-            -78.45297839862141,
-            -0.0013727395483584814
-          ],
-          [
-            -78.45362935480637,
-            -0.001339479013367395
-          ],
-          [
-            -78.45489716614796,
-            -0.0012995494063261503
-          ],
-          [
-            -78.45542884403778,
-            -0.0012272412132432464
-          ],
-          [
-            -78.45626251496955,
-            -0.0009252481722370476
-          ],
-          [
-            -78.45661554908851,
-            -0.0011889604056705139
-          ],
-          [
-            -78.45678993943656,
-            -0.001180453559044281
-          ],
-          [
-            -78.45706432681702,
-            -0.0009634446093684801
-          ],
-          [
-            -78.45720043635663,
-            -0.0009634446093684801
-          ],
-          [
-            -78.45736631985848,
-            -0.001120821264123606
-          ]
-        ],
-        "type": "LineString"
-      }
+      layers: [
+        { id: "satellite", type: "raster", source: "satellite" }
+      ]
     }
-  ]
-}
+  });
 
-    // Extraemos los puntos de la línea (son los que forman el perímetro)
-    let polygonPoints = [];
-    
-    // Buscar el feature que es LineString (el último)
-    MASK_GEOJSON.features.forEach(feature => {
-      if (feature.geometry.type === 'LineString') {
-        // Los puntos de la línea ya están en orden
-        polygonPoints = feature.geometry.coordinates.map(coord => [coord[1], coord[0]]); // Leaflet usa [lat, lng]
-      }
+  // Contenedores para marcadores
+  let marcadoresBase = {};
+  let marcadoresCategorias = [];
+  
+  // MARCADOR GPS IDÉNTICO A LEAFLET: circleMarker({radius:10, color:"#fff", fillColor:"#000"})
+  const userEl = document.createElement("div");
+  userEl.style.width = "20px";  // radio 10 = diametro 20
+  userEl.style.height = "20px";
+  userEl.style.backgroundColor = "#000"; // fillColor: "#000"
+  userEl.style.border = "3px solid #fff"; // color: "#fff"
+  userEl.style.borderRadius = "50%"; // Círculo perfecto
+  userEl.style.boxSizing = "border-box";
+  userEl.style.display = "none"; // Oculto hasta que haya señal
+
+  // Lo agregamos inmediatamente al mapa para asegurar que MapLibre lo registre
+  let userMarker = new maplibregl.Marker({ element: userEl })
+    .setLngLat([-78.4549464, -0.0025133])
+    .addTo(map);
+
+  map.on("load", () => {
+    /* ---- MÁSCARA (NEBLINA) ---- */
+    if (enabled) {
+      const polygonHole = [
+        [-78.45735017679192, -0.0011238105713999857], [-78.45750452841975, -0.001538122835768263],
+        [-78.45728518663297, -0.001911816250625975], [-78.45683025551939, -0.0018874449407633165],
+        [-78.45670027520148, -0.00192806379024546], [-78.45651342849398, -0.0021555293467088177],
+        [-78.45631845801665, -0.002504851451504919], [-78.45600975476106, -0.0027404407780977635],
+        [-78.45561981380641, -0.0027973071671425487], [-78.45505927368437, -0.0033740948280183147],
+        [-78.45479931304811, -0.0037477882423218034], [-78.45462059011084, -0.004145852965379504],
+        [-78.45414128768736, -0.003609684154426418], [-78.45369448034403, -0.003837149710449239],
+        [-78.45327204430971, -0.004080862806134178], [-78.45302020744369, -0.0036259316939890596],
+        [-78.45302833121349, -0.0030491440333122455], [-78.45301426295887, -0.00274930990684652],
+        [-78.45299265313656, -0.002199501418047589], [-78.45297839862141, -0.0013727395483584814],
+        [-78.45362935480637, -0.001339479013367395], [-78.45489716614796, -0.0012995494063261503],
+        [-78.45542884403778, -0.0012272412132432464], [-78.45626251496955, -0.0009252481722370476],
+        [-78.45661554908851, -0.0011889604056705139], [-78.45678993943656, -0.001180453559044281],
+        [-78.45706432681702, -0.0009634446093684801], [-78.45720043635663, -0.0009634446093684801],
+        [-78.45736631985848, -0.001120821264123606], [-78.45735017679192, -0.0011238105713999857] 
+      ];
+
+      const exteriorWorld = [
+        [-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]
+      ];
+
+      map.addSource("mask", {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: [exteriorWorld, polygonHole]
+          }
+        }
+      });
+
+      map.addLayer({
+        id: "mask-layer",
+        type: "fill",
+        source: "mask",
+        paint: {
+          "fill-color": color,
+          "fill-opacity": opacity
+        }
+      });
+    }
+
+    /* ---- PREPARACIÓN PARA RUTAS ---- */
+    map.addSource("circuito-source", {
+      type: "geojson",
+      data: { type: "FeatureCollection", features: [] }
+    });
+
+    map.addLayer({
+      id: "circuito-layer",
+      type: "line",
+      source: "circuito-source",
+      layout: { "line-join": "round", "line-cap": "round" },
+      paint: { "line-color": ["get", "color"], "line-width": 5 }
+    });
+
+    map.addSource("gps-route-source", {
+      type: "geojson",
+      data: { type: "Feature", geometry: { type: "LineString", coordinates: [] } }
+    });
+
+    map.addLayer({
+      id: "gps-route-layer",
+      type: "line",
+      source: "gps-route-source",
+      layout: { "line-join": "round", "line-cap": "round" },
+      paint: { "line-color": "#000", "line-width": 4, "line-dasharray": [2, 2] }
     });
     
-    // Si no hay línea, intentamos con los puntos individuales (pero estarían desordenados)
-    if (polygonPoints.length === 0) {
-      console.warn('No se encontró un LineString en el GeoJSON');
-      // Como fallback, usamos un círculo
-      const centro = [-0.0025133, -78.4549464];
-      polygonPoints = generarCirculo(centro, 190);
-    }
+    // Inicializar marcadores base
+    inicializarMarcadoresBase();
     
-    // Asegurarnos de que el polígono esté cerrado (primer punto = último punto)
-    if (polygonPoints.length > 0) {
-      const first = polygonPoints[0];
-      const last = polygonPoints[polygonPoints.length - 1];
-      if (first[0] !== last[0] || first[1] !== last[1]) {
-        polygonPoints.push(first);
+    // Iniciar el GPS
+    iniciarGPS();
+  }); 
+
+  /* ---------- GPS CON CAPACITOR ----------- */
+  let watchId = null;
+  let primeraVez = true;
+
+  async function iniciarGPS() {
+    try {
+      const status = await Geolocation.checkPermissions();
+      if (status.location !== 'granted') {
+        const request = await Geolocation.requestPermissions();
+        if (request.location !== 'granted') return;
       }
+
+      watchId = await Geolocation.watchPosition(
+        { 
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0 
+        },
+        (position, err) => {
+          if (err) {
+            console.warn("Error GPS Capacitor:", err);
+            return;
+          }
+          if (!position || !position.coords) return;
+          
+          const { latitude: lat, longitude: lng } = position.coords;
+
+          // Actualizamos posición
+          userMarker.setLngLat([lng, lat]);
+          
+          // Lo hacemos visible
+          userEl.style.display = "block";
+
+          if (primeraVez) {
+            map.flyTo({ 
+              center: [lng, lat], 
+              zoom: 17, 
+              essential: true,
+              pitch: 50 
+            });
+            primeraVez = false; 
+          }
+          
+          actualizarRutaConUsuario(lat, lng);
+        }
+      );
+    } catch (error) {
+      console.error("No se pudo iniciar el GPS", error);
     }
-    
-    // Polígono exterior que cubre todo el mundo (un rectángulo enorme)
-    const exterior = [
-      [-90, -180],
-      [90, -180],
-      [90, 180],
-      [-90, 180],
-      [-90, -180]
-    ];
-    
-    // Creamos el polígono con agujero: exterior + el polígono personalizado como agujero
-    maskLayer = L.polygon([exterior, polygonPoints], {
-      color: 'none',
-      fillColor: color,
-      fillOpacity: opacity,
-      interactive: false,
-    }).addTo(map);
-    
-    maskLayer.bringToBack();
-    
-    // Opcional: dibujar el perímetro para verificar (solo para debug)
-    // L.polyline(polygonPoints, { color: 'red', weight: 2 }).addTo(map);
   }
 
   /* ---------- MARCADORES BASE ---------- */
-  const baseLayer = L.layerGroup().addTo(map);
-  const marcadoresBase = {};
-
   function crearPopupBase(d, t) {
     const nombre = t ? t(`destinos.${d.id}`, d.nombre) : d.nombre;
+    
+    let imagesHtml = "";
+    if (d.imagenes && d.imagenes.length > 0) {
+      const imgTags = d.imagenes.map(img => `<img src="${img}" alt="${nombre}" />`).join('');
+      imagesHtml = `
+        <div class="popup-carousel">
+          ${imgTags}
+        </div>
+        ${d.imagenes.length > 1 ? '<small style="color: #888; font-size: 10px; display: block; margin-top: 4px;">Desliza para ver más ↔</small>' : ''}
+      `;
+    } else if (d.imagen) {
+      imagesHtml = `<img src="${d.imagen}" style="width:100%; border-radius:8px" />`;
+    }
+
     return `
-      <div style="text-align:center; max-width:180px">
-        <h4>${nombre}</h4>
-        ${d.imagen ? `<img src="${d.imagen}" style="width:100%; border-radius:8px" />` : ""}
+      <div style="text-align:center; max-width: 200px; font-family: sans-serif;"> 
+        <h4 style="margin-bottom: 8px; margin-top: 0;">${nombre}</h4>
+        ${imagesHtml}
       </div>
     `;
   }
 
-  DESTINOS.forEach(d => {
-    const marker = L.marker([d.lat, d.lng])
-      .bindPopup(crearPopupBase(d, initialT))
-      .addTo(baseLayer);
+  function inicializarMarcadoresBase() {
+    DESTINOS.forEach(d => {
+      const el = document.createElement("div");
+      el.innerHTML = "📍";
+      el.style.fontSize = "24px";
+      el.style.cursor = "pointer";
 
-    marcadoresBase[d.id] = marker;
-  });
+      const popup = new maplibregl.Popup({ offset: 25 }).setHTML(crearPopupBase(d, initialT));
+      const marker = new maplibregl.Marker({ element: el })
+        .setLngLat([d.lng, d.lat])
+        .setPopup(popup)
+        .addTo(map);
+
+      marcadoresBase[d.id] = marker;
+    });
+  }
 
   function toggleMarcadoresBase(mostrar) {
-    mostrar ? baseLayer.addTo(map) : map.removeLayer(baseLayer);
+    Object.values(marcadoresBase).forEach(marker => {
+      const el = marker.getElement(); // Obtenemos el div HTML del marcador
+      if (el) {
+        // Si mostrar es true, lo mostramos (block), si no, lo ocultamos (none)
+        el.style.display = mostrar ? "block" : "none";
+      }
+    });
   }
 
   function actualizarIdiomaBase(nuevoT) {
     Object.entries(marcadoresBase).forEach(([id, marker]) => {
       const destino = DESTINOS.find(d => d.id === Number(id));
       if (destino) {
-        marker.setPopupContent(crearPopupBase(destino, nuevoT));
+        marker.getPopup().setHTML(crearPopupBase(destino, nuevoT));
       }
     });
   }
 
-  /* ---------- GPS ---------- */
-  const userMarker = L.circleMarker([0, 0], {
-    radius: 10,
-    color: "#fff",
-    fillColor: "#000",
-    fillOpacity: 1
-  }).addTo(map);
-
-  let routeLine = null;
-  let routePoints = [];
-
+  /* ---------- FUNCIONES INTERNAS RUTAS ---------- */
   function distanceMeters(lat1, lon1, lat2, lon2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(lat1 * Math.PI / 180) *
-      Math.cos(lat2 * Math.PI / 180) *
-      Math.sin(dLon / 2) ** 2;
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
@@ -543,102 +367,129 @@ map.setMaxZoom(20);
     for (let i = 0; i <= pasos; i++) {
       const t = i / pasos;
       puntos.push([
-        origen.lat + (destino.lat - origen.lat) * t,
-        origen.lng + (destino.lng - origen.lng) * t
+        origen.lng + (destino.lng - origen.lng) * t,
+        origen.lat + (destino.lat - origen.lat) * t
       ]);
     }
     return puntos;
   }
 
+  let routePointsMap = [];
+
   function actualizarRutaConUsuario(lat, lng) {
-    if (!routeLine || routePoints.length === 0) return;
+    if (routePointsMap.length === 0) return;
 
     let closestIndex = 0;
     let minDist = Infinity;
 
-    routePoints.forEach((p, i) => {
-      const d = distanceMeters(lat, lng, p[0], p[1]);
+    routePointsMap.forEach((p, i) => {
+      const d = distanceMeters(lat, lng, p[1], p[0]);
       if (d < minDist) {
         minDist = d;
         closestIndex = i;
       }
     });
 
-    routePoints = routePoints.slice(closestIndex);
-    routeLine.setLatLngs(routePoints);
+    routePointsMap = routePointsMap.slice(closestIndex);
+    if (map.getSource("gps-route-source")) {
+      map.getSource("gps-route-source").setData({
+        type: "Feature",
+        geometry: { type: "LineString", coordinates: routePointsMap }
+      });
+    }
   }
 
-  let watchId = null;
-  if ("geolocation" in navigator) {
-    watchId = navigator.geolocation.watchPosition(
-      pos => {
-        const { latitude, longitude } = pos.coords;
-        userMarker.setLatLng([latitude, longitude]);
-        actualizarRutaConUsuario(latitude, longitude);
-      },
-      err => console.error("GPS error:", err),
-      { enableHighAccuracy: true }
-    );
-  }
 
+  /* ---------- FUNCIONES EXPUESTAS A REACT ---------- */
   function dibujarRutaDesdeGps(destino) {
-    if (!destino) return;
+    if (!destino || !userMarker || !userMarker.getLngLat()) return;
 
-    const userLatLng = userMarker.getLatLng();
-    if (!userLatLng) return;
+    const userLngLat = userMarker.getLngLat();
+    
+    // Validamos que existan coordenadas válidas
+    if (!userLngLat || (userLngLat.lng === 0 && userLngLat.lat === 0)) {
+      console.warn("Esperando señal GPS válida...");
+      return;
+    }
 
-    routePoints = generarRutaInterpolada(
-      userLatLng,
+    routePointsMap = generarRutaInterpolada(
+      { lat: userLngLat.lat, lng: userLngLat.lng },
       { lat: destino.lat, lng: destino.lng },
       150
     );
 
-    if (routeLine) routeLine.remove();
+    if (map.getSource("gps-route-source")) {
+      map.getSource("gps-route-source").setData({
+        type: "Feature",
+        geometry: { type: "LineString", coordinates: routePointsMap }
+      });
 
-    routeLine = L.polyline(routePoints, {
-      color: "#000",
-      weight: 4,
-      dashArray: "8 6"
-    }).addTo(map);
-
-    map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+      const bounds = new maplibregl.LngLatBounds();
+      routePointsMap.forEach(coord => bounds.extend(coord));
+      map.fitBounds(bounds, { padding: 50 });
+    }
   }
-
-  const circuitosLayer = L.layerGroup().addTo(map);
 
   function dibujarCircuito(circuito) {
-    circuitosLayer.clearLayers();
-    if (!circuito) return;
+    if (!map.getSource("circuito-source")) return;
 
-    const puntos = circuito.getPuntos(DESTINOS).map(p => [p.lat, p.lng]);
-    L.polyline(puntos, { color: circuito.color, weight: 5 })
-      .addTo(circuitosLayer);
+    if (!circuito) {
+      map.getSource("circuito-source").setData({ type: "FeatureCollection", features: [] });
+      return;
+    }
 
-    map.fitBounds(L.latLngBounds(puntos), { padding: [50, 50] });
+    const puntos = circuito.getPuntos(DESTINOS).map(p => [p.lng, p.lat]);
+    
+    map.getSource("circuito-source").setData({
+      type: "FeatureCollection",
+      features: [{
+        type: "Feature",
+        properties: { color: circuito.color },
+        geometry: { type: "LineString", coordinates: puntos }
+      }]
+    });
+
+    const bounds = new maplibregl.LngLatBounds();
+    puntos.forEach(coord => bounds.extend(coord));
+    map.fitBounds(bounds, { padding: 50 });
   }
-
-  const categoryLayer = L.layerGroup().addTo(map);
 
   function dibujarPuntos(lista) {
-    categoryLayer.clearLayers();
+    marcadoresCategorias.forEach(marker => marker.remove());
+    marcadoresCategorias = [];
+
     lista.forEach(p => {
-      L.circleMarker([p.lat, p.lng], {
-        radius: 8,
-        fillColor: p.color,
-        color: "#fff",
-        weight: 2,
-        fillOpacity: 0.9
-      })
-        .bindPopup(`
-          <div style="max-width:200px">
-            <strong>${p.name}</strong><br/>
-            <small>${p.description ?? ""}</small>
-          </div>
-        `)
-        .addTo(categoryLayer);
+      const el = document.createElement("div");
+      el.style.width = "24px";
+      el.style.height = "24px";
+      el.style.backgroundColor = p.color;
+      el.style.border = "2px solid #fff";
+      el.style.borderRadius = "50%";
+      el.style.boxShadow = "0 0 4px rgba(0,0,0,0.5)";
+      el.style.display = "flex";
+      el.style.justifyContent = "center";
+      el.style.alignItems = "center";
+      el.style.color = "#fff"; 
+      
+      if (p.icon) {
+        el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
+      }
+
+      const popup = new maplibregl.Popup({ offset: 15 }).setHTML(`
+        <div style="max-width:200px; font-family: sans-serif;">
+          <strong>${p.name}</strong><br/>
+          <small>${p.description ?? ""}</small>
+        </div>
+      `);
+
+      const marker = new maplibregl.Marker({ element: el })
+        .setLngLat([p.lng, p.lat])
+        .setPopup(popup)
+        .addTo(map);
+
+      marcadoresCategorias.push(marker);
     });
   }
-
 
   return {
     dibujarCircuito,
@@ -646,11 +497,12 @@ map.setMaxZoom(20);
     toggleMarcadoresBase,
     dibujarRutaDesdeGps,
     actualizarIdiomaBase,
-    // Devolvemos el bearing desde las opciones actualizadas
-    getBearing: () => map.options.bearing || 0,
+    getBearing: () => map.getBearing(),
     cleanup: () => {
       map.remove();
-      if (watchId) navigator.geolocation.clearWatch(watchId);
+      if (watchId) {
+        Geolocation.clearWatch({ id: watchId }).catch(console.error);
+      }
     }
   };
 }

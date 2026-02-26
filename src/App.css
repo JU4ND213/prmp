@@ -236,7 +236,6 @@
   background: #f2f2f2;
 }
 
-
 /* ================= ESTADOS ================= */
 .category-chip,
 .control-btn {
@@ -261,4 +260,34 @@
     
     /* Mejora la nitidez en pantallas de alta resolución */
     text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+/* ================= CARRUSEL DE POPUPS (NUEVO) ================= */
+.popup-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 8px; 
+  padding-bottom: 5px; 
+  scrollbar-width: thin; /* Para Firefox */
+}
+
+/* Ocultar barra de scroll en móviles, dejarla finita en web */
+.popup-carousel::-webkit-scrollbar {
+  height: 4px;
+}
+
+.popup-carousel::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.popup-carousel img {
+  scroll-snap-align: center;
+  flex: 0 0 100%; 
+  width: 100%;
+  height: 150px; 
+  object-fit: contain; 
+  border-radius: 8px;
+  background-color: #f8f9fa; 
 }
