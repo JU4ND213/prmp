@@ -38,15 +38,18 @@ export default function MapView() {
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
       actualizarIdiomaBase,
+      centrarEnUsuario, // <--- Agregamos la función aquí
       cleanup
     } = mapApi;
 
+    // Guardamos las funciones en la referencia para poder llamarlas desde los botones
     mapRef.current = {
       dibujarCircuito,
       dibujarPuntos,
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
-      actualizarIdiomaBase
+      actualizarIdiomaBase,
+      centrarEnUsuario // <--- Y la guardamos en la referencia
     };
 
     return () => cleanup?.();
@@ -113,6 +116,15 @@ export default function MapView() {
   };
 
   /* ===============================
+     CENTRAR CÁMARA EN USUARIO
+  =============================== */
+  const centrarCamara = () => {
+    if (mapRef.current?.centrarEnUsuario) {
+      mapRef.current.centrarEnUsuario();
+    }
+  };
+
+  /* ===============================
      UI
   =============================== */
   return (
@@ -121,17 +133,14 @@ export default function MapView() {
 
       {/* ===== BOTÓN DE IDIOMA ===== */}
       <div className="language-wrapper">
-  <button
-    className="chip chip--circle language-icon"
-    onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
-    title="Idioma"
-  >
-    <img
-      src="/images/language.png"   // ruta o URL de la imagen
-      alt="Idioma"
-      className="language-img"
-    />
-  </button>
+        <button
+          className="chip chip--circle language-icon"
+          onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
+          title="Idioma"
+        >
+          {/* Reemplazamos el <img> por el icono de Google */}
+          <span className="material-symbols-outlined">g_translate</span>
+        </button>
 
         {idiomaMenuAbierto && (
           <div className="language-menu">
@@ -141,6 +150,15 @@ export default function MapView() {
         )}
       </div>
 
+     {/* ===== BOTÓN FLOTANTE "CENTRAR EN MI UBICACIÓN" (NUEVO) ===== */}
+      <button 
+        className="locate-btn" 
+        onClick={centrarCamara}
+        title={t("centerLocation", "Centrar en mi ubicación")}
+      >
+        {/* Reemplazamos el emoji por el nombre exacto del icono */}
+        <span className="material-symbols-outlined">my_location</span>
+      </button>
       {/* ===== BOTÓN PANEL ===== */}
       <button
         className="toggle-btn"
@@ -219,22 +237,22 @@ export default function MapView() {
         <label>{t("touristCircuits")}</label>
         <div className="circuits-grid">
           {[
-  { key: "PACHA", class: "ruta-pacha" },
-  { key: "INTI", class: "ruta-inti" },
-  { key: "KILLA", class: "ruta-killa" }
-      ].map(({ key, class: cls }) => {
-        const isActive = activeCircuitos.includes(key);
+            { key: "PACHA", class: "ruta-pacha" },
+            { key: "INTI", class: "ruta-inti" },
+            { key: "KILLA", class: "ruta-killa" }
+          ].map(({ key, class: cls }) => {
+            const isActive = activeCircuitos.includes(key);
 
-        return (
-          <button
-            key={key}
-            className={`control-btn ${cls} ${isActive ? "active" : ""}`}
-            onClick={() => toggleCircuito(key)}
-          >
-            {t(`circuits.${key}`)} {isActive && "✓"}
-          </button>
-        );
-      })}
+            return (
+              <button
+                key={key}
+                className={`control-btn ${cls} ${isActive ? "active" : ""}`}
+                onClick={() => toggleCircuito(key)}
+              >
+                {t(`circuits.${key}`)} {isActive && "✓"}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -399,7 +399,6 @@ export function startMap(container, initialT, maskOptions = {}) {
     }
   }
 
-
   /* ---------- FUNCIONES EXPUESTAS A REACT ---------- */
   function dibujarRutaDesdeGps(destino) {
     if (!destino || !userMarker || !userMarker.getLngLat()) return;
@@ -491,12 +490,34 @@ export function startMap(container, initialT, maskOptions = {}) {
     });
   }
 
+  /* ---------- NUEVA FUNCIÓN PARA CENTRAR EN EL USUARIO ---------- */
+  function centrarEnUsuario() {
+    if (!userMarker) return;
+    
+    const userLngLat = userMarker.getLngLat();
+    
+    // Validamos que el GPS ya haya capturado una coordenada válida
+    if (!userLngLat || (userLngLat.lng === 0 && userLngLat.lat === 0)) {
+      console.warn("Aún no tenemos tu ubicación exacta.");
+      return; 
+    }
+
+    // Movemos la cámara hacia el usuario
+    map.flyTo({
+      center: [userLngLat.lng, userLngLat.lat],
+      zoom: 18,         
+      pitch: 50,        
+      essential: true   
+    });
+  }
+
   return {
     dibujarCircuito,
     dibujarPuntos,
     toggleMarcadoresBase,
     dibujarRutaDesdeGps,
     actualizarIdiomaBase,
+    centrarEnUsuario, // <--- Exportamos la función aquí
     getBearing: () => map.getBearing(),
     cleanup: () => {
       map.remove();

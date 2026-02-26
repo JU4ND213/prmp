@@ -205,10 +205,12 @@
   z-index: 2000;
 }
 
-.language-icon img {
-  width: 1em;
-  height: 1em;
-  display: block;
+/* Nuevo estilo para el icono de Material Symbols */
+.language-icon .material-symbols-outlined {
+  font-family: 'Material Symbols Outlined'; /* Forzamos la fuente */
+  font-size: 1.2rem; /* Puedes subir o bajar este valor si quieres el icono más grande o pequeño */
+  user-select: none;
+  line-height: 1;
 }
 
 .language-menu {
@@ -235,7 +237,6 @@
 .language-menu button:hover {
   background: #f2f2f2;
 }
-
 /* ================= ESTADOS ================= */
 .category-chip,
 .control-btn {
@@ -290,4 +291,54 @@
   object-fit: contain; 
   border-radius: 8px;
   background-color: #f8f9fa; 
+}
+/* ================= BOTÓN DE MI UBICACIÓN (NUEVO) ================= */
+.locate-btn {
+  position: absolute;
+  z-index: 1005; /* Un poco por debajo del toggle-btn (1010) */
+  right: 14px;   /* Alineado con tus otros controles */
+  bottom: 24px;  /* Posición base para desktop */
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--bg-panel);
+  color: #007aff; /* Azul clásico de GPS */
+  border: none;
+  box-shadow: var(--shadow-panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.locate-btn:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.locate-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===== AJUSTES PARA MOBILE ===== */
+@media (max-width: 768px) {
+  .locate-btn {
+    /* Lo ponemos arriba del botón azul/rojo de "toggle-btn" que tienes en bottom: 14px */
+    bottom: 75px; 
+    transition: bottom var(--transition-smooth); /* Para que se mueva suave si se abre el panel */
+  }
+
+  /* Si el panel se abre, tu toggle-btn sube a 52vh. 
+     Hacemos que este botón de GPS suba también para que no quede tapado */
+  .controls-panel.open ~ .locate-btn {
+    bottom: calc(52vh + 60px); 
+  }
+}
+
+/* ===== EL NUEVO AGREGADO (Solo evita que el icono se ponga azul al darle muchos clics) ===== */
+.locate-btn .material-symbols-outlined {
+  user-select: none; 
+  line-height: 1;    
 }
