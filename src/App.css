@@ -85,11 +85,19 @@
 }
 
 /* ================= GRIDS ================= */
-.categories-grid,
+.categories-grid {
+  display: flex;
+  flex-wrap: wrap; /* Esto permite que bajen a la siguiente línea */
+  gap: 8px;
+  width: 100%;
+  padding: 4px 0;
+}
 .circuits-grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;    /* Forzamos la fila horizontal */
+  flex-wrap: nowrap;      /* Evitamos que se apilen */
   gap: 6px;
+  width: 100%;            /* Ocupa todo el ancho del panel */
 }
 
 /* ================= BOTONES CHIP ================= */
@@ -151,15 +159,21 @@
 .ruta-pacha,
 .ruta-inti,
 .ruta-killa {
-  width: 100%;
-  padding: 6px 12px;
+  flex: 1;                /* Cada botón toma una parte igual del ancho */
+  width: auto;            /* QUITAMOS el 100% que los obligaba a apilarse */
+  padding: 5px 2px;       /* Reducimos el relleno para que sea más pequeño */
+  font-size: 0.65rem;     /* Bajamos un poco el tamaño de la fuente */
   border-radius: var(--radius-pill);
   border: none;
-  font-size: 0.75rem;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  white-space: nowrap;    /* Evita que el texto se parta en dos líneas */
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ruta-pacha { background: linear-gradient(180deg, #2b6cff, #1a4dbf); }
@@ -167,34 +181,30 @@
 .ruta-killa { background: linear-gradient(180deg, #f39c12, #d35400); }
 
 /* ================= GPS ================= */
-.route-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.gps-row {
+  display: flex;       /* Alinea en fila */
+  align-items: center; /* Centra verticalmente */
+  gap: 8px;            /* Espacio entre botones y select */
+  width: 100%;         /* Usa todo el ancho disponible */
+  padding: 4px 0;
 }
 
 .route-select {
-  flex: 1;
-  padding: 4px 8px;
-  border-radius: 6px;
+  flex: 1;             /* El selector crece para llenar el hueco */
+  min-width: 0;        /* Evita que el texto largo rompa el diseño */
+  height: 32px;        /* Altura igual a la de los botones circulares */
+  border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 0.75rem;
+  background-color: #fff;
+  padding: 0 8px;
 }
 
-.go-btn {
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: none;
-  background: #000;
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-
-.go-btn:disabled {
-  opacity: 0.4;
+/* Estilo para cuando el botón de Ir está bloqueado */
+.ir-btn:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
+  filter: grayscale(1);
 }
 
 /* ================= IDIOMA ================= */

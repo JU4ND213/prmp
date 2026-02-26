@@ -14,7 +14,7 @@ export default function MapView() {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [activeCategories, setActiveCategories] = useState([]);
   const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(true);
-  const [activeCircuitos, setActiveCircuitos] = useState([]);
+  const [activeCircuito, setActiveCircuito] = useState(null);
   const [destinoId, setDestinoId] = useState("");
   const [idiomaMenuAbierto, setIdiomaMenuAbierto] = useState(false);
 
@@ -66,23 +66,23 @@ export default function MapView() {
      CIRCUITOS
   =============================== */
   const toggleCircuito = (key) => {
-    setActiveCircuitos((prev) =>
-      prev.includes(key) ? prev.filter((c) => c !== key) : [...prev, key]
-    );
-  };
+  // Si vuelves a hacer clic en el mismo, se deselecciona (null)
+  // Si haces clic en uno nuevo, ese se convierte en el único activo
+  setActiveCircuito((prev) => (prev === key ? null : key));
+};
 
   useEffect(() => {
-    if (!mapRef.current) return;
+  if (!mapRef.current) return;
 
-    if (activeCircuitos.length === 0) {
-      mapRef.current.dibujarCircuito(null);
-      return;
-    }
+  // Si no hay circuito activo, limpiamos la línea del mapa
+  if (!activeCircuito) {
+    mapRef.current.dibujarCircuito(null);
+    return;
+  }
 
-    activeCircuitos.forEach((key) => {
-      mapRef.current.dibujarCircuito(CIRCUITOS_OBJ[key]);
-    });
-  }, [activeCircuitos]);
+  // Dibujamos el único circuito seleccionado
+  mapRef.current.dibujarCircuito(CIRCUITOS_OBJ[activeCircuito]);
+}, [activeCircuito]);
 
   /* ===============================
      CATEGORÍAS
@@ -173,42 +173,46 @@ export default function MapView() {
           <h3>{t("controlPanel")}</h3>
         </div>
 
-        {/* PUNTOS BASE */}
-        <button
-          className="chip chip--circle"
-          onClick={() => {
-            const nuevo = !mostrarMarcadoresBase;
-            setMostrarMarcadoresBase(nuevo);
-            mapRef.current?.toggleMarcadoresBase(nuevo);
-          }}
-          title="Puntos base"
-        >
-          {mostrarMarcadoresBase ? "📍" : "✔"}
-        </button>
+        <div className="gps-row">
+  {/* PUNTOS BASE */}
+  <button
+    className="chip chip--circle"
+    onClick={() => {
+      const nuevo = !mostrarMarcadoresBase;
+      setMostrarMarcadoresBase(nuevo);
+      mapRef.current?.toggleMarcadoresBase(nuevo);
+    }}
+    title="Puntos base"
+  >
+    {mostrarMarcadoresBase ? "📍" : "✔"}
+  </button>
 
-        {/* GPS */}
-        <select
-          className="route-select"
-          value={destinoId}
-          onChange={(e) => setDestinoId(e.target.value)}
-        >
-          <option value="">{t("selectPlace")}</option>
-          {DESTINOS.map((d) => (
-            <option key={d.id} value={d.id}>
-              {t(`destinos.${d.id}`)}
-            </option>
-          ))}
-        </select>
+  {/* SELECTOR (Listbox) */}
+  <select
+    className="route-select"
+    value={destinoId}
+    onChange={(e) => setDestinoId(e.target.value)}
+  >
+    <option value="">{t("selectPlace")}</option>
+    {DESTINOS.map((d) => (
+      <option key={d.id} value={d.id}>
+        {t(`destinos.${d.id}`)}
+      </option>
+    ))}
+  </select>
 
-        <button
-          className="chip chip--circle"
-          onClick={irAlDestino}
-          disabled={!destinoId}
-        >
-          {t("go")}
-        </button>
+  {/* BOTÓN IR */}
+  <button
+    className="chip chip--circle ir-btn"
+    onClick={irAlDestino}
+    disabled={!destinoId}
+  >
+    {t("go")}
+  </button>
+</div>
 
-        <div className="divider"></div>
+{/* MANTÉN EL DIVIDER AQUÍ PARA SEPARAR DE LAS CATEGORÍAS */}
+<div className="divider"></div>
 
         {/* CATEGORÍAS */}
         <label>{t("pointsOfInterest")}</label>
@@ -236,23 +240,25 @@ export default function MapView() {
         {/* CIRCUITOS */}
         <label>{t("touristCircuits")}</label>
         <div className="circuits-grid">
-          {[
-            { key: "PACHA", class: "ruta-pacha" },
-            { key: "INTI", class: "ruta-inti" },
-            { key: "KILLA", class: "ruta-killa" }
-          ].map(({ key, class: cls }) => {
-            const isActive = activeCircuitos.includes(key);
+                  {[
+          { key: "PACHA", class: "ruta-pacha" },
+          { key: "INTI", class: "ruta-inti" },
+          { key: "KILLA", class: "ruta-killa" }
+        ].map(({ key, class: cls }) => {
+          
+          // ✅ CAMBIO: Ahora comparamos directamente (ya no usamos .includes)
+          const isActive = activeCircuito === key; 
 
-            return (
-              <button
-                key={key}
-                className={`control-btn ${cls} ${isActive ? "active" : ""}`}
-                onClick={() => toggleCircuito(key)}
-              >
-                {t(`circuits.${key}`)} {isActive && "✓"}
-              </button>
-            );
-          })}
+          return (
+            <button
+              key={key}
+              className={`control-btn ${cls} ${isActive ? "active" : ""}`}
+              onClick={() => toggleCircuito(key)}
+            >
+              {t(`circuits.${key}`)} {isActive && "✓"}
+            </button>
+          );
+        })}
         </div>
       </div>
     </div>
