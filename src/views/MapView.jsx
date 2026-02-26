@@ -177,7 +177,7 @@ export default function MapView() {
           <option value="">{t("selectPlace")}</option>
           {DESTINOS.map((d) => (
             <option key={d.id} value={d.id}>
-              {d.nombre}
+              {t(`destinos.${d.id}`)}
             </option>
           ))}
         </select>
@@ -207,7 +207,7 @@ export default function MapView() {
                 style={{ backgroundColor: config.color }}
                 onClick={() => toggleCategory(key)}
               >
-                {t(config.labelKey ?? config.label)} {isActive && "✓"}
+                {t(`categories.${key}`)} {isActive && "✓"}
               </button>
             );
           })}
@@ -219,24 +219,22 @@ export default function MapView() {
         <label>{t("touristCircuits")}</label>
         <div className="circuits-grid">
           {[
-            { key: "PACHA", label: "Ruta Pacha", class: "ruta-pacha" },
-            { key: "INTI", label: "Ruta Inti", class: "ruta-inti" },
-            { key: "KILLA", label: "Ruta Killa", class: "ruta-killa" }
-          ].map(({ key, label, class: cls }) => {
-            const isActive = activeCircuitos.includes(key);
+  { key: "PACHA", class: "ruta-pacha" },
+  { key: "INTI", class: "ruta-inti" },
+  { key: "KILLA", class: "ruta-killa" }
+      ].map(({ key, class: cls }) => {
+        const isActive = activeCircuitos.includes(key);
 
-            return (
-              <button
-                key={key}
-                className={`control-btn ${cls} ${
-                  isActive ? "active" : ""
-                }`}
-                onClick={() => toggleCircuito(key)}
-              >
-                {label} {isActive && "✓"}
-              </button>
-            );
-          })}
+        return (
+          <button
+            key={key}
+            className={`control-btn ${cls} ${isActive ? "active" : ""}`}
+            onClick={() => toggleCircuito(key)}
+          >
+            {t(`circuits.${key}`)} {isActive && "✓"}
+          </button>
+        );
+      })}
         </div>
       </div>
     </div>
