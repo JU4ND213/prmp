@@ -125,6 +125,62 @@
     "inti_raymi": {
       "name": "Inti Raymi Fiesta del Sol",
       "description": "Fiesta del sol celebrada en el monumento"
+    },
+    "piel_y_cuero": {
+      "name": "Piel y Cuero",
+      "description": "Productos de piel y cuero"
+    },
+    "local_27_native_crafts": {
+      "name": "Local 27 - Native Crafts",
+      "description": "Tienda de artesanías nativas"
+    },
+    "amor_n83": {
+      "name": "Amor (n°83)",
+      "description": "Artesanías locales y productos regionales"
+    },
+    "local_42_maki_rurashka": {
+      "name": "Local 42 - Maki Rurashka",
+      "description": "Productos rurales y artesanías locales"
+    },
+    "local_26_claya": {
+      "name": "Local 26 - Claya",
+      "description": "Productos locales y artesanías tradicionales"
+    },
+    "origenes_ecuador": {
+      "name": "Origenes Ecuador",
+      "description": "Productos locales y artesanías tradicionales"
+    },
+    "ricon_musical": {
+      "name": "Ricon Musical",
+      "description": "Productos musicales locales"
+    },
+    "local_95a_huiñay": {
+      "name": "Local 95A - Huiñay",
+      "description": "Artesanías locales y productos regionales"
+    },
+    "haku_andean_chick": {
+      "name": "Haku Andean Chick",
+      "description": "Productos andinos y artesanías tradicionales"
+    },
+    "tienda_pichincha": {
+      "name": "Tienda Pichincha",
+      "description": "Productos locales y artesanías tradicionales"
+    },
+    "plaza_cultura": {
+      "name": "Plaza Cultura",
+      "description": "Plaza de eventos culturales"
+    },
+    "plaza_central": {
+      "name": "Plaza Central",
+      "description": "Plaza central del monumento"
+    },
+    "plaza_de_colores": {
+      "name": "Plaza de colores",
+      "description": "Plaza con elementos decorativos de colores"
+    },
+    "arena_top": {
+      "name": "Arena top",
+      "description": "Arena de eventos especiales"
     }
   },
   "language_selector": {
