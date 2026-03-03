@@ -47,7 +47,46 @@
     "14": "Point 14 Guayasamín Pavilion",
     "15": "Point 15 Geodesic Avenue"
   },
+  "points": {
+    "centro_medico": {
+      "name": "Medical Center",
+      "description": "Medical assistance"
+    },
+    "lactario": {
+      "name": "Nursing Room",
+      "description": "Nursing room for infants"
+    },
+    "cajero_bg": {
+      "name": "Banco Guayaquil ATM",
+      "description": "Banco Guayaquil automated teller machine"
+    },
 
+    "bano": {
+      "name": "Restroom",
+      "description": "Restroom facilities"
+    },
+
+    "boleteria": {
+      "name": "Middle of the World Ticket Office",
+      "description": "Monument ticket office"
+    },
+    "pab_guayasamin": {
+      "name": "Guayasamín Pavilion",
+      "description": "Pavilion dedicated to Guayasamín culture"
+    },
+    "planetario": {
+      "name": "Planetarium",
+      "description": "Planetarium with star projections"
+    },
+    "museo_cacao": {
+      "name": "Cocoa Museum",
+      "description": "Museum dedicated to cocoa and its history"
+    },
+    "experimento_huevo": {
+      "name": "Egg Experiment",
+      "description": "Interactive egg experiment laboratory"
+    }
+  },
   "language_selector": {
     "label": "Language",
     "es": "Spanish",

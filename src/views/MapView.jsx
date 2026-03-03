@@ -98,11 +98,15 @@ export default function MapView() {
 
     const puntos = activeCategories.flatMap(
       (cat) => POINTS_BY_COLOR[cat] || []
-    );
+    ).map(p => ({
+      ...p,
+      // Si el punto tiene un 'id', busca su traducción. Si no, deja el nombre original.
+      name: p.id ? t(`points.${p.id}.name`, p.name) : p.name,
+      description: p.id ? t(`points.${p.id}.description`, p.description) : p.description
+    }));
 
     mapRef.current.dibujarPuntos(puntos);
-  }, [activeCategories]);
-
+  }, [activeCategories, i18n.language, t]);
   /* ===============================
      RUTA GPS
   =============================== */

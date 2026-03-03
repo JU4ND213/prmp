@@ -47,7 +47,54 @@
     "14": "Punto 14 Pab. Guayasamín",
     "15": "Punto 15 Av. Geodésicos"
   },
+  "points": {
+    "centro_medico": {
+      "name": "Centro Médico",
+      "description": "Asistencia médica"
+    },
+    "lactario": {
+      "name": "Lactario",
+      "description": "Lactario para lactantes"
+    },
+    "cajero_bg": {
+      "name": "Cajero Banco Guayaquil",
+      "description": "Cajero automático del Banco Guayaquil"
+    },
 
+    "bano": {
+      "name": "Baño",
+      "description": "Lugar para hacer necesidades biológicas"
+    },
+
+    "boleteria": {
+      "name": "Boletería Mitad del Mundo",
+      "description": "Boletería del monumento"
+    },
+    "pab_guayasamin": {
+      "name": "Pabellón Guayasamín",
+      "description": "Pabellón dedicado a la cultura Guayasamín"
+    },
+    "planetario": {
+      "name": "Planetario",
+      "description": "Planetario con proyección de estrellas"
+    },
+    "museo_cacao": {
+      "name": "Museo del Cacao",
+      "description": "Museo dedicado al cacao y su historia"
+    },
+    "experimento_huevo": {
+      "name": "Experimento del Huevo",
+      "description": "Laboratorio interactivo sobre el huevo"
+    },
+    "legado_virtual": {
+      "name": "Legado Virtual",
+      "description": "Experiencia virtual sobre el legado cultural"
+    },
+    "pabellon_ecuador": {
+      "name": "Pabellón Ecuador",
+      "description": "Pabellón dedicado a la cultura ecuatoriana"
+    }
+  },
   "language_selector": {
     "label": "Idioma",
     "es": "Español",

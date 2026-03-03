@@ -10,8 +10,8 @@ export const DESTINOS = [
     imagen: "/images/Mitad_del_Mundo_01.png", 
     imagenes: [
       "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
+      "/images/turismo-ecuador.png", 
+      "/images/monu.png"
     ],
     lat: -0.0021191507224225577, 
     lng: -78.45583279786655 
@@ -335,9 +335,8 @@ export function startMap(container, initialT, maskOptions = {}) {
 
   function toggleMarcadoresBase(mostrar) {
     Object.values(marcadoresBase).forEach(marker => {
-      const el = marker.getElement(); // Obtenemos el div HTML del marcador
+      const el = marker.getElement();
       if (el) {
-        // Si mostrar es true, lo mostramos (block), si no, lo ocultamos (none)
         el.style.display = mostrar ? "block" : "none";
       }
     });
@@ -517,7 +516,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     toggleMarcadoresBase,
     dibujarRutaDesdeGps,
     actualizarIdiomaBase,
-    centrarEnUsuario, // <--- Exportamos la función aquí
+    centrarEnUsuario, 
     getBearing: () => map.getBearing(),
     cleanup: () => {
       map.remove();
