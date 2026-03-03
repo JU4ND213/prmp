@@ -82,17 +82,49 @@
       "name": "Museo del Cacao",
       "description": "Museo dedicado al cacao y su historia"
     },
-    "experimento_huevo": {
-      "name": "Experimento del Huevo",
-      "description": "Laboratorio interactivo sobre el huevo"
-    },
     "legado_virtual": {
       "name": "Legado Virtual",
       "description": "Experiencia virtual sobre el legado cultural"
     },
+    "experimento_huevo": {
+      "name": "Experimento del Huevo",
+      "description": "Actividad lúdica sobre el huevo"
+    },
+    "museo_cerveza": {
+      "name": "Museo Cerveza Artesanal",
+      "description": "Museo dedicado a la cerveza"
+    },
+    "pabellon_francia": {
+      "name": "Pabellón de Francia",
+      "description": "Pabellón dedicado a la cultura francesa"
+    },
     "pabellon_ecuador": {
-      "name": "Pabellón Ecuador",
+      "name": "Pabellón de Ecuador",
       "description": "Pabellón dedicado a la cultura ecuatoriana"
+    },
+    "iglesia_mitad_mundo": {
+      "name": "Iglesia Mitad del Mundo",
+      "description": "Iglesia ubicada en el monumento"
+    },
+    "tiangues": {
+      "name": "Tiangues",
+      "description": "Área de tiangues con exhibiciones culturales"
+    },
+    "zona_llamas": {
+      "name": "Zona de Llamas",
+      "description": "Zona con exhibición de llamas y animales andinos"
+    },
+    "tren_mitad_mundo": {
+      "name": "Tren Mitad del Mundo",
+      "description": "Tren que recorre el monumento"
+    },
+    "viviendas_ancestrales": {
+      "name": "Viviendas Ancestrales",
+      "description": "Viviendas tradicionales ancestrales"
+    },
+    "inti_raymi": {
+      "name": "Inti Raymi Fiesta del Sol",
+      "description": "Fiesta del sol celebrada en el monumento"
     }
   },
   "language_selector": {

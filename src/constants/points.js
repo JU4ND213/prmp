@@ -21,7 +21,7 @@ export const POINTS_BY_COLOR = {
     { id: "planetario",name: "Planetario", description: "Planetario con proyección de estrellas", lat: -0.002893, lng: -78.4550475, color: "#ffc800", icon: "attractions" },
     { id: "museo_cacao", name: "Museo del cacao", description: "Museo dedicado al cacao y su historia", lat: -0.001614, lng: -78.4551451, color: "#ffc800", icon: "attractions" },
     { id: "legado_virtual", name: "Legado Virtual", description: "Experiencia virtual sobre el legado cultural", lat: -0.0026843, lng: -78.4552738, color: "#ffc800", icon: "attractions" },
-    { id: "experimento_huevo", name: "Experimento del Huevo", description: "Laboratorio interactivo sobre el huevo", lat: -0.0021183, lng: -78.4550887, color: "#ffc800", icon: "attractions" },
+    { id: "experimento_huevo", name: "Experimento del Huevo", description: "Actividad lúdica sobre el huevo", lat: -0.0021183, lng: -78.4550887, color: "#ffc800", icon: "attractions" },
     { id: "museo_cerveza", name: "Museo Cerveza Artesanal", description: "Museo dedicado a la cerveza", lat: -0.0017324, lng: -78.4545912, color: "#ffc800", icon: "attractions" },
     { id: "pabellon_francia", name: "Pabellón de Francia", description: "Pabellón dedicado a la cultura francesa", lat: -0.0031023, lng: -78.4550493, color: "#ffc800", icon: "attractions" },
     { id: "pabellon_ecuador", name: "Pabellón Ecuador", description: "Pabellón dedicado a la cultura ecuatoriana", lat: -0.0029697, lng: -78.4552645, color: "#ffc800", icon: "attractions" },
@@ -30,7 +30,6 @@ export const POINTS_BY_COLOR = {
     { id: "zona_llamas", name: "Zona de llamas", description: "Zona con exhibición de llamas y animales andinos", lat: -0.0014521, lng: -78.4567139, color: "#ffc800", icon: "attractions" },
     { id: "tren_mitad_mundo", name: "Tren Mitad del Mundo", description: "Tren que recorre el monumento", lat: -0.0016097, lng: -78.4541643, color: "#ffc800", icon: "attractions" },
     { id: "viviendas_ancestrales", name: "Viviendas ancestrales", description: "Viviendas tradicionales ancestrales", lat: -0.0026562, lng: -78.4537317, color: "#ffc800", icon: "attractions" },
-    { id: "viviendas_ancestrales", name: "Viviendas Ancestrales", description: "Viviendas en la ciudad Mitad del Mundo", lat: -0.0026649, lng: -78.4536884, color: "#ffc800", icon: "attractions" },
     { id: "inti_raymi", name: "Inti Raymi Fiesta del sol", description: "Fiesta del sol celebrada en el monumento", lat: -0.0029441, lng: -78.454315, color: "#ffc800", icon: "attractions" },
   ],
 

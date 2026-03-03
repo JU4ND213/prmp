@@ -48,45 +48,83 @@
     "15": "Point 15 Geodesic Avenue"
   },
   "points": {
-    "centro_medico": {
-      "name": "Medical Center",
-      "description": "Medical assistance"
-    },
-    "lactario": {
-      "name": "Nursing Room",
-      "description": "Nursing room for infants"
-    },
-    "cajero_bg": {
-      "name": "Banco Guayaquil ATM",
-      "description": "Banco Guayaquil automated teller machine"
-    },
-
-    "bano": {
-      "name": "Restroom",
-      "description": "Restroom facilities"
-    },
-
-    "boleteria": {
-      "name": "Middle of the World Ticket Office",
-      "description": "Monument ticket office"
-    },
-    "pab_guayasamin": {
-      "name": "Guayasamín Pavilion",
-      "description": "Pavilion dedicated to Guayasamín culture"
-    },
-    "planetario": {
-      "name": "Planetarium",
-      "description": "Planetarium with star projections"
-    },
-    "museo_cacao": {
-      "name": "Cocoa Museum",
-      "description": "Museum dedicated to cocoa and its history"
-    },
-    "experimento_huevo": {
-      "name": "Egg Experiment",
-      "description": "Interactive egg experiment laboratory"
-    }
+  "centro_medico": {
+    "name": "Medical Center",
+    "description": "Medical assistance"
   },
+  "lactario": {
+    "name": "Lactation Room",
+    "description": "Lactation room for infants"
+  },
+  "cajero_bg": {
+    "name": "Banco Guayaquil ATM",
+    "description": "Banco Guayaquil automated teller machine"
+  },
+  "bano": {
+    "name": "Restroom",
+    "description": "Place for biological needs"
+  },
+  "boleteria": {
+    "name": "Mitad del Mundo Ticket Office",
+    "description": "Monument ticket office"
+  },
+  "pab_guayasamin": {
+    "name": "Guayasamín Pavilion",
+    "description": "Pavilion dedicated to Guayasamín culture"
+  },
+  "planetario": {
+    "name": "Planetarium",
+    "description": "Planetarium with star projections"
+  },
+  "museo_cacao": {
+    "name": "Cocoa Museum",
+    "description": "Museum dedicated to cocoa and its history"
+  },
+  "legado_virtual": {
+    "name": "Virtual Heritage",
+    "description": "Virtual experience about cultural heritage"
+  },
+  "experimento_huevo": {
+    "name": "Egg Experiment",
+    "description": "Playful activity related to the egg"
+  },
+  "museo_cerveza": {
+    "name": "Craft Beer Museum",
+    "description": "Museum dedicated to beer"
+  },
+  "pabellon_francia": {
+    "name": "France Pavilion",
+    "description": "Pavilion dedicated to French culture"
+  },
+  "pabellon_ecuador": {
+    "name": "Ecuador Pavilion",
+    "description": "Pavilion dedicated to Ecuadorian culture"
+  },
+  "iglesia_mitad_mundo": {
+    "name": "Mitad del Mundo Church",
+    "description": "Church located at the monument"
+  },
+  "tiangues": {
+    "name": "Tiangues",
+    "description": "Tiangues area with cultural exhibitions"
+  },
+  "zona_llamas": {
+    "name": "Llama Zone",
+    "description": "Area with llamas and Andean animals exhibition"
+  },
+  "tren_mitad_mundo": {
+    "name": "Mitad del Mundo Train",
+    "description": "Train that tours the monument"
+  },
+  "viviendas_ancestrales": {
+    "name": "Ancestral Dwellings",
+    "description": "Traditional ancestral dwellings"
+  },
+  "inti_raymi": {
+    "name": "Inti Raymi Sun Festival",
+    "description": "Sun festival celebrated at the monument"
+  }
+},
   "language_selector": {
     "label": "Language",
     "es": "Spanish",
