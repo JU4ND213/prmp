@@ -19,8 +19,8 @@ export const DESTINOS = [
   },
   { id: 1, nombre: "Punto 1 Viviendas", imagen: "/images/Viviendas.png", imagenes: [
       "/images/Viviendas.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
+      "/images/vivendass.png", 
+      "/images/vivendassss.png"
     ], lat: -0.0026339, lng: -78.4536447 },
   { id: 2, nombre: "Punto 2 Museo Fiestas", imagen: "/images/Museo Fiestas.png", imagenes: [
       "/images/Museo Fiestas.png", 
@@ -34,17 +34,17 @@ export const DESTINOS = [
     ], lat: -0.002419977392211793,  lng: -78.45455274302334 },
   { id: 4, nombre: "Punto 4 Capilla", imagen: "/images/Iglesia.png", imagenes: [
       "/images/Iglesia.png", 
-      "/images/Mitad_del_Mundo_01.png", 
+      "/images/inglees.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00217993, lng: -78.45443815 },
   { id: 5, nombre: "Punto 5 Museo Cerveza", imagen: "/images/Museo Cerveza.png", imagenes: [
       "/images/Museo Cerveza.png", 
-      "/images/Mitad_del_Mundo_01.png", 
+      "/images/cervezzz.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00172532, lng: -78.45456769 },
   { id: 6, nombre: "Punto 6 Museo Cacao", imagen: "/images/Muiseo cacao.png", imagenes: [
       "/images/Muiseo cacao.png", 
-      "/images/Mitad_del_Mundo_01.png", 
+      "/images/museocc.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.0016318614649577512,  lng: -78.45513804232704 },
   { id: 8, nombre: "Punto 8 Tienda Pichincha", imagen: "/images/Tienda pichincha.png", imagenes: [
@@ -69,7 +69,7 @@ export const DESTINOS = [
     ], lat: -0.00295948, lng: -78.45520276 },
   { id: 12, nombre: "Punto 12 Planetario", imagen: "/images/Planetario.png", imagenes: [
       "/images/Planetario.png", 
-      "/images/Mitad_del_Mundo_01.png", 
+      "/images/planet.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00287231, lng: -78.45505122 },
   { id: 13, nombre: "Punto 13 Pab. Francia", imagen: "/images/PabellonFrancia.png", imagenes: [

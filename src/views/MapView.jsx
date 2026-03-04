@@ -123,7 +123,6 @@ export default function MapView() {
       mapRef.current.centrarEnUsuario();
     }
   };
-
   /* ===============================
      UI
   =============================== */
