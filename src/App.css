@@ -41,49 +41,56 @@
 /* ===== DESKTOP ===== */
 @media (min-width: 768px) {
 
-  /* ===== BOTÓN TOGGLE ===== */
+  /* ===== BOTÓN TOGGLE (El botón azul de Opciones) ===== */
   .toggle-btn {
-    position: fixed;              /* 👈 CLAVE */
-    top: 16px;
-    left: 16px;
+    position: fixed !important; 
+    
+    
+    top: auto !important; 
+    left: auto !important;
+
+    
+    bottom: 80px !important; 
+    right: 20px !important;   
 
     width: auto !important;
     height: 40px !important;
     padding: 8px 14px !important;
-
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-
     white-space: nowrap;
     border-radius: var(--radius-pill);
-
     max-width: fit-content;
     max-height: 40px;
-
     pointer-events: auto;
-    z-index: 1200;                 /* 👈 encima del mapa */
+    z-index: 1200; 
   }
 
-  /* ===== PANEL ===== */
+  /* ===== PANEL (El menú que se abre) ===== */
   .controls-panel {
-    position: fixed;              /* 👈 CLAVE */
-    top: 64px;                    /* deja respirar al botón */
-    left: 16px;
+    position: fixed !important;
+
+    /* Limpiamos la posición vieja */
+    top: auto !important;
+    left: auto !important;
+
+    /* Lo ponemos just arriba del botón para que no lo tape */
+    bottom: 200px !important; 
+    right: 20px !important;
 
     width: 260px;
-    max-height: calc(100vh - 80px);
+    max-height: calc(100vh - 250px);
     padding: 12px;
     border-radius: var(--radius-lg);
     overflow-y: auto;
-
     background: var(--panel-bg, #fff);
     box-shadow: 0 8px 24px rgba(0,0,0,.15);
 
-    transform: translateX(-110%);
+    /* Animación para que entre desde la derecha */
+    transform: translateX(110%);
     transition: transform .25s ease;
-
-    z-index: 1100;                /* debajo del botón */
+    z-index: 1100;
   }
 
   /* ===== PANEL ABIERTO ===== */
@@ -93,7 +100,7 @@
 
   /* ===== PANEL CERRADO ===== */
   .controls-panel.closed {
-    transform: translateX(-110%);
+    transform: translateX(110%);
   }
 
   /* ===== ESTADO BOTÓN CUANDO ABRE ===== */
@@ -104,7 +111,29 @@
 }
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
+  
+  
+  .toggle-btn {
+    position: fixed !important; 
+    bottom: 80px !important; 
+    right: 16px !important;  
+    
+    /* Le devolvemos su forma */
+    width: auto !important;
+    height: 40px !important;
+    padding: 8px 14px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: var(--radius-pill);
+    max-width: fit-content;
+    z-index: 1200; 
+  }
+
+  /* Tu panel actual (solo le agregué position fixed y z-index por seguridad) */
   .controls-panel {
+    position: fixed !important; 
     bottom: 0;
     left: 0;
     width: 100%;
@@ -117,6 +146,11 @@
 
   .controls-panel.open { transform: translateY(0); }
   .controls-panel.closed { transform: translateY(120%); }
+  
+  .controls-panel.open ~ .toggle-btn {
+    background: #ff3b30;
+    color: #fff;
+  }
 }
 
 /* ================= ELEMENTOS INTERNOS ================= */
@@ -177,7 +211,7 @@
 
 /* ================= CHIP PÍLDORA (FINO) ================= */
 .chip--pill {
-  padding: 4px 10px;     /* 👈 clave anti-tosco */
+  padding: 4px 10px;     
   border-radius: var(--radius-pill);
   white-space: nowrap;
   line-height: 1;
@@ -356,7 +390,7 @@
   position: absolute;
   z-index: 1005; /* Un poco por debajo del toggle-btn (1010) */
   right: 14px;   /* Alineado con tus otros controles */
-  bottom: 24px;  /* Posición base para desktop */
+  bottom: 25px;  /* Posición base para desktop */
   width: 48px;
   height: 48px;
   border-radius: 50%;

@@ -164,7 +164,7 @@ export default function MapView() {
         className="toggle-btn"
         onClick={() => setMenuAbierto(!menuAbierto)}
       >
-        {menuAbierto ? "✕" : "☰ Opciones"}
+        {menuAbierto ? "✕" : "☰"}
       </button>
 
       {/* ===== PANEL ===== */}
