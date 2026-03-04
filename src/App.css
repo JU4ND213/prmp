@@ -39,21 +39,69 @@
 }
 
 /* ===== DESKTOP ===== */
-@media (min-width: 769px) {
-  .toggle-btn { display: none; }
+@media (min-width: 768px) {
 
+  /* ===== BOTÓN TOGGLE ===== */
+  .toggle-btn {
+    position: fixed;              /* 👈 CLAVE */
+    top: 16px;
+    left: 16px;
+
+    width: auto !important;
+    height: 40px !important;
+    padding: 8px 14px !important;
+
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    white-space: nowrap;
+    border-radius: var(--radius-pill);
+
+    max-width: fit-content;
+    max-height: 40px;
+
+    pointer-events: auto;
+    z-index: 1200;                 /* 👈 encima del mapa */
+  }
+
+  /* ===== PANEL ===== */
   .controls-panel {
-    top: 14px;
-    left: 14px;
+    position: fixed;              /* 👈 CLAVE */
+    top: 64px;                    /* deja respirar al botón */
+    left: 16px;
+
     width: 260px;
-    max-height: calc(100vh - 28px);
+    max-height: calc(100vh - 80px);
     padding: 12px;
     border-radius: var(--radius-lg);
-    overflow: hidden; 
+    overflow-y: auto;
+
+    background: var(--panel-bg, #fff);
+    box-shadow: 0 8px 24px rgba(0,0,0,.15);
+
+    transform: translateX(-110%);
+    transition: transform .25s ease;
+
+    z-index: 1100;                /* debajo del botón */
+  }
+
+  /* ===== PANEL ABIERTO ===== */
+  .controls-panel.open {
+    transform: translateX(0);
+  }
+
+  /* ===== PANEL CERRADO ===== */
+  .controls-panel.closed {
+    transform: translateX(-110%);
+  }
+
+  /* ===== ESTADO BOTÓN CUANDO ABRE ===== */
+  .controls-panel.open ~ .toggle-btn {
+    background: #ff3b30;
+    color: #fff;
   }
 }
-
-
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
   .controls-panel {
@@ -64,7 +112,7 @@
     padding: 12px 12px 16px;
     border-radius: 16px 16px 0 0;
     transform: translateY(120%);
-    overflow: hidden; /* ⛔ sin scroll */
+    overflow: hidden; 
   }
 
   .controls-panel.open { transform: translateY(0); }
