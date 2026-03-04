@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../App.css";
-
 import { startMap, CIRCUITOS_OBJ, DESTINOS } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 import { useTranslation } from "react-i18next";
