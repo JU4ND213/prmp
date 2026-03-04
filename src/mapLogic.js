@@ -488,7 +488,6 @@ export function startMap(container, initialT, maskOptions = {}) {
       marcadoresCategorias.push(marker);
     });
   }
-
   /* ---------- NUEVA FUNCIÓN PARA CENTRAR EN EL USUARIO ---------- */
   function centrarEnUsuario() {
     if (!userMarker) return;
