@@ -1,6 +1,7 @@
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Geolocation } from "@capacitor/geolocation";
+import { RUTAS_CAMINABLES } from "./constants/rutasCaminables";
 
 /* ================= DATOS ================= */
 export const DESTINOS = [
@@ -45,7 +46,7 @@ export const DESTINOS = [
       "/images/Muiseo cacao.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.0015001643185256258,  lng: -78.45516180961549 },
+    ], lat: -0.0016318614649577512,  lng: -78.45513804232704 },
   { id: 8, nombre: "Punto 8 Tienda Pichincha", imagen: "/images/Tienda pichincha.png", imagenes: [
       "/images/Tienda pichincha.png", 
       "/images/Mitad_del_Mundo_01.png", 
@@ -104,7 +105,121 @@ export const CIRCUITOS_OBJ = {
   INTI: new Circuito([1, 2, 5, 6, 8, 9, 7, 10, 11, 12, 13, 14], "#2ecc71"),
   KILLA: new Circuito([15, 14, 13, 12, 11, 10, 7], "#f39c12")
 };
+/* ================= MOTOR DE ENRUTAMIENTO ================= */
+const precision = 4;
+const toKey = (lng, lat) => `${lng.toFixed(precision)},${lat.toFixed(precision)}`;
 
+function construirGrafo(geojson) {
+  const grafo = {};
+
+  if (!geojson || !geojson.features) {
+    console.error("El GeoJSON de rutas no es válido o está vacío.");
+    return grafo;
+  }
+
+  geojson.features.forEach((feature, index) => {
+    // Verificamos que sea un LineString (o lo adaptamos si no lo es)
+    if (feature.geometry.type !== "LineString") {
+      console.warn(`La feature en el índice ${index} no es un LineString. Tipo actual: ${feature.geometry.type}`);
+      return; // Saltamos esta feature y continuamos con la siguiente
+    }
+
+    const coords = feature.geometry.coordinates;
+
+    for (let i = 0; i < coords.length - 1; i++) {
+      const lng1 = coords[i][0];
+      const lat1 = coords[i][1];
+      const lng2 = coords[i+1][0];
+      const lat2 = coords[i+1][1];
+
+      // Verificación de seguridad: Asegurarnos de que tenemos números válidos
+      if (typeof lng1 !== 'number' || typeof lat1 !== 'number' || 
+          typeof lng2 !== 'number' || typeof lat2 !== 'number') {
+        console.warn(`Coordenadas inválidas encontradas en la feature ${index}`);
+        continue;
+      }
+
+      const p1 = toKey(lng1, lat1);
+      const p2 = toKey(lng2, lat2);
+      
+      const dist = distanceMetersMotor(lat1, lng1, lat2, lng2); 
+
+      if (!grafo[p1]) grafo[p1] = { coord: [lng1, lat1], vecinos: {} };
+      if (!grafo[p2]) grafo[p2] = { coord: [lng2, lat2], vecinos: {} };
+
+      grafo[p1].vecinos[p2] = dist;
+      grafo[p2].vecinos[p1] = dist;
+    }
+  });
+
+  return grafo;
+}
+
+// Sacamos distanceMeters temporalmente aquí arriba para que el motor la pueda usar
+function distanceMetersMotor(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+const grafoCaminos = construirGrafo(RUTAS_CAMINABLES);
+
+function encontrarNodoMasCercano(lat, lng) {
+  let nodoMasCercano = null;
+  let distMinima = Infinity;
+  for (let key in grafoCaminos) {
+    const [nLng, nLat] = grafoCaminos[key].coord;
+    const d = distanceMetersMotor(lat, lng, nLat, nLng);
+    if (d < distMinima) {
+      distMinima = d;
+      nodoMasCercano = key;
+    }
+  }
+  return nodoMasCercano;
+}
+
+function encontrarRutaMasCorta(inicioKey, finKey) {
+  const distancias = {};
+  const previos = {};
+  const noVisitados = new Set(Object.keys(grafoCaminos));
+
+  for (let nodo in grafoCaminos) distancias[nodo] = Infinity;
+  distancias[inicioKey] = 0;
+
+  while (noVisitados.size > 0) {
+    let nodoActual = null;
+    let distMinima = Infinity;
+    for (let nodo of noVisitados) {
+      if (distancias[nodo] < distMinima) {
+        distMinima = distancias[nodo];
+        nodoActual = nodo;
+      }
+    }
+    if (nodoActual === null || nodoActual === finKey) break;
+    noVisitados.delete(nodoActual);
+
+    for (let vecino in grafoCaminos[nodoActual].vecinos) {
+      let nuevaDistancia = distancias[nodoActual] + grafoCaminos[nodoActual].vecinos[vecino];
+      if (nuevaDistancia < distancias[vecino]) {
+        distancias[vecino] = nuevaDistancia;
+        previos[vecino] = nodoActual;
+      }
+    }
+  }
+
+  const ruta = [];
+  let u = finKey;
+  if (distancias[u] !== Infinity || u === inicioKey) {
+    while (u) {
+      ruta.unshift(grafoCaminos[u].coord);
+      u = previos[u];
+    }
+  }
+  return ruta;
+}
 /* ---------------- MAPA ---------------- */
 export function startMap(container, initialT, maskOptions = {}) {
   if (!container) return;
@@ -361,17 +476,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
-  function generarRutaInterpolada(origen, destino, pasos = 150) {
-    const puntos = [];
-    for (let i = 0; i <= pasos; i++) {
-      const t = i / pasos;
-      puntos.push([
-        origen.lng + (destino.lng - origen.lng) * t,
-        origen.lat + (destino.lat - origen.lat) * t
-      ]);
-    }
-    return puntos;
-  }
+  
 
   let routePointsMap = [];
 
@@ -404,17 +509,27 @@ export function startMap(container, initialT, maskOptions = {}) {
 
     const userLngLat = userMarker.getLngLat();
     
-    // Validamos que existan coordenadas válidas
     if (!userLngLat || (userLngLat.lng === 0 && userLngLat.lat === 0)) {
       console.warn("Esperando señal GPS válida...");
       return;
     }
 
-    routePointsMap = generarRutaInterpolada(
-      { lat: userLngLat.lat, lng: userLngLat.lng },
-      { lat: destino.lat, lng: destino.lng },
-      150
-    );
+    const nodoInicio = encontrarNodoMasCercano(userLngLat.lat, userLngLat.lng);
+    const nodoFin = encontrarNodoMasCercano(destino.lat, destino.lng);
+
+    if (!nodoInicio || !nodoFin) {
+      console.warn("No se pudo conectar a la red de caminos.");
+      return;
+    }
+
+    let rutaCalculada = encontrarRutaMasCorta(nodoInicio, nodoFin);
+
+    if (rutaCalculada.length > 0) {
+      rutaCalculada.unshift([userLngLat.lng, userLngLat.lat]); 
+      rutaCalculada.push([destino.lng, destino.lat]);          
+    }
+
+    routePointsMap = rutaCalculada;
 
     if (map.getSource("gps-route-source")) {
       map.getSource("gps-route-source").setData({
