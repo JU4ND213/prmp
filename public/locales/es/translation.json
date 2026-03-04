@@ -181,6 +181,50 @@
     "arena_top": {
       "name": "Arena top",
       "description": "Arena de eventos especiales"
+    },
+    "parking": {
+      "name": "Parking",
+      "description": "Estacionamiento general"
+    },
+    "estacionamiento_principal": {
+      "name": "Estacionamiento Principal",
+      "description": "Estacionamiento del monumento"
+    },
+    "nuca_llacta": {
+      "name": "Ñuca Llacta Restaurant",
+      "description": "Comida tradicional ecuatoriana"
+    },
+    "restaurante": {
+      "name": "RESTAURANTE",
+      "description": "Restaurante general con variedad de platos"
+    },
+    "calima": {
+      "name": "Calima",
+      "description": "Restaurante con menú regional"
+    },
+    "cafe_sinchi_warmi": {
+      "name": "Café Sinchi Warmi",
+      "description": "Cafetería con ambiente cálido"
+    },
+    "raqeri_cacao": {
+      "name": "raqeri cacao",
+      "description": "Cafetería especializada en cacao"
+    },
+    "restaurante_balcon_al_mund": {
+      "name": "Restaurante Balcon al Mundo",
+      "description": "Vista panorámica al monumento"
+    },
+    "el_orgánico_star_coffee": {
+      "name": "El Orgánico Star Coffee",
+      "description": "Cafetería especializada en café orgánico"
+    },
+    "cafe_guayasamin": {
+      "name": "Café Guayasamin",
+      "description": "Cafetería con productos locales"
+    },
+    "tienda_delicatessen_rosita": {
+      "name": "Tienda Delicatessen Rosita",
+      "description": "Tienda de productos gourmet"
     }
   },
   "language_selector": {

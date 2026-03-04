@@ -53,8 +53,8 @@
     "description": "Medical assistance"
   },
   "lactario": {
-    "name": "Lactation Room",
-    "description": "Lactation room for infants"
+    "name": "Nursing Room",
+    "description": "Nursing room for infants"
   },
   "cajero_bg": {
     "name": "Banco Guayaquil ATM",
@@ -65,7 +65,7 @@
     "description": "Place for biological needs"
   },
   "boleteria": {
-    "name": "Mitad del Mundo Ticket Office",
+    "name": "Middle of the World Ticket Office",
     "description": "Monument ticket office"
   },
   "pab_guayasamin": {
@@ -81,12 +81,12 @@
     "description": "Museum dedicated to cocoa and its history"
   },
   "legado_virtual": {
-    "name": "Virtual Heritage",
+    "name": "Virtual Legacy",
     "description": "Virtual experience about cultural heritage"
   },
   "experimento_huevo": {
     "name": "Egg Experiment",
-    "description": "Playful activity related to the egg"
+    "description": "Playful activity about the egg"
   },
   "museo_cerveza": {
     "name": "Craft Beer Museum",
@@ -101,7 +101,7 @@
     "description": "Pavilion dedicated to Ecuadorian culture"
   },
   "iglesia_mitad_mundo": {
-    "name": "Mitad del Mundo Church",
+    "name": "Middle of the World Church",
     "description": "Church located at the monument"
   },
   "tiangues": {
@@ -113,16 +113,116 @@
     "description": "Area with llamas and Andean animals exhibition"
   },
   "tren_mitad_mundo": {
-    "name": "Mitad del Mundo Train",
+    "name": "Middle of the World Train",
     "description": "Train that tours the monument"
   },
   "viviendas_ancestrales": {
     "name": "Ancestral Dwellings",
-    "description": "Traditional ancestral dwellings"
+    "description": "Traditional ancestral homes"
   },
   "inti_raymi": {
     "name": "Inti Raymi Sun Festival",
     "description": "Sun festival celebrated at the monument"
+  },
+  "piel_y_cuero": {
+    "name": "Leather and Hide",
+    "description": "Leather and hide products"
+  },
+  "local_27_native_crafts": {
+    "name": "Shop 27 - Native Crafts",
+    "description": "Native handicrafts shop"
+  },
+  "amor_n83": {
+    "name": "Amor (No. 83)",
+    "description": "Local handicrafts and regional products"
+  },
+  "local_42_maki_rurashka": {
+    "name": "Shop 42 - Maki Rurashka",
+    "description": "Rural products and local handicrafts"
+  },
+  "local_26_claya": {
+    "name": "Shop 26 - Claya",
+    "description": "Local products and traditional handicrafts"
+  },
+  "origenes_ecuador": {
+    "name": "Origins Ecuador",
+    "description": "Local products and traditional handicrafts"
+  },
+  "ricon_musical": {
+    "name": "Ricon Musical",
+    "description": "Local musical products"
+  },
+  "local_95a_huiñay": {
+    "name": "Shop 95A - Huiñay",
+    "description": "Local handicrafts and regional products"
+  },
+  "haku_andean_chick": {
+    "name": "Haku Andean Chick",
+    "description": "Andean products and traditional handicrafts"
+  },
+  "tienda_pichincha": {
+    "name": "Pichincha Store",
+    "description": "Local products and traditional handicrafts"
+  },
+  "plaza_cultura": {
+    "name": "Culture Plaza",
+    "description": "Cultural events plaza"
+  },
+  "plaza_central": {
+    "name": "Central Plaza",
+    "description": "Main plaza of the monument"
+  },
+  "plaza_de_colores": {
+    "name": "Colorful Plaza",
+    "description": "Plaza with colorful decorative elements"
+  },
+  "arena_top": {
+    "name": "Top Arena",
+    "description": "Special events arena"
+  },
+  "estacionamiento_principal": {
+    "name": "Main Parking Lot",
+    "description": "Monument parking area"
+  },
+  "nuca_llacta": {
+    "name": "Ñuca Llacta Restaurant",
+    "description": "Traditional Ecuadorian food"
+  },
+  "restaurante": {
+    "name": "RESTAURANT",
+    "description": "General restaurant with a variety of dishes"
+  },
+  "calima": {
+    "name": "Calima",
+    "description": "Restaurant with regional menu"
+  },
+  "cafe_sinchi_warmi": {
+    "name": "Sinchi Warmi Café",
+    "description": "Café with a warm atmosphere"
+  },
+  "raqeri_cacao": {
+    "name": "Raqeri Cacao",
+    "description": "Cocoa-specialized café"
+  },
+  "restaurante_balcon_al_mund": {
+    "name": "Balcony to the World Restaurant",
+    "description": "Panoramic view of the monument"
+  },
+  "el_orgánico_star_coffee": {
+    "name": "El Orgánico Star Coffee",
+    "description": "Organic coffee specialty café"
+  },
+  "cafe_guayasamin": {
+    "name": "Guayasamín Café",
+    "description": "Café with local products"
+  },
+  "parking": {
+      "name": "Parking",
+      "description": "General parking"
+    },
+  "tienda_delicatessen_rosita": {
+    "name": "Rosita Delicatessen Shop",
+    "description": "Gourmet products shop"
   }
 },
   "language_selector": {
