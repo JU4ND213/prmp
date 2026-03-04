@@ -8,16 +8,13 @@ import { useTranslation } from "react-i18next";
 export default function MapView() {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
-
   const { t, i18n } = useTranslation();
-
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [activeCategories, setActiveCategories] = useState([]);
   const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(true);
   const [activeCircuito, setActiveCircuito] = useState(null);
   const [destinoId, setDestinoId] = useState("");
   const [idiomaMenuAbierto, setIdiomaMenuAbierto] = useState(false);
-
   const cambiarIdioma = (lng) => {
     i18n.changeLanguage(lng);
     setIdiomaMenuAbierto(false);

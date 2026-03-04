@@ -49,9 +49,10 @@
     max-height: calc(100vh - 28px);
     padding: 12px;
     border-radius: var(--radius-lg);
-    overflow: hidden; /* ⛔ sin scroll */
+    overflow: hidden; 
   }
 }
+
 
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
