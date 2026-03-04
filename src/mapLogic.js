@@ -118,7 +118,7 @@ export function startMap(container, initialT, maskOptions = {}) {
   // 1. Inicialización de MapLibre
   const map = new maplibregl.Map({
     container: container,
-    center: [-78.4549464, -0.0025133], 
+    center: [-78.454012, -0.003140], 
     zoom: 16,
     maxZoom: 19, 
     pitch: 50,  
@@ -156,7 +156,7 @@ export function startMap(container, initialT, maskOptions = {}) {
 
   // Lo agregamos inmediatamente al mapa para asegurar que MapLibre lo registre
   let userMarker = new maplibregl.Marker({ element: userEl })
-    .setLngLat([-78.4549464, -0.0025133])
+    .setLngLat([-78.454012, -0.003140])
     .addTo(map);
 
   map.on("load", () => {
