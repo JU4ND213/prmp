@@ -2,7 +2,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Geolocation } from "@capacitor/geolocation";
 import { RUTAS_CAMINABLES } from "./constants/rutasCaminables";
-
+import { Capacitor } from "@capacitor/core";
 /* ================= DATOS ================= */
 export const DESTINOS = [
   { 
@@ -361,12 +361,19 @@ export function startMap(container, initialT, maskOptions = {}) {
 
   async function iniciarGPS() {
     try {
-      const status = await Geolocation.checkPermissions();
-      if (status.location !== 'granted') {
-        const request = await Geolocation.requestPermissions();
-        if (request.location !== 'granted') return;
+      // 1. Verificación de Plataforma Nativa (¡La magia para que no falle en Web!)
+      if (Capacitor.isNativePlatform()) {
+        const status = await Geolocation.checkPermissions();
+        if (status.location !== 'granted') {
+          const request = await Geolocation.requestPermissions();
+          if (request.location !== 'granted') {
+            console.error("El usuario denegó los permisos en el móvil");
+            return;
+          }
+        }
       }
 
+      // 2. Rastreo en Tiempo Real (Funciona tanto en Web segura como en App Nativa)
       watchId = await Geolocation.watchPosition(
         { 
           enableHighAccuracy: true,
@@ -382,7 +389,7 @@ export function startMap(container, initialT, maskOptions = {}) {
           
           const { latitude: lat, longitude: lng } = position.coords;
 
-          // Actualizamos posición
+          // Actualizamos posición del punto negro en el mapa
           userMarker.setLngLat([lng, lat]);
           
           // Lo hacemos visible
@@ -398,6 +405,7 @@ export function startMap(container, initialT, maskOptions = {}) {
             primeraVez = false; 
           }
           
+          // Actualiza la ruta dibujada con el movimiento del usuario
           actualizarRutaConUsuario(lat, lng);
         }
       );

@@ -5693,6 +5693,23 @@ export const RUTAS_CAMINABLES = {
         ],
         "type": "LineString"
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [
+            -78.45487875105763,
+            -0.0021364880343099912
+          ],
+          [
+            -78.45487466132293,
+            -0.0022348218843433187
+          ]
+        ],
+        "type": "LineString"
+      }
     }
   ]
 }
