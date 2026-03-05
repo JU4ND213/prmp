@@ -1,12 +1,12 @@
 /* ================= VARIABLES BASE ================= */
 :root {
-  --bg-panel: rgba(255, 255, 255, 0.97);
-  --shadow-panel: 0 4px 18px rgba(0,0,0,0.18);
+  --bg-panel: rgba(255, 255, 255, 0.65); /* más transparente para glass */
+  --shadow-panel: 0 8px 30px rgba(0,0,0,0.18);
   --radius-lg: 16px;
   --radius-pill: 999px;
   --transition-fast: 0.15s ease;
   --transition-smooth: 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-  /* ===== ULTRA COMPACT ===== */
+
   --compact-gap: 6px;
   --compact-pad: 10px;
   --compact-font: 0.72rem;
@@ -26,131 +26,121 @@
 
 /* ================= PANEL DE CONTROLES ================= */
 .controls-panel {
-  position: absolute;
-  z-index: 1000;
+  z-index: 1100;
+
   background: var(--bg-panel);
+
+  /* EFECTO GLASS */
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.35);
+
   box-shadow: var(--shadow-panel);
+
   display: flex;
   flex-direction: column;
   gap: var(--compact-gap);
+
   pointer-events: auto;
   box-sizing: border-box;
+
   transition: transform var(--transition-smooth);
 }
 
-/* ===== DESKTOP ===== */
+/* ================= BOTÓN OPCIONES ================= */
+.toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  width: auto;
+  height: 40px;
+  padding: 8px 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--radius-pill);
+  background: #007aff;
+  color: #fff;
+  font-weight: 700;
+
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  cursor: pointer;
+
+  z-index: 1200;
+}
+
+/* ================= DESKTOP ================= */
 @media (min-width: 768px) {
 
-  /* ===== BOTÓN TOGGLE (El botón azul de Opciones) ===== */
-  .toggle-btn {
-    position: fixed !important; 
-    
-    
-    top: auto !important; 
-    left: auto !important;
-
-    
-    bottom: 80px !important; 
-    right: 20px !important;   
-
-    width: auto !important;
-    height: 40px !important;
-    padding: 8px 14px !important;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    border-radius: var(--radius-pill);
-    max-width: fit-content;
-    max-height: 40px;
-    pointer-events: auto;
-    z-index: 1200; 
-  }
-
-  /* ===== PANEL (El menú que se abre) ===== */
   .controls-panel {
-    position: fixed !important;
 
-    /* Limpiamos la posición vieja */
-    top: auto !important;
-    left: auto !important;
-
-    /* Lo ponemos just arriba del botón para que no lo tape */
-    bottom: 200px !important; 
-    right: 20px !important;
+    position: fixed;
+    right: 20px;
+    bottom: 140px;
 
     width: 260px;
-    max-height: calc(100vh - 250px);
+    max-height: 60vh;
+
     padding: 12px;
     border-radius: var(--radius-lg);
-    overflow-y: auto;
-    background: var(--panel-bg, #fff);
-    box-shadow: 0 8px 24px rgba(0,0,0,.15);
 
-    /* Animación para que entre desde la derecha */
-    transform: translateX(110%);
-    transition: transform .25s ease;
-    z-index: 1100;
+    overflow-y: auto;
+
+    transform: translateX(120%);
   }
 
-  /* ===== PANEL ABIERTO ===== */
   .controls-panel.open {
     transform: translateX(0);
   }
 
-  /* ===== PANEL CERRADO ===== */
   .controls-panel.closed {
-    transform: translateX(110%);
+    transform: translateX(120%);
   }
 
-  /* ===== ESTADO BOTÓN CUANDO ABRE ===== */
-  .controls-panel.open ~ .toggle-btn {
-    background: #ff3b30;
-    color: #fff;
-  }
 }
-/* ===== MOBILE ===== */
+
+/* ================= MOBILE ================= */
 @media (max-width: 768px) {
-  
-  
+
   .toggle-btn {
-    position: fixed !important; 
-    bottom: 80px !important; 
-    right: 16px !important;  
-    
-    /* Le devolvemos su forma */
-    width: auto !important;
-    height: 40px !important;
-    padding: 8px 14px !important;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    border-radius: var(--radius-pill);
-    max-width: fit-content;
-    z-index: 1200; 
+    right: 16px;
   }
 
-  /* Tu panel actual (solo le agregué position fixed y z-index por seguridad) */
   .controls-panel {
-    position: fixed !important; 
+
+    position: fixed;
+
     bottom: 0;
     left: 0;
+
     width: 100%;
     max-height: 55vh;
+
     padding: 12px 12px 16px;
+
     border-radius: 16px 16px 0 0;
+
     transform: translateY(120%);
-    overflow: hidden; 
+    overflow: hidden;
   }
 
-  .controls-panel.open { transform: translateY(0); }
-  .controls-panel.closed { transform: translateY(120%); }
-  
-  .controls-panel.open ~ .toggle-btn {
-    background: #ff3b30;
-    color: #fff;
+  .controls-panel.open {
+    transform: translateY(0);
   }
+
+  .controls-panel.closed {
+    transform: translateY(120%);
+  }
+
+}
+
+/* ================= ESTADO BOTÓN ================= */
+.controls-panel.open ~ .toggle-btn {
+  background: #ff3b30;
 }
 
 /* ================= ELEMENTOS INTERNOS ================= */
@@ -163,24 +153,25 @@
 
 .divider {
   height: 1px;
-  background: #e6e6e6;
+  background: rgba(0,0,0,0.08);
   margin: 4px 0;
 }
 
 /* ================= GRIDS ================= */
 .categories-grid {
   display: flex;
-  flex-wrap: wrap; /* Esto permite que bajen a la siguiente línea */
+  flex-wrap: wrap;
   gap: 8px;
   width: 100%;
   padding: 4px 0;
 }
+
 .circuits-grid {
   display: flex;
-  flex-direction: row;    /* Forzamos la fila horizontal */
-  flex-wrap: nowrap;      /* Evitamos que se apilen */
+  flex-direction: row;
+  flex-wrap: nowrap;
   gap: 6px;
-  width: 100%;            /* Ocupa todo el ancho del panel */
+  width: 100%;
 }
 
 /* ================= BOTONES CHIP ================= */
@@ -209,50 +200,29 @@
   font-size: 0.85rem;
 }
 
-/* ================= CHIP PÍLDORA (FINO) ================= */
+/* ================= CHIP PÍLDORA ================= */
 .chip--pill {
-  padding: 4px 10px;     
+  padding: 4px 10px;
   border-radius: var(--radius-pill);
   white-space: nowrap;
   line-height: 1;
-}
-
-/* ================= BOTÓN FLOTANTE MOBILE ================= */
-.toggle-btn {
-  position: absolute;
-  bottom: 14px;
-  right: 14px;
-  z-index: 1010;
-  padding: 8px 16px;
-  border-radius: var(--radius-pill);
-  background: #007aff;
-  color: #fff;
-  font-weight: 700;
-  border: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  cursor: pointer;
-}
-
-.controls-panel.open ~ .toggle-btn {
-  background: #ff3b30;
-  bottom: 52vh;
 }
 
 /* ================= RUTAS ================= */
 .ruta-pacha,
 .ruta-inti,
 .ruta-killa {
-  flex: 1;                /* Cada botón toma una parte igual del ancho */
-  width: auto;            /* QUITAMOS el 100% que los obligaba a apilarse */
-  padding: 5px 2px;       /* Reducimos el relleno para que sea más pequeño */
-  font-size: 0.65rem;     /* Bajamos un poco el tamaño de la fuente */
+  flex: 1;
+  width: auto;
+  padding: 5px 2px;
+  font-size: 0.65rem;
   border-radius: var(--radius-pill);
   border: none;
   font-weight: 600;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-  white-space: nowrap;    /* Evita que el texto se parta en dos líneas */
+  white-space: nowrap;
   text-align: center;
   display: flex;
   align-items: center;
@@ -263,27 +233,26 @@
 .ruta-inti  { background: linear-gradient(180deg, #2ecc71, #27ae60); }
 .ruta-killa { background: linear-gradient(180deg, #f39c12, #d35400); }
 
-/* ================= GPS ================= */
+/* ================= GPS ROW ================= */
 .gps-row {
-  display: flex;       /* Alinea en fila */
-  align-items: center; /* Centra verticalmente */
-  gap: 8px;            /* Espacio entre botones y select */
-  width: 100%;         /* Usa todo el ancho disponible */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
   padding: 4px 0;
 }
 
 .route-select {
-  flex: 1;             /* El selector crece para llenar el hueco */
-  min-width: 0;        /* Evita que el texto largo rompa el diseño */
-  height: 32px;        /* Altura igual a la de los botones circulares */
+  flex: 1;
+  min-width: 0;
+  height: 32px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,0.15);
   font-size: 0.75rem;
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.9);
   padding: 0 8px;
 }
 
-/* Estilo para cuando el botón de Ir está bloqueado */
 .ir-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
@@ -298,10 +267,9 @@
   z-index: 2000;
 }
 
-/* Nuevo estilo para el icono de Material Symbols */
 .language-icon .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined'; /* Forzamos la fuente */
-  font-size: 1.2rem; /* Puedes subir o bajar este valor si quieres el icono más grande o pequeño */
+  font-family: 'Material Symbols Outlined';
+  font-size: 1.2rem;
   user-select: none;
   line-height: 1;
 }
@@ -311,7 +279,7 @@
   top: 100%;
   right: 0;
   margin-top: 6px;
-  background: #fff;
+  background: rgba(255,255,255,0.95);
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.35);
   overflow: hidden;
@@ -330,6 +298,7 @@
 .language-menu button:hover {
   background: #f2f2f2;
 }
+
 /* ================= ESTADOS ================= */
 .category-chip,
 .control-btn {
@@ -343,30 +312,26 @@
   border-color: #000;
 }
 
+/* ================= EMOJI MARKER ================= */
 .emoji-marker {
-    font-size: 20px !important; /* El emoji debe ser un poco menor que el iconSize */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    /* Efecto de sombra para que resalte sobre el mapa verde/gris */
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-    
-    /* Mejora la nitidez en pantallas de alta resolución */
-    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+  font-size: 20px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
-/* ================= CARRUSEL DE POPUPS (NUEVO) ================= */
+/* ================= CARRUSEL POPUPS ================= */
 .popup-carousel {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: 8px; 
-  padding-bottom: 5px; 
-  scrollbar-width: thin; /* Para Firefox */
+  gap: 8px;
+  padding-bottom: 5px;
+  scrollbar-width: thin;
 }
 
-/* Ocultar barra de scroll en móviles, dejarla finita en web */
 .popup-carousel::-webkit-scrollbar {
   height: 4px;
 }
@@ -378,31 +343,41 @@
 
 .popup-carousel img {
   scroll-snap-align: center;
-  flex: 0 0 100%; 
+  flex: 0 0 100%;
   width: 100%;
-  height: 150px; 
-  object-fit: contain; 
+  height: 150px;
+  object-fit: contain;
   border-radius: 8px;
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
 }
-/* ================= BOTÓN DE MI UBICACIÓN (NUEVO) ================= */
+
+/* ================= BOTÓN GPS ================= */
 .locate-btn {
-  position: absolute;
-  z-index: 1005; /* Un poco por debajo del toggle-btn (1010) */
-  right: 14px;   /* Alineado con tus otros controles */
-  bottom: 25px;  /* Posición base para desktop */
+
+  position: fixed;
+
+  right: 20px;
+  bottom: 80px;
+
   width: 48px;
   height: 48px;
+
   border-radius: 50%;
-  background-color: var(--bg-panel);
-  color: #007aff; /* Azul clásico de GPS */
+  background-color: rgba(255,255,255,0.85);
+  color: #007aff;
+
   border: none;
   box-shadow: var(--shadow-panel);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   font-size: 1.5rem;
   cursor: pointer;
+
+  z-index: 1150;
+
   transition: transform var(--transition-fast), background-color var(--transition-fast);
 }
 
@@ -415,23 +390,20 @@
   transform: scale(0.95);
 }
 
-/* ===== AJUSTES PARA MOBILE ===== */
-@media (max-width: 768px) {
-  .locate-btn {
-    /* Lo ponemos arriba del botón azul/rojo de "toggle-btn" que tienes en bottom: 14px */
-    bottom: 75px; 
-    transition: bottom var(--transition-smooth); /* Para que se mueva suave si se abre el panel */
+/* ================= MOBILE GPS ================= */
+@media (max-width:768px){
+
+  .locate-btn{
+    bottom: 90px;
   }
 
-  /* Si el panel se abre, tu toggle-btn sube a 52vh. 
-     Hacemos que este botón de GPS suba también para que no quede tapado */
-  .controls-panel.open ~ .locate-btn {
-    bottom: calc(52vh + 60px); 
+  .controls-panel.open ~ .locate-btn{
+    bottom: calc(55vh + 20px);
   }
+
 }
 
-/* ===== EL NUEVO AGREGADO (Solo evita que el icono se ponga azul al darle muchos clics) ===== */
 .locate-btn .material-symbols-outlined {
-  user-select: none; 
-  line-height: 1;    
+  user-select: none;
+  line-height: 1;
 }
