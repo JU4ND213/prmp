@@ -345,7 +345,7 @@ export function startMap(container, initialT, maskOptions = {}) {
       type: "line",
       source: "gps-route-source",
       layout: { "line-join": "round", "line-cap": "round" },
-      paint: { "line-color": "#000", "line-width": 4, "line-dasharray": [2, 2] }
+      paint: { "line-color": "#2200fe", "line-width": 8 }
     });
     
     // Inicializar marcadores base
