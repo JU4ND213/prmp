@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">map-app-mvc</string>
-    <string name="title_activity_main">map-app-mvc</string>
-    <string name="package_name">com.example.app</string>
-    <string name="custom_url_scheme">com.example.app</string>
+    <string name="app_name">Map Monument</string>
+    <string name="title_activity_main">Map Monument</string>
+    <string name="package_name">jl.jdll.213</string>
+    <string name="custom_url_scheme">jl.jdll.213</string>
 </resources>
