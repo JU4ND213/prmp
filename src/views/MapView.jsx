@@ -245,7 +245,7 @@ export default function MapView() {
           { key: "KILLA", class: "ruta-killa" }
         ].map(({ key, class: cls }) => {
           
-          // ✅ CAMBIO: Ahora comparamos directamente (ya no usamos .includes)
+          // CAMBIO: Ahora comparamos directamente (ya no usamos .includes)
           const isActive = activeCircuito === key; 
 
           return (
