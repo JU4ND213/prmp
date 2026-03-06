@@ -14,7 +14,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
     </style>
-
+<!-- Desarrolado Por Mi "Ju4n_213" / Juan David López Luna -->
 
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
         <item name="android:background">@drawable/splash</item>

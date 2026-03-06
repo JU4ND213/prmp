@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
+<!-- Desarrolado Por Mi "Ju4n_213" / Juan David López Luna -->
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
