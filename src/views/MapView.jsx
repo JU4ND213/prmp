@@ -15,11 +15,17 @@ export default function MapView() {
   const [destinoId, setDestinoId] = useState("");
   const [idiomaMenuAbierto, setIdiomaMenuAbierto] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const cambiarIdioma = (lng) => {
-    i18n.changeLanguage(lng);
-    setIdiomaMenuAbierto(false);
-  };
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const cambiarIdioma = (lng) => {i18n.changeLanguage(lng); setIdiomaMenuAbierto(false);};
+  
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 300);
 
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+  
   /* ===============================
      INICIALIZAR MAPA
   =============================== */
@@ -90,62 +96,52 @@ export default function MapView() {
     );
   };
   useEffect(() => {
-    if (!mapRef.current) return;
+  if (!mapRef.current) return;
 
-    let puntosParaDibujar = [];
+  let puntosParaDibujar = [];
 
-    // Si el usuario escribió algo en el buscador
-    if (searchTerm.trim() !== "") {
-      const termino = searchTerm.toLowerCase();
-      // Unimos todos los puntos de todas las categorías en una sola lista
-      const todosLosPuntos = Object.values(POINTS_BY_COLOR).flat();
-      
-      puntosParaDibujar = todosLosPuntos.filter((p) => {
-        // 1. TRADUCIMOS ANTES DE COMPARAR
-        // Obtenemos el nombre y descripción en el idioma actual (con fallback a los datos originales)
-        const nombreTraducido = p.id ? t(`points.${p.id}.name`, p.name).toLowerCase() : p.name.toLowerCase();
-        const descTraducida = p.id && p.description 
-          ? t(`points.${p.id}.description`, p.description).toLowerCase() 
-          : (p.description || "").toLowerCase();
+  // CAMBIO AQUÍ: Usamos debouncedSearch en lugar de searchTerm
+  if (debouncedSearch.trim() !== "") {
+    const termino = debouncedSearch.toLowerCase();
+    const todosLosPuntos = Object.values(POINTS_BY_COLOR).flat();
+    
+    puntosParaDibujar = todosLosPuntos.filter((p) => {
+      const nombreTraducido = p.id ? t(`points.${p.id}.name`, p.name).toLowerCase() : p.name.toLowerCase();
+      const descTraducida = p.id && p.description 
+        ? t(`points.${p.id}.description`, p.description).toLowerCase() 
+        : (p.description || "").toLowerCase();
 
-        // 2. TRADUCIMOS EL MENÚ (si existe)
-        let menuTraducido = p.menu || [];
-        if (p.id) {
-          // Intentamos traer el arreglo traducido del JSON
-          const traduccion = t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu });
-          if (Array.isArray(traduccion)) {
-            menuTraducido = traduccion;
-          }
+      let menuTraducido = p.menu || [];
+      if (p.id) {
+        const traduccion = t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu });
+        if (Array.isArray(traduccion)) {
+          menuTraducido = traduccion;
         }
+      }
 
-        // 3. VERIFICAMOS COINCIDENCIAS
-        const coincideNombre = nombreTraducido.includes(termino);
-        const coincideDesc = descTraducida.includes(termino);
-        
-        // Validamos si algún plato del menú traducido coincide con la búsqueda
-        const coincideMenu = menuTraducido.some(plato => plato.toLowerCase().includes(termino));
-        
-        // Retorna verdadero si encuentra la palabra en el nombre, descripción o menú
-        return coincideNombre || coincideDesc || coincideMenu;
-      });
-    } else {
-      // Si el buscador está vacío, mostramos las categorías seleccionadas normalmente
-      puntosParaDibujar = activeCategories.flatMap(
-        (cat) => POINTS_BY_COLOR[cat] || []
-      );
-    }
+      const coincideNombre = nombreTraducido.includes(termino);
+      const coincideDesc = descTraducida.includes(termino);
+      const coincideMenu = menuTraducido.some(plato => plato.toLowerCase().includes(termino));
+      
+      return coincideNombre || coincideDesc || coincideMenu;
+    });
+  } else {
+    puntosParaDibujar = activeCategories.flatMap(
+      (cat) => POINTS_BY_COLOR[cat] || []
+    );
+  }
 
-    // Ya tenemos los puntos filtrados correctamente, ahora los preparamos para el mapa
-    const puntosTraducidos = puntosParaDibujar.map((p) => ({
-      ...p,
-      name: p.id ? t(`points.${p.id}.name`, p.name) : p.name,
-      description: p.id ? t(`points.${p.id}.description`, p.description) : p.description,
-      // Opcional: También pasamos el menú traducido al mapa por si lo muestras en un popup
-      menu: p.id && p.menu ? t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu }) : p.menu
-    }));
+  const puntosTraducidos = puntosParaDibujar.map((p) => ({
+    ...p,
+    name: p.id ? t(`points.${p.id}.name`, p.name) : p.name,
+    description: p.id ? t(`points.${p.id}.description`, p.description) : p.description,
+    menu: p.id && p.menu ? t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu }) : p.menu
+  }));
 
-    mapRef.current.dibujarPuntos(puntosTraducidos);
-  }, [activeCategories, searchTerm, i18n.language, t]); // <-- Se vuelve a ejecutar si cambias de idioma
+  mapRef.current.dibujarPuntos(puntosTraducidos);
+
+// CAMBIO AQUÍ: Asegúrate de depender de debouncedSearch
+}, [activeCategories, debouncedSearch, i18n.language, t]);
   /* ===============================
      RUTA GPS
   =============================== */

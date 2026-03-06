@@ -356,12 +356,14 @@ export function startMap(container, initialT, maskOptions = {}) {
   }); 
 
   /* ---------- GPS CON CAPACITOR ----------- */
+ /* ---------- GPS CON CAPACITOR ----------- */
   let watchId = null;
   let primeraVez = true;
+  // 👉 1. Agregamos esta variable para controlar el tiempo
+  let ultimoTiempoCalculo = 0; 
 
   async function iniciarGPS() {
     try {
-      // 1. Verificación de Plataforma Nativa (¡La magia para que no falle en Web!)
       if (Capacitor.isNativePlatform()) {
         const status = await Geolocation.checkPermissions();
         if (status.location !== 'granted') {
@@ -373,7 +375,6 @@ export function startMap(container, initialT, maskOptions = {}) {
         }
       }
 
-      // 2. Rastreo en Tiempo Real (Funciona tanto en Web segura como en App Nativa)
       watchId = await Geolocation.watchPosition(
         { 
           enableHighAccuracy: true,
@@ -389,10 +390,8 @@ export function startMap(container, initialT, maskOptions = {}) {
           
           const { latitude: lat, longitude: lng } = position.coords;
 
-          // Actualizamos posición del punto negro en el mapa
+          // 1. El marcador del usuario SIEMPRE se actualiza rápido (es muy ligero)
           userMarker.setLngLat([lng, lat]);
-          
-          // Lo hacemos visible
           userEl.style.display = "block";
 
           if (primeraVez) {
@@ -405,8 +404,12 @@ export function startMap(container, initialT, maskOptions = {}) {
             primeraVez = false; 
           }
           
-          // Actualiza la ruta dibujada con el movimiento del usuario
-          actualizarRutaConUsuario(lat, lng);
+          // 👉 2. LA MAGIA: Solo recalculamos la ruta cada 3 segundos (3000 ms)
+          const ahora = Date.now();
+          if (ahora - ultimoTiempoCalculo > 3000) {
+            actualizarRutaConUsuario(lat, lng);
+            ultimoTiempoCalculo = ahora; // Actualizamos el cronómetro
+          }
         }
       );
     } catch (error) {

@@ -11,7 +11,16 @@
   --compact-pad: 10px;
   --compact-font: 0.72rem;
 }
+/* ================= RESET NATIVO ================= */
+* {
+  /* Apaga el destello azul al tocar botones en móviles */
+  -webkit-tap-highlight-color: transparent;
+}
 
+button {
+  /* Quita el borde de "foco" que a veces ponen los navegadores */
+  outline: none; 
+}
 /* ================= MAP VIEW ================= */
 .map-view {
   position: relative;
@@ -43,8 +52,6 @@
 
   pointer-events: auto;
   box-sizing: border-box;
-
-  transition: transform var(--transition-smooth);
 }
 
 /* ================= BOTÓN OPCIONES ================= */
