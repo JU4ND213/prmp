@@ -35,15 +35,15 @@ export const POINTS_BY_COLOR = {
 
   // Restaurantes
   restaurantes: [
-    { id: "nuca_llacta", name: "Ñuca Llacta Restaurant", description: "Comida tradicional ecuatoriana", lat: -0.0024445, lng: -78.4543661, color: "#583700", icon: "restaurant" },
-    { id: "restaurante", name: "RESTAURANTE", description: "Restaurante general con variedad de platos", lat: -0.0020385, lng: -78.4544344, color: "#583700", icon: "restaurant" },
-    { id: "calima", name: "Calima", description: "Restaurante con menú regional", lat: -0.0015815, lng: -78.4549402, color: "#583700", icon: "restaurant" },
-    { id: "cafe_sinchi_warmi", name: "Café Sinchi Warmi", description: "Cafetería con ambiente cálido", lat: -0.0017107, lng: -78.4552719, color: "#583700", icon: "restaurant" },
-    { id: "raqeri_cacao", name: "raqeri cacao", description: "Cafetería especializada en cacao", lat: -0.0015384, lng: -78.4553481, color: "#583700", icon: "restaurant" },
-    { id: "restaurante_balcon_al_mundo", name: "Restaurante Balcon al Mundo", description: "Vista panorámica al monumento", lat: -0.0024231, lng: -78.4547545, color: "#583700", icon: "restaurant" },
-    { id: "el_orgánico_star_coffee", name: "El Orgánico Star Coffee", description: "Cafetería especializada en café orgánico", lat: -0.0018819, lng: -78.4545454, color: "#583700", icon: "restaurant" },
-    { id: "cafe_guayasamin", name: "Café Guayasamin", description: "Cafetería con productos locales", lat: -0.0022184, lng: -78.4550409, color: "#583700", icon: "restaurant" },
-    { id: "tienda_delicatessen_rosita", name: "Tienda Delicatessen Rosita", description: "Tienda de productos gourmet", lat: -0.0022465, lng: -78.4540331, color: "#583700", icon: "restaurant" },
+    { id: "nuca_llacta", name: "Ñuca Llacta Restaurant", description: "Comida tradicional ecuatoriana", lat: -0.0024445, lng: -78.4543661, color: "#583700", icon: "restaurant", menu: ["cuy", "fritada", "locro de papa", "empanadas"] },
+    { id: "restaurante", name: "RESTAURANTE", description: "Restaurante general con variedad de platos", lat: -0.0020385, lng: -78.4544344, color: "#583700", icon: "restaurant", menu: ["humitas", "caldo de gallina", "crema de zanahoria", "pristiños"]},
+    { id: "calima", name: "Calima", description: "Restaurante con menú regional", lat: -0.0015815, lng: -78.4549402, color: "#583700", icon: "restaurant", menu: ["seco de chivo", "arroz con menestra", "canelazo", "morocho"] },
+    { id: "cafe_sinchi_warmi", name: "Café Sinchi Warmi", description: "Cafetería con ambiente cálido", lat: -0.0017107, lng: -78.4552719, color: "#583700", icon: "restaurant", menu: ["café", "té", "smoothies"] },
+    { id: "raqeri_cacao", name: "raqeri cacao", description: "Cafetería especializada en cacao", lat: -0.0015384, lng: -78.4553481, color: "#583700", icon: "restaurant", menu: ["cacao", "chocolate", "postres"] },
+    { id: "restaurante_balcon_al_mundo", name: "Restaurante Balcon al Mundo", description: "Vista panorámica al monumento", lat: -0.0024231, lng: -78.4547545, color: "#583700", icon: "restaurant", menu: ["platos principales", "ensaladas", "bebidas"] },
+    { id: "el_orgánico_star_coffee", name: "El Orgánico Star Coffee", description: "Cafetería especializada en café orgánico", lat: -0.0018819, lng: -78.4545454, color: "#583700", icon: "restaurant", menu: ["café orgánico", "tés", "smoothies"] },
+    { id: "cafe_guayasamin", name: "Café Guayasamin", description: "Cafetería con productos locales", lat: -0.0022184, lng: -78.4550409, color: "#583700", icon: "restaurant", menu: ["café local", "postres", "bebidas"] },
+    { id: "tienda_delicatessen_rosita", name: "Tienda Delicatessen Rosita", description: "Tienda de productos gourmet", lat: -0.0022465, lng: -78.4540331, color: "#583700", icon: "restaurant", menu: ["productos gourmet", "quesos", "vinos"] },
   ],
 
   // Tiendas

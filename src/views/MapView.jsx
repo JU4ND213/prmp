@@ -14,6 +14,7 @@ export default function MapView() {
   const [activeCircuito, setActiveCircuito] = useState(null);
   const [destinoId, setDestinoId] = useState("");
   const [idiomaMenuAbierto, setIdiomaMenuAbierto] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const cambiarIdioma = (lng) => {
     i18n.changeLanguage(lng);
     setIdiomaMenuAbierto(false);
@@ -80,29 +81,71 @@ export default function MapView() {
   mapRef.current.dibujarCircuito(CIRCUITOS_OBJ[activeCircuito]);
 }, [activeCircuito]);
 
-  /* ===============================
-     CATEGORÍAS
+/* ===============================
+     CATEGORÍAS Y BÚSQUEDA
   =============================== */
   const toggleCategory = (key) => {
     setActiveCategories((prev) =>
       prev.includes(key) ? prev.filter((c) => c !== key) : [...prev, key]
     );
   };
-
   useEffect(() => {
     if (!mapRef.current) return;
 
-    const puntos = activeCategories.flatMap(
-      (cat) => POINTS_BY_COLOR[cat] || []
-    ).map(p => ({
+    let puntosParaDibujar = [];
+
+    // Si el usuario escribió algo en el buscador
+    if (searchTerm.trim() !== "") {
+      const termino = searchTerm.toLowerCase();
+      // Unimos todos los puntos de todas las categorías en una sola lista
+      const todosLosPuntos = Object.values(POINTS_BY_COLOR).flat();
+      
+      puntosParaDibujar = todosLosPuntos.filter((p) => {
+        // 1. TRADUCIMOS ANTES DE COMPARAR
+        // Obtenemos el nombre y descripción en el idioma actual (con fallback a los datos originales)
+        const nombreTraducido = p.id ? t(`points.${p.id}.name`, p.name).toLowerCase() : p.name.toLowerCase();
+        const descTraducida = p.id && p.description 
+          ? t(`points.${p.id}.description`, p.description).toLowerCase() 
+          : (p.description || "").toLowerCase();
+
+        // 2. TRADUCIMOS EL MENÚ (si existe)
+        let menuTraducido = p.menu || [];
+        if (p.id) {
+          // Intentamos traer el arreglo traducido del JSON
+          const traduccion = t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu });
+          if (Array.isArray(traduccion)) {
+            menuTraducido = traduccion;
+          }
+        }
+
+        // 3. VERIFICAMOS COINCIDENCIAS
+        const coincideNombre = nombreTraducido.includes(termino);
+        const coincideDesc = descTraducida.includes(termino);
+        
+        // Validamos si algún plato del menú traducido coincide con la búsqueda
+        const coincideMenu = menuTraducido.some(plato => plato.toLowerCase().includes(termino));
+        
+        // Retorna verdadero si encuentra la palabra en el nombre, descripción o menú
+        return coincideNombre || coincideDesc || coincideMenu;
+      });
+    } else {
+      // Si el buscador está vacío, mostramos las categorías seleccionadas normalmente
+      puntosParaDibujar = activeCategories.flatMap(
+        (cat) => POINTS_BY_COLOR[cat] || []
+      );
+    }
+
+    // Ya tenemos los puntos filtrados correctamente, ahora los preparamos para el mapa
+    const puntosTraducidos = puntosParaDibujar.map((p) => ({
       ...p,
-      // Si el punto tiene un 'id', busca su traducción. Si no, deja el nombre original.
       name: p.id ? t(`points.${p.id}.name`, p.name) : p.name,
-      description: p.id ? t(`points.${p.id}.description`, p.description) : p.description
+      description: p.id ? t(`points.${p.id}.description`, p.description) : p.description,
+      // Opcional: También pasamos el menú traducido al mapa por si lo muestras en un popup
+      menu: p.id && p.menu ? t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu }) : p.menu
     }));
 
-    mapRef.current.dibujarPuntos(puntos);
-  }, [activeCategories, i18n.language, t]);
+    mapRef.current.dibujarPuntos(puntosTraducidos);
+  }, [activeCategories, searchTerm, i18n.language, t]); // <-- Se vuelve a ejecutar si cambias de idioma
   /* ===============================
      RUTA GPS
   =============================== */
@@ -173,6 +216,29 @@ export default function MapView() {
         </div>
 
         <div className="gps-row">
+      {/* ===== BUSCADOR ===== */}
+        <div className="search-bar-container">
+          <input 
+            type="text" 
+            className="search-input"
+            placeholder={t("searchPlaceholder", "Ej: cuy, locro, museo...")} 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          
+          {searchTerm && (
+            <button
+              className="search-clear-btn"
+              onClick={() => setSearchTerm("")}
+              title={t("clearSearch", "Limpiar búsqueda")}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: "20px" }}>close</span>
+            </button>
+          )}
+        </div>
+        
+        {/* Agregamos tu divider para separarlo de la fila del GPS */}
+        <div className="divider"></div>
   {/* PUNTOS BASE */}
   <button
     className="chip chip--circle"

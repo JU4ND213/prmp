@@ -1,4 +1,8 @@
 {
+  "searchPlaceholder": "Ex: guinea pig, stew, museum...",
+  "clearSearch": "Clear search",
+  "centerLocation": "Center on my location",
+  
   "controlPanel": "Control Panel",
   "selectPlace": "Select destination",
   "go": "Go",
@@ -186,7 +190,8 @@
   },
   "nuca_llacta": {
     "name": "Ñuca Llacta Restaurant",
-    "description": "Traditional Ecuadorian food"
+    "description": "Traditional Ecuadorian food",
+    "menu": ["cuy (guinea pig)", "fritada (fried pork)", "locro de papa (potato soup)", "empanadas"]
   },
   "restaurante": {
     "name": "RESTAURANT",
@@ -204,7 +209,7 @@
     "name": "Raqeri Cacao",
     "description": "Cocoa-specialized café"
   },
-  "restaurante_balcon_al_mund": {
+  "restaurante_balcon_al_mundo": {
     "name": "Balcony to the World Restaurant",
     "description": "Panoramic view of the monument"
   },

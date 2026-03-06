@@ -1,4 +1,8 @@
 {
+  "searchPlaceholder": "Ej: cuy, locro, museo...",
+  "clearSearch": "Limpiar búsqueda",
+  "centerLocation": "Centrar en mi ubicación",
+  
   "controlPanel": "Panel de control",
   "selectPlace": "Seleccionar destino",
   "go": "Ir",
@@ -210,7 +214,7 @@
       "name": "raqeri cacao",
       "description": "Cafetería especializada en cacao"
     },
-    "restaurante_balcon_al_mund": {
+    "restaurante_balcon_al_mundo": {
       "name": "Restaurante Balcon al Mundo",
       "description": "Vista panorámica al monumento"
     },
