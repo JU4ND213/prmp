@@ -170,7 +170,13 @@ export default function MapView() {
     // Volvemos el estado a falso para que el botón vuelva a ser "Go"
     setRutaActiva(false);
   };
-
+  const handleCambioDestino = (e) => {
+      setDestinoId(e.target.value);
+      
+      if (rutaActiva) {
+        limpiarRuta();
+      }
+    };
   /* ===============================
      CENTRAR CÁMARA EN USUARIO
   =============================== */
@@ -269,7 +275,7 @@ export default function MapView() {
   <select
     className="route-select"
     value={destinoId}
-    onChange={(e) => setDestinoId(e.target.value)}
+    onChange={handleCambioDestino}
   >
     <option value="">{t("selectPlace")}</option>
     {DESTINOS.map((d) => (
