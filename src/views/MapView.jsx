@@ -16,6 +16,7 @@ export default function MapView() {
   const [idiomaMenuAbierto, setIdiomaMenuAbierto] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [rutaActiva, setRutaActiva] = useState(false);
   const cambiarIdioma = (lng) => {i18n.changeLanguage(lng); setIdiomaMenuAbierto(false);};
   
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function MapView() {
       dibujarPuntos,
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
+      limpiarRutaGps,
       actualizarIdiomaBase,
       centrarEnUsuario, // <--- Agregamos la función aquí
       cleanup
@@ -51,6 +53,7 @@ export default function MapView() {
       dibujarPuntos,
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
+      limpiarRutaGps,
       actualizarIdiomaBase,
       centrarEnUsuario // <--- Y la guardamos en la referencia
     };
@@ -151,7 +154,21 @@ export default function MapView() {
     const destino = DESTINOS.find((d) => d.id === Number(destinoId));
     if (!destino) return;
 
+    // Dibuja la ruta
     mapRef.current?.dibujarRutaDesdeGps(destino);
+    
+    // Cambiamos el estado para indicar que la ruta ya está activa
+    setRutaActiva(true); 
+  };
+
+  // Nueva función para limpiar la ruta
+  const limpiarRuta = () => {
+    // Aquí llamas a la función dentro de tu mapa que borra la línea
+    // (Asegúrate de tener un método como este creado en tu componente del mapa)
+    mapRef.current?.limpiarRutaGps(); 
+    
+    // Volvemos el estado a falso para que el botón vuelva a ser "Go"
+    setRutaActiva(false);
   };
 
   /* ===============================
@@ -262,13 +279,15 @@ export default function MapView() {
     ))}
   </select>
 
-  {/* BOTÓN IR */}
+  {/* BOTÓN IR / LIMPIAR */}
   <button
-    className="chip chip--circle ir-btn"
-    onClick={irAlDestino}
-    disabled={!destinoId}
+    // Puedes agregar una clase condicional si quieres cambiarle el color cuando sea una "X"
+    className={`chip chip--circle ${rutaActiva ? "cancelar-btn" : "ir-btn"}`}
+    onClick={rutaActiva ? limpiarRuta : irAlDestino}
+    disabled={!destinoId && !rutaActiva} 
   >
-    {t("go")}
+    {/* Si la ruta está activa muestra la X, sino muestra el texto de 'go' */}
+    {rutaActiva ? "✖" : t("go")}
   </button>
 </div>
 

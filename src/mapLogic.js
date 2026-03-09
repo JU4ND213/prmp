@@ -354,8 +354,6 @@ export function startMap(container, initialT, maskOptions = {}) {
     // Iniciar el GPS
     iniciarGPS();
   }); 
-
-  /* ---------- GPS CON CAPACITOR ----------- */
  /* ---------- GPS CON CAPACITOR ----------- */
   let watchId = null;
   let primeraVez = true;
@@ -614,6 +612,19 @@ export function startMap(container, initialT, maskOptions = {}) {
       marcadoresCategorias.push(marker);
     });
   }
+  /* ---------- NUEVA FUNCIÓN PARA LIMPIAR LA RUTA GPS ---------- */
+  function limpiarRutaGps() {
+    // 1. Vaciamos la variable interna que guarda los puntos
+    routePointsMap = [];
+
+    // 2. Actualizamos el mapa enviando un LineString vacío
+    if (map.getSource("gps-route-source")) {
+      map.getSource("gps-route-source").setData({
+        type: "Feature",
+        geometry: { type: "LineString", coordinates: [] } // Coordenadas vacías borran la línea
+      });
+    }
+  }
   /* ---------- NUEVA FUNCIÓN PARA CENTRAR EN EL USUARIO ---------- */
   function centrarEnUsuario() {
     if (!userMarker) return;
@@ -640,6 +651,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     dibujarPuntos,
     toggleMarcadoresBase,
     dibujarRutaDesdeGps,
+    limpiarRutaGps,
     actualizarIdiomaBase,
     centrarEnUsuario, 
     getBearing: () => map.getBearing(),
