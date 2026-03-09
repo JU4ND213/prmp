@@ -43,7 +43,7 @@ export default function MapView() {
       dibujarRutaDesdeGps,
       limpiarRutaGps,
       actualizarIdiomaBase,
-      centrarEnUsuario, // <--- Agregamos la función aquí
+      centrarEnUsuario, 
       cleanup
     } = mapApi;
 
@@ -55,7 +55,7 @@ export default function MapView() {
       dibujarRutaDesdeGps,
       limpiarRutaGps,
       actualizarIdiomaBase,
-      centrarEnUsuario // <--- Y la guardamos en la referencia
+      centrarEnUsuario 
     };
 
     return () => cleanup?.();
