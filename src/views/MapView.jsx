@@ -5,6 +5,13 @@ import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 import { useTranslation } from "react-i18next";
 
 export default function MapView() {
+  const [compassActive, setCompassActive] = useState(false);
+  const toggleCompass = () => {
+  if (mapRef.current?.toggleCompassMode) {
+    const nuevoEstado = mapRef.current.toggleCompassMode();
+    setCompassActive(nuevoEstado);
+  }
+};
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const { t, i18n } = useTranslation();
@@ -17,6 +24,7 @@ export default function MapView() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [rutaActiva, setRutaActiva] = useState(false);
+
   const cambiarIdioma = (lng) => {i18n.changeLanguage(lng); setIdiomaMenuAbierto(false);};
   
   useEffect(() => {
@@ -42,6 +50,8 @@ export default function MapView() {
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
       limpiarRutaGps,
+      toggleCompassMode,
+      isCompassActive,
       actualizarIdiomaBase,
       centrarEnUsuario, 
       cleanup
@@ -54,6 +64,8 @@ export default function MapView() {
       toggleMarcadoresBase,
       dibujarRutaDesdeGps,
       limpiarRutaGps,
+      toggleCompassMode,
+      isCompassActive,
       actualizarIdiomaBase,
       centrarEnUsuario 
     };
@@ -220,6 +232,18 @@ export default function MapView() {
         {/* Reemplazamos el emoji por el nombre exacto del icono */}
         <span className="material-symbols-outlined">my_location</span>
       </button>
+      
+      {/* ===== BOTÓN FLOTANTE compass) ===== */}
+      <button
+        /* Corrección aquí: Se agregaron las comillas invertidas y llaves correctas */
+        className={`locate-btn ${compassActive ? 'active' : ''}`}
+        onClick={toggleCompass}
+        title={t("compassMode", "Modo brújula")}
+        style={{ bottom: '140px' }}
+      >
+        <span className="material-symbols-outlined">explore</span>
+      </button>
+
       {/* ===== BOTÓN PANEL ===== */}
       <button
         className="toggle-btn"

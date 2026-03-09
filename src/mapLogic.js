@@ -645,13 +645,151 @@ export function startMap(container, initialT, maskOptions = {}) {
       essential: true   
     });
   }
+  // ========== DECLARACIONES DE BRÚJULA (ANTES DE USARLAS) ==========
+let compassActive = false;
+let orientationHandler = null;
+let filteredHeading = null;
+let animationFrame = null;
+let userArrowContainer = null; // Referencia al contenedor de la flecha
 
+const SMOOTHING_FACTOR = 0.2; // Suavizado
+const DEAD_ZONE = 2;          // Grados mínimos de cambio
+
+function normalizeAngle(angle) {
+  return ((angle % 360) + 360) % 360;
+}
+
+// Obtiene el heading de la parte superior del dispositivo (0 = norte, 90 = este)
+function getDeviceHeading(event) {
+  if (event.webkitCompassHeading !== undefined) {
+    // iOS
+    return event.webkitCompassHeading;
+  } else {
+    // Android
+    const alpha = event.alpha;
+    const beta = event.beta;
+    const gamma = event.gamma;
+    if (alpha === null || beta === null || gamma === null) return null;
+
+    const a = alpha * Math.PI / 180;
+    const b = beta * Math.PI / 180;
+    const g = gamma * Math.PI / 180;
+
+    let heading = Math.atan2(
+      Math.sin(a) * Math.cos(g) + Math.cos(a) * Math.sin(b) * Math.sin(g),
+      Math.cos(a) * Math.cos(g) - Math.sin(a) * Math.sin(b) * Math.sin(g)
+    ) * 180 / Math.PI;
+
+    if (window.orientation !== undefined) {
+      heading += window.orientation;
+    }
+    heading = normalizeAngle(heading);
+    return heading;
+  }
+}
+
+function handleOrientation(event) {
+  if (!compassActive) return;
+
+  let heading = getDeviceHeading(event);
+  if (heading === null || isNaN(heading)) return;
+
+  // Elige UNA de estas opciones (descomenta la que funcione):
+  // let viewHeading = heading;                           // Opción 0: sin offset
+  // let viewHeading = normalizeAngle(heading + 90);      // Opción 1: +90°
+  // let viewHeading = normalizeAngle(heading - 90);      // Opción 2: -90°
+  let viewHeading = normalizeAngle(heading + 180);     // Opción 3: +180° (ajústala)
+  // let viewHeading = normalizeAngle(heading - 180);     // Opción 4: -180°
+  // let viewHeading = normalizeAngle(-heading);          // Opción 5: inversión pura
+  // let viewHeading = normalizeAngle(-heading + 90);     // Opción 6: inversión +90°
+
+  if (filteredHeading === null) {
+    filteredHeading = viewHeading;
+    map.setBearing(filteredHeading);
+    if (userArrowContainer) {
+      userArrowContainer.style.transform = `rotate(${filteredHeading}deg)`;
+    }
+    return;
+  }
+
+  let diff = viewHeading - filteredHeading;
+  if (diff > 180) diff -= 360;
+  if (diff < -180) diff += 360;
+
+  if (Math.abs(diff) < DEAD_ZONE) return;
+
+  filteredHeading += diff * SMOOTHING_FACTOR;
+  filteredHeading = normalizeAngle(filteredHeading);
+
+  if (animationFrame) cancelAnimationFrame(animationFrame);
+  animationFrame = requestAnimationFrame(() => {
+    map.setBearing(filteredHeading);
+    if (userArrowContainer) {
+      userArrowContainer.style.transform = `rotate(${filteredHeading}deg)`;
+    }
+    animationFrame = null;
+  });
+}
+
+function startCompass() {
+  if (!window.DeviceOrientationEvent) {
+    console.warn("Este dispositivo no soporta eventos de orientación.");
+    return;
+  }
+  const startListening = () => {
+    window.addEventListener('deviceorientation', handleOrientation);
+    orientationHandler = handleOrientation;
+    compassActive = true;
+    filteredHeading = null;
+  };
+  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission()
+      .then(permissionState => {
+        if (permissionState === 'granted') {
+          startListening();
+        } else {
+          console.warn("Permiso de orientación denegado");
+        }
+      })
+      .catch(console.error);
+  } else {
+    startListening();
+  }
+}
+
+function stopCompass() {
+  if (orientationHandler) {
+    window.removeEventListener('deviceorientation', orientationHandler);
+    orientationHandler = null;
+  }
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+  }
+  compassActive = false;
+  filteredHeading = null;
+}
+
+function toggleCompassMode() {
+  if (compassActive) {
+    stopCompass();
+  } else {
+    startCompass();
+  }
+  return compassActive;
+}
+
+function isCompassActive() {
+  return compassActive;
+}
   return {
     dibujarCircuito,
     dibujarPuntos,
     toggleMarcadoresBase,
     dibujarRutaDesdeGps,
     limpiarRutaGps,
+    toggleCompassMode,
+    isCompassActive,
     actualizarIdiomaBase,
     centrarEnUsuario, 
     getBearing: () => map.getBearing(),
