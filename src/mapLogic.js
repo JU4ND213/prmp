@@ -576,7 +576,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     map.fitBounds(bounds, { padding: 50 });
   }
 
-  function dibujarPuntos(lista) {
+  function dibujarPuntos(lista, onMarkerClick) {
     marcadoresCategorias.forEach(marker => marker.remove());
     marcadoresCategorias = [];
 
@@ -592,11 +592,17 @@ export function startMap(container, initialT, maskOptions = {}) {
       el.style.justifyContent = "center";
       el.style.alignItems = "center";
       el.style.color = "#fff"; 
+      el.style.cursor = "pointer";
       
       if (p.icon) {
         el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
       }
-
+      if (onMarkerClick) {
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          onMarkerClick(p);
+        });
+      }
       const popup = new maplibregl.Popup({ offset: 15 }).setHTML(`
         <div style="max-width:200px; font-family: sans-serif;">
           <strong>${p.name}</strong><br/>
