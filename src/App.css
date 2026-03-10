@@ -202,7 +202,7 @@ button {
   border-radius: 50%;
   
   /* Estética Glass: Blanco semi-transparente */
-  background: rgba(7, 219, 92, 0.7);
+  background: rgba(193, 199, 195, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   
@@ -222,7 +222,7 @@ button {
 
 /* Efecto al pasar el mouse */
 .circle:hover {
-  background: rgba(11, 198, 195, 0.9);
+  background: #0400ff;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -230,7 +230,7 @@ button {
 /* Efecto cuando los marcadores están ACTIVOS */
 /* Suponiendo que añades la clase .active dinámicamente */
 .circle.active {
-  background: #007aff; /* El azul de tu toggle-btn */
+  background: #0400ff; /* El azul de tu toggle-btn */
   color: white;
   border-color: transparent;
 }
