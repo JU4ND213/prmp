@@ -24,7 +24,7 @@ export default function MapView() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [rutaActiva, setRutaActiva] = useState(false);
-
+  const [puntosVisibles, setPuntosVisibles] = useState([]);
   const cambiarIdioma = (lng) => {i18n.changeLanguage(lng); setIdiomaMenuAbierto(false);};
   
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function MapView() {
   }));
 
   mapRef.current.dibujarPuntos(puntosTraducidos);
-
+  setPuntosVisibles(puntosTraducidos);
 // CAMBIO AQUÍ: Asegúrate de depender de debouncedSearch
 }, [activeCategories, debouncedSearch, i18n.language, t]);
   /* ===============================
@@ -203,11 +203,31 @@ export default function MapView() {
   return (
     <div className="map-view">
       <div ref={mapContainerRef} className="map-container" />
-
+      {/* 🌟 NUEVO: PANEL DE LISTA DE PUNTOS VISIBLES */}
+      {/* Solo se muestra si hay categorías seleccionadas o se buscó algo */}
+      {(activeCategories.length > 0 || debouncedSearch.trim() !== "") && (
+        <div className="results-panel">
+          <div className="results-header">
+            <h3>{t("listTitle", "Lugares")} ({puntosVisibles.length})</h3>
+          </div>
+          <div className="results-list">
+            {puntosVisibles.length > 0 ? (
+              puntosVisibles.map((punto, index) => (
+                <div key={index} className="result-card">
+                  <h4>{punto.name}</h4>
+                  {punto.description && <p>{punto.description}</p>}
+                </div>
+              ))
+            ) : (
+              <p className="no-results">{t("noResults", "No se encontraron lugares.")}</p>
+            )}
+          </div>
+        </div>
+      )}
       {/* ===== BOTÓN DE IDIOMA ===== */}
       <div className="language-wrapper">
         <button
-          className="chip chip--circle language-icon"
+          className="circle language-icon"
           onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
           title="Idioma"
         >
@@ -279,12 +299,10 @@ export default function MapView() {
             </button>
           )}
         </div>
-        
-        {/* Agregamos tu divider para separarlo de la fila del GPS */}
         <div className="divider"></div>
   {/* PUNTOS BASE */}
   <button
-    className="chip chip--circle"
+    className="circle"
     onClick={() => {
       const nuevo = !mostrarMarcadoresBase;
       setMostrarMarcadoresBase(nuevo);
@@ -312,7 +330,7 @@ export default function MapView() {
   {/* BOTÓN IR / LIMPIAR */}
   <button
     // Puedes agregar una clase condicional si quieres cambiarle el color cuando sea una "X"
-    className={`chip chip--circle ${rutaActiva ? "cancelar-btn" : "ir-btn"}`}
+    className={`circle ${rutaActiva ? "cancelar-btn" : "ir-btn"}`}
     onClick={rutaActiva ? limpiarRuta : irAlDestino}
     disabled={!destinoId && !rutaActiva} 
   >

@@ -195,16 +195,48 @@ button {
 .chip:hover { opacity: 0.9; }
 .chip:active { transform: scale(0.96); }
 
-/* ================= CHIP CIRCULAR ================= */
-.chip--circle {
-  width: 32px;
-  height: 32px;
+/* ================= BOTÓN CIRCULAR (ESTILO GLASS) ================= */
+.circle {
+  width: 34px; /* Un poquito más grande para facilitar el toque */
+  height: 34px;
   border-radius: 50%;
-  background: #000;
+  
+  /* Estética Glass: Blanco semi-transparente */
+  background: rgba(7, 219, 92, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  
+  /* Bordes sutiles como tus otros paneles */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition-fast);
+  font-size: 1rem;
+}
+
+/* Efecto al pasar el mouse */
+.circle:hover {
+  background: rgba(11, 198, 195, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Efecto cuando los marcadores están ACTIVOS */
+/* Suponiendo que añades la clase .active dinámicamente */
+.circle.active {
+  background: #007aff; /* El azul de tu toggle-btn */
+  color: white;
+  border-color: transparent;
+}
+
+.circle:active {
+  transform: scale(0.92);
 }
 
 /* ================= CHIP PÍLDORA ================= */
@@ -329,35 +361,205 @@ button {
   text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
-/* ================= CARRUSEL POPUPS ================= */
+/* ================= CARRUSEL POPUPS (Estilo Glass) ================= */
 .popup-carousel {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: 8px;
-  padding-bottom: 5px;
+  gap: 12px; 
+  padding: 16px; 
   scrollbar-width: thin;
+  
+  /* --- Efecto Glassmorphism Corregido (Sutil y Transparente) --- */
+  background: rgba(255, 255, 255, 0.1); 
+  backdrop-filter: blur(12px); 
+  -webkit-backdrop-filter: blur(12px); 
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  border-radius: 16px; 
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2); 
 }
 
+/* Scrollbar estilizado para combinar con el cristal */
 .popup-carousel::-webkit-scrollbar {
-  height: 4px;
+  height: 6px;
 }
 
-.popup-carousel::-webkit-scrollbar-thumb {
-  background-color: #ccc;
+.popup-carousel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
 }
 
+.popup-carousel::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.popup-carousel::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Imágenes dentro del carrusel */
 .popup-carousel img {
   scroll-snap-align: center;
   flex: 0 0 100%;
   width: 100%;
   height: 150px;
   object-fit: contain;
-  border-radius: 8px;
-  background-color: #f8f9fa;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease; 
 }
 
+.popup-carousel img:hover {
+  transform: scale(1.02); 
+}
+/* ================= CONTENEDOR PRINCIPAL DEL POPUP (MapLibre Glass) ================= */
+
+/* Hacer el fondo de todo el popup transparente para ver el cristal */
+.maplibregl-popup-tip {
+  /* La flechita de abajo */
+  border-top-color: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.maplibregl-popup-content {
+  /* El cuadro blanco principal */
+  background: var(--bg-panel) !important; /* Usamos la variable que ya tenías para tu panel */
+  backdrop-filter: blur(14px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-panel) !important;
+  color: #333 !important; /* Color del texto del título */
+  padding: 15px 10px 10px 10px !important; /* Ajuste de márgenes internos */
+}
+
+/* Estilizar el botoncito de Cerrar (X) para que combine */
+.maplibregl-popup-close-button {
+  color: #555 !important;
+  font-size: 20px !important;
+  padding: 4px 8px !important;
+  border-radius: 50% !important;
+  transition: background-color var(--transition-fast) !important;
+}
+
+.maplibregl-popup-close-button:hover {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  color: #000 !important;
+}
+/* ================= PANEL DE RESULTADOS (LISTA DE LUGARES) ================= */
+.results-panel {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 280px;
+  max-height: 60vh; /* Ocupa hasta el 60% del alto de la pantalla */
+  z-index: 1100;
+  
+  /* Efecto Glassmorphism usando tus variables */
+  background: var(--bg-panel);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Mantiene las esquinas redondas */
+}
+
+.results-header {
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.results-header h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* El contenedor que hace scroll */
+.results-list {
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+}
+
+/* Scrollbar para la lista de resultados */
+.results-list::-webkit-scrollbar {
+  width: 6px;
+}
+.results-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.results-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+/* Cada tarjeta de lugar */
+.result-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+  cursor: pointer;
+}
+
+.result-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.result-card h4 {
+  margin: 0 0 4px 0;
+  font-size: 0.8rem;
+  color: #007aff;
+}
+
+.result-card p {
+  margin: 0;
+  font-size: 0.7rem;
+  color: #555;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  line-clamp: 2;         
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.no-results {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 768px) {
+  .results-panel {
+    top: 70px; /* Debajo del idioma en móviles */
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-height: 35vh; /* Más pequeñito en móvil para no tapar todo el mapa */
+  }
+}
 /* ================= BOTÓN GPS ================= */
 .locate-btn {
 
