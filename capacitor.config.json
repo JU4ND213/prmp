@@ -1,5 +1,9 @@
 {
   "appId": "jl.prmp.jdll",
   "appName": "Map Monument",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "iosScheme": "https",
+    "androidScheme": "https"
+  }
 }
