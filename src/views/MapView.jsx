@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import "../App.css";
 import { startMap, CIRCUITOS_OBJ, DESTINOS } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
@@ -117,7 +117,13 @@ export default function MapView() {
     );
   };
 
-  useEffect(() => {
+  // Manejador de clic en un punto (tarjeta o marcador) - definido ANTES del useEffect que lo usa
+  const handleResultClick = useCallback((punto) => {
+    setSelectedPunto(punto);
+    mapRef.current?.flyTo(punto.lng, punto.lat);
+  }, []);
+
+useEffect(() => {
     if (!mapRef.current) return;
 
     let puntosParaDibujar = [];
@@ -125,60 +131,35 @@ export default function MapView() {
     if (debouncedSearch.trim() !== "") {
       const termino = debouncedSearch.toLowerCase();
       const todosLosPuntos = Object.values(POINTS_BY_COLOR).flat();
-
       puntosParaDibujar = todosLosPuntos.filter((p) => {
-        const nombreTraducido = p.id
-          ? t(`points.${p.id}.name`, p.name).toLowerCase()
-          : p.name.toLowerCase();
-        const descTraducida =
-          p.id && p.description
-            ? t(`points.${p.id}.description`, p.description).toLowerCase()
-            : (p.description || "").toLowerCase();
-
+        const nombreTraducido = p.id ? t(`points.${p.id}.name`, p.name).toLowerCase() : p.name.toLowerCase();
+        const descTraducida = p.id && p.description ? t(`points.${p.id}.description`, p.description).toLowerCase() : (p.description || "").toLowerCase();
         let menuTraducido = p.menu || [];
         if (p.id) {
-          const traduccion = t(`points.${p.id}.menu`, {
-            returnObjects: true,
-            defaultValue: p.menu,
-          });
-          if (Array.isArray(traduccion)) {
-            menuTraducido = traduccion;
-          }
+          const traduccion = t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu });
+          if (Array.isArray(traduccion)) menuTraducido = traduccion;
         }
-
-        const coincideNombre = nombreTraducido.includes(termino);
-        const coincideDesc = descTraducida.includes(termino);
-        const coincideMenu = menuTraducido.some((plato) =>
-          plato.toLowerCase().includes(termino)
+        return (
+          nombreTraducido.includes(termino) ||
+          descTraducida.includes(termino) ||
+          menuTraducido.some(plato => plato.toLowerCase().includes(termino))
         );
-
-        return coincideNombre || coincideDesc || coincideMenu;
       });
     } else {
-      puntosParaDibujar = activeCategories.flatMap(
-        (cat) => POINTS_BY_COLOR[cat] || []
-      );
+      puntosParaDibujar = activeCategories.flatMap(cat => POINTS_BY_COLOR[cat] || []);
     }
 
-    const puntosTraducidos = puntosParaDibujar.map((p) => ({
+    const puntosTraducidos = puntosParaDibujar.map(p => ({
       ...p,
       name: p.id ? t(`points.${p.id}.name`, p.name) : p.name,
-      description: p.id
-        ? t(`points.${p.id}.description`, p.description)
-        : p.description,
-      menu:
-        p.id && p.menu
-          ? t(`points.${p.id}.menu`, {
-              returnObjects: true,
-              defaultValue: p.menu,
-            })
-          : p.menu,
+      description: p.id ? t(`points.${p.id}.description`, p.description) : p.description,
+      menu: p.id && p.menu ? t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu }) : p.menu
     }));
 
-    mapRef.current.dibujarPuntos(puntosTraducidos);
+    // Llamada a dibujarPuntos con el callback y el ID seleccionado
+    mapRef.current.dibujarPuntos(puntosTraducidos, handleResultClick, selectedPunto?.id);
     setPuntosVisibles(puntosTraducidos);
-  }, [activeCategories, debouncedSearch, i18n.language, t]);
-
+  }, [activeCategories, debouncedSearch, i18n.language, t, selectedPunto, handleResultClick]);
   /* ===============================
      RUTA GPS
   =============================== */
@@ -205,10 +186,6 @@ export default function MapView() {
     }
   };
 
-  const handleResultClick = (punto) => {
-    setSelectedPunto(punto);
-    mapRef.current?.flyTo(punto.lng, punto.lat);
-  };
 
   /* ===============================
      CENTRAR CÁMARA EN USUARIO
@@ -251,31 +228,30 @@ export default function MapView() {
               </p>
             )}
           </div>
+        </div>
+      )}
 
-          {/* PANEL DE DETALLES DEL PUNTO SELECCIONADO */}
-          {selectedPunto && (
-            <div className="result-detail-panel">
-              <button
-                className="detail-close-btn"
-                onClick={() => setSelectedPunto(null)}
-                title="Cerrar"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-              <h4>{selectedPunto.name}</h4>
-              {selectedPunto.description && <p>{selectedPunto.description}</p>}
-
-              {selectedPunto.menu && selectedPunto.menu.length > 0 && (
-                <>
-                  <strong>Menú:</strong>
-                  <ul>
-                    {selectedPunto.menu.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
+      {/* PANEL DE DETALLES FLOTANTE */}
+      {selectedPunto && (
+        <div className="detail-floating-panel">
+          <button
+            className="detail-close-btn"
+            onClick={() => setSelectedPunto(null)}
+            title="Cerrar"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
+          <h4>{selectedPunto.name}</h4>
+          {selectedPunto.description && <p>{selectedPunto.description}</p>}
+          {selectedPunto.menu && selectedPunto.menu.length > 0 && (
+            <>
+              <strong>Menú:</strong>
+              <ul>
+                {selectedPunto.menu.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
       )}

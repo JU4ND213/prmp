@@ -579,7 +579,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     map.fitBounds(bounds, { padding: 50 });
   }
 
-  function dibujarPuntos(lista, onMarkerClick) {
+  function dibujarPuntos(lista, onMarkerClick,selectedId) {
     marcadoresCategorias.forEach(marker => marker.remove());
     marcadoresCategorias = [];
 
@@ -596,6 +596,11 @@ export function startMap(container, initialT, maskOptions = {}) {
       el.style.alignItems = "center";
       el.style.color = "#fff"; 
       el.style.cursor = "pointer";
+
+      // ✅ RESALTAR SI ES EL SELECCIONADO
+    if (p.id === selectedId) {
+      el.classList.add("marker-selected");
+    }
       
       if (p.icon) {
         el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
