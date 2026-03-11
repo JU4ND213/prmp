@@ -5,6 +5,7 @@ import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 import { useTranslation } from "react-i18next";
 
 export default function MapView() {
+  const [selectedPunto, setSelectedPunto]= useState(null);
   const [compassActive, setCompassActive] = useState(false);
   const toggleCompass = () => {
   if (mapRef.current?.toggleCompassMode) {
@@ -54,6 +55,7 @@ export default function MapView() {
       isCompassActive,
       actualizarIdiomaBase,
       centrarEnUsuario, 
+      flyTo,
       cleanup
     } = mapApi;
 
@@ -67,11 +69,17 @@ export default function MapView() {
       toggleCompassMode,
       isCompassActive,
       actualizarIdiomaBase,
+      flyTo,
       centrarEnUsuario 
     };
 
     return () => cleanup?.();
   }, []);
+
+
+  useEffect(()=> {
+    setSelectedPunto(null);
+  },[activeCategories, debouncedSearch]);
 
   /* ===============================
      CAMBIO DE IDIOMA
@@ -189,6 +197,13 @@ export default function MapView() {
         limpiarRuta();
       }
     };
+
+
+    const handleResultClick = (punto) => {
+      setSelectedPunto(punto);
+      mapRef.current?.flyTo(punto.lng, punto.lat);
+    };
+
   /* ===============================
      CENTRAR CÁMARA EN USUARIO
   =============================== */
@@ -206,22 +221,52 @@ export default function MapView() {
       {/* 🌟 NUEVO: PANEL DE LISTA DE PUNTOS VISIBLES */}
       {/* Solo se muestra si hay categorías seleccionadas o se buscó algo */}
       {(activeCategories.length > 0 || debouncedSearch.trim() !== "") && (
-        <div className="results-panel">
-          <div className="results-header">
-            <h3>{t("listTitle", "Lugares")} ({puntosVisibles.length})</h3>
+  <div className="results-panel">
+    <div className="results-header">
+      <h3>{t("listTitle", "Lugares")} ({puntosVisibles.length})</h3>
+    </div>
+    <div className="results-list">
+      {puntosVisibles.length > 0 ? (
+        puntosVisibles.map((punto, index) => (
+          <div key={index} className="result-card" 
+          onClick={() => handleResultClick(punto)}   // <--- AÑADIR
+          >
+            <h4>{punto.name}</h4>
+            {punto.description && <p>{punto.description}</p>}
           </div>
-          <div className="results-list">
-            {puntosVisibles.length > 0 ? (
-              puntosVisibles.map((punto, index) => (
-                <div key={index} className="result-card">
-                  <h4>{punto.name}</h4>
-                  {punto.description && <p>{punto.description}</p>}
-                </div>
-              ))
-            ) : (
-              <p className="no-results">{t("noResults", "No se encontraron lugares.")}</p>
-            )}
-          </div>
+        ))
+      ) : (
+        <p className="no-results">{t("noResults", "No se encontraron lugares.")}</p>
+      )}
+    </div>
+
+    {/* PANEL DE DETALLES DEL PUNTO SELECCIONADO */}
+    {selectedPunto && (
+      <div className="result-detail-panel">
+        <button 
+          className="detail-close-btn" 
+          onClick={() => setSelectedPunto(null)}
+          title="Cerrar"
+        >
+          <span className="material-symbols-outlined">close</span>
+        </button>
+        <h4>{selectedPunto.name}</h4>
+        {selectedPunto.description && <p>{selectedPunto.description}</p>}
+        
+        {selectedPunto.menu && selectedPunto.menu.length > 0 && (
+          <>
+            <strong>Menú:</strong>
+            <ul>
+              {selectedPunto.menu.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    )}
+  
+
         </div>
       )}
       {/* ===== BOTÓN DE IDIOMA ===== */}

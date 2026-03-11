@@ -11,6 +11,73 @@
   --compact-pad: 10px;
   --compact-font: 0.72rem;
 }
+/* Panel de detalles del lugar seleccionado */
+.result-detail-panel {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+  position: relative;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.result-detail-panel h4 {
+  margin: 0 0 8px 0;
+  color: #007aff;
+  font-size: 1rem;
+  padding-right: 24px;
+}
+
+.result-detail-panel p {
+  margin: 4px 0;
+  font-size: 0.85rem;
+  color: #333;
+}
+
+.result-detail-panel ul {
+  margin: 4px 0;
+  padding-left: 20px;
+  font-size: 0.8rem;
+}
+
+.detail-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.detail-close-btn:hover {
+  background-color: rgba(0,0,0,0.1);
+  color: #ff3b30;
+}
+
+.detail-close-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+
+
+
+
+
+
+
+
 /* ================= RESET NATIVO ================= */
 * {
   /* Apaga el destello azul al tocar botones en móviles */

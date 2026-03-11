@@ -798,6 +798,9 @@ function isCompassActive() {
     isCompassActive,
     actualizarIdiomaBase,
     centrarEnUsuario, 
+    flyTo: (lng,lat)=> {
+     map.flyTo({ center: [lng,lat],zoom:40, pitch: 50, essential: true }); 
+    },
     getBearing: () => map.getBearing(),
     cleanup: () => {
       map.remove();
