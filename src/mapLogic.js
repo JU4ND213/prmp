@@ -440,11 +440,14 @@ export function startMap(container, initialT, maskOptions = {}) {
     `;
   }
 
+  /* ---------- MARCADORES BASE ---------- */
   function inicializarMarcadoresBase() {
     DESTINOS.forEach(d => {
       const el = document.createElement("div");
-      el.innerHTML = "📍";
-      el.style.fontSize = "24px";
+      
+      // 👇 AQUÍ REEMPLAZAMOS EL EMOJI POR EL ÍCONO DE GOOGLE FONTS
+      // Le puse color rojo (#ea4335) y una sombrita para que parezca un pin real
+      el.innerHTML = '<span class="material-symbols-outlined" style="color: #ea4335; font-size: 32px; text-shadow: 0px 2px 4px rgba(0,0,0,0.5);">location_on</span>';
       el.style.cursor = "pointer";
 
       const popup = new maplibregl.Popup({ offset: 25 }).setHTML(crearPopupBase(d, initialT));
@@ -456,7 +459,7 @@ export function startMap(container, initialT, maskOptions = {}) {
       marcadoresBase[d.id] = marker;
     });
   }
-
+  
   function toggleMarcadoresBase(mostrar) {
     Object.values(marcadoresBase).forEach(marker => {
       const el = marker.getElement();
