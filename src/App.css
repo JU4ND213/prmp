@@ -75,12 +75,14 @@
 
 /* ================= MARCADOR SELECCIONADO ================= */
 .marker-selected {
-  outline: 10px solid rgb(255, 0, 0);
-  outline-offset: 1px;
-  box-shadow: 0 0 0 2px rgb(255, 0, 0);
+  /* outline no respeta border-radius en iOS Safari — usamos box-shadow */
+  box-shadow:
+    0 0 0 3px rgb(255, 0, 0),
+    0 0 0 5px rgba(255, 0, 0, 0.4);
   transform: scale(1.2);
   transition: all 0.25s ease-out;
   z-index: 20;
+  border-radius: 50%;          /* fuerza círculo también en iOS */
 }
 
 /* ================= RESET NATIVO ================= */

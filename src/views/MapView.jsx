@@ -319,9 +319,10 @@ useEffect(() => {
             <input
               type="text"
               className="search-input"
-              placeholder={t("searchPlaceholder", "Ej: cuy, locro, museo...")}
+              placeholder={t("searchPlaceholder", "Busca lugar, plato o servicio...")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") e.target.blur(); }}
             />
 
             {searchTerm && (
