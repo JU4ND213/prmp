@@ -283,6 +283,7 @@ useEffect(() => {
         className="locate-btn"
         onClick={centrarCamara}
         title={t("centerLocation", "Centrar en mi ubicación")}
+        style={{ bottom: "500px" }}
       >
         <span className="material-symbols-outlined">my_location</span>
       </button>
@@ -292,7 +293,7 @@ useEffect(() => {
         className={`locate-btn ${compassActive ? "active" : ""}`}
         onClick={toggleCompass}
         title={t("compassMode", "Modo brújula")}
-        style={{ bottom: "140px" }}
+        style={{ bottom: "550px" }}
       >
         <span className="material-symbols-outlined">explore</span>
       </button>
