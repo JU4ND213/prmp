@@ -406,6 +406,7 @@ export function startMap(container, initialT, maskOptions = {}) {
           const ahora = Date.now();
           if (ahora - ultimoTiempoCalculo > 3000) {
             actualizarRutaConUsuario(lat, lng);
+            verificarProximidad(lat, lng);   
             ultimoTiempoCalculo = ahora; // Actualizamos el cronómetro
           }
         }
@@ -795,6 +796,39 @@ function toggleCompassMode() {
 
 function isCompassActive() {
   return compassActive;
+}
+/* ---------- PROXIMIDAD AUTO-POPUP ---------- */
+const RADIO_METROS = 10;          // distancia en metros para abrir popup
+let ultimoPopupAbierto = null;    // evita abrir el mismo popup en bucle
+
+function verificarProximidad(lat, lng) {
+  DESTINOS.forEach(d => {
+    const distancia = distanceMeters(lat, lng, d.lat, d.lng);
+
+    if (distancia <= RADIO_METROS) {
+      const marker = marcadoresBase[d.id];
+      if (!marker) return;
+
+      // Solo abre si no está ya abierto este popup
+      if (ultimoPopupAbierto !== d.id) {
+        ultimoPopupAbierto = d.id;
+        marker.togglePopup();
+
+        // Centra el mapa en el destino
+        map.flyTo({
+          center: [d.lng, d.lat],
+          zoom: 18,
+          pitch: 50,
+          essential: true
+        });
+      }
+    } else {
+      // Si se aleja, resetea para que pueda volver a abrirse
+      if (ultimoPopupAbierto === d.id) {
+        ultimoPopupAbierto = null;
+      }
+    }
+  });
 }
   return {
     dibujarCircuito,
