@@ -7,7 +7,7 @@ import { Capacitor } from "@capacitor/core";
 export const DESTINOS = [
   { 
     id: 7, 
-    nombre: "Punto 7 Monumento", 
+    nombre: "Monumento", 
     imagen: "/images/Mitad_del_Mundo_01.png", 
     imagenes: [
       "/images/Mitad_del_Mundo_01.png", 
@@ -17,72 +17,72 @@ export const DESTINOS = [
     lat: -0.0021191507224225577, 
     lng: -78.45583279786655 
   },
-  { id: 1, nombre: "Punto 1 Viviendas", imagen: "/images/Viviendas.png", imagenes: [
+  { id: 1, nombre: "Viviendas", imagen: "/images/Viviendas.png", imagenes: [
       "/images/Viviendas.png", 
       "/images/vivendass.png", 
       "/images/vivendassss.png"
     ], lat: -0.0026339, lng: -78.4536447 },
-  { id: 2, nombre: "Punto 2 Museo Fiestas", imagen: "/images/Museo Fiestas.png", imagenes: [
+  { id: 2, nombre: "Museo Fiestas", imagen: "/images/Museo Fiestas.png", imagenes: [
       "/images/Museo Fiestas.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ],lat: -0.00254709, lng: -78.45416508 },
-  { id: 3, nombre: "Punto 3 Tiangues", imagen: "/images/Tiangues.png", imagenes: [
+  { id: 3, nombre: "Tiangues", imagen: "/images/Tiangues.png", imagenes: [
       "/images/Tiangues.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.002419977392211793,  lng: -78.45455274302334 },
-  { id: 4, nombre: "Punto 4 Capilla", imagen: "/images/Iglesia.png", imagenes: [
+  { id: 4, nombre: "Capilla", imagen: "/images/Iglesia.png", imagenes: [
       "/images/Iglesia.png", 
       "/images/inglees.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00217993, lng: -78.45443815 },
-  { id: 5, nombre: "Punto 5 Museo Cerveza", imagen: "/images/Museo Cerveza.png", imagenes: [
+  { id: 5, nombre: "Museo Cerveza", imagen: "/images/Museo Cerveza.png", imagenes: [
       "/images/Museo Cerveza.png", 
       "/images/cervezzz.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00172532, lng: -78.45456769 },
-  { id: 6, nombre: "Punto 6 Museo Cacao", imagen: "/images/Muiseo cacao.png", imagenes: [
+  { id: 6, nombre: "Museo Cacao", imagen: "/images/Muiseo cacao.png", imagenes: [
       "/images/Muiseo cacao.png", 
       "/images/museocc.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.0016318614649577512,  lng: -78.45513804232704 },
-  { id: 8, nombre: "Punto 8 Tienda Pichincha", imagen: "/images/Tienda pichincha.png", imagenes: [
+  { id: 8, nombre: "Tienda Pichincha", imagen: "/images/Tienda pichincha.png", imagenes: [
       "/images/Tienda pichincha.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.0019201542192408055,  lng: -78.45507887340779 },
-  { id: 9, nombre: "Punto 9 Exp. Huevo", imagen: "/images/Exp Huevo.png", imagenes: [
+  { id: 9, nombre: "Exp. Huevo", imagen: "/images/Exp Huevo.png", imagenes: [
       "/images/Exp Huevo.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.002128299975813348,  lng: -78.45500898876774 },
-  { id: 10, nombre: "Punto 10 Legado Virtual", imagen: "/images/Legado Virtual.png", imagenes: [
+  { id: 10, nombre: "Legado Virtual", imagen: "/images/Legado Virtual.png", imagenes: [
       "/images/Legado Virtual.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.0027321406845731214,  lng: -78.45531831507765 },
-  { id: 11, nombre: "Punto 11 Pab. Ecuador", imagen: "/images/PabellonEcu.png", imagenes: [
+  { id: 11, nombre: "Pab. Ecuador", imagen: "/images/PabellonEcu.png", imagenes: [
       "/images/PabellonEcu.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00295948, lng: -78.45520276 },
-  { id: 12, nombre: "Punto 12 Planetario", imagen: "/images/Planetario.png", imagenes: [
+  { id: 12, nombre: "Planetario", imagen: "/images/Planetario.png", imagenes: [
       "/images/Planetario.png", 
       "/images/planet.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00287231, lng: -78.45505122 },
-  { id: 13, nombre: "Punto 13 Pab. Francia", imagen: "/images/PabellonFrancia.png", imagenes: [
+  { id: 13, nombre: "Pab. Francia", imagen: "/images/PabellonFrancia.png", imagenes: [
       "/images/PabellonFrancia.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.00308018, lng: -78.45503877 },
-  { id: 14, nombre: "Punto 14 Pab. Guayasamín", imagen: "/images/Pabellon Guayasamin.png", imagenes: [
+  { id: 14, nombre: "Pab. Guayasamín", imagen: "/images/Pabellon Guayasamin.png", imagenes: [
       "/images/Pabellon Guayasamin.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"
     ], lat: -0.0030547, lng: -78.45482457 },
-  { id: 15, nombre: "Punto 15 Av. Geodésicos", imagen: "/images/Av. Geodésicos.png", imagenes: [
+  { id: 15, nombre: "Av. Geodésicos", imagen: "/images/Av. Geodésicos.png", imagenes: [
       "/images/Av. Geodésicos.png", 
       "/images/Mitad_del_Mundo_01.png", 
       "/images/Mitad_del_Mundo_01.png"

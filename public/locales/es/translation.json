@@ -35,21 +35,21 @@
   },
 
   "destinos": {
-    "1": "Punto 1 Viviendas",
-    "2": "Punto 2 Museo Fiestas",
-    "3": "Punto 3 Tiangues",
-    "4": "Punto 4 Capilla",
-    "5": "Punto 5 Museo Cerveza",
-    "6": "Punto 6 Museo Cacao",
-    "7": "Punto 7 Monumento",
-    "8": "Punto 8 Tienda Pichincha",
-    "9": "Punto 9 Exp. Huevo",
-    "10": "Punto 10 Legado Virtual",
-    "11": "Punto 11 Pab. Ecuador",
-    "12": "Punto 12 Planetario",
-    "13": "Punto 13 Pab. Francia",
-    "14": "Punto 14 Pab. Guayasamín",
-    "15": "Punto 15 Av. Geodésicos"
+    "1": "Viviendas",
+    "2": "Museo Fiestas",
+    "3": "Tiangues",
+    "4": "Capilla",
+    "5": "Museo Cerveza",
+    "6": "Museo Cacao",
+    "7": "Monumento",
+    "8": "Tienda Pichincha",
+    "9": "Exp. Huevo",
+    "10": "Legado Virtual",
+    "11": "Pab. Ecuador",
+    "12": "Planetario",
+    "13": "Pab. Francia",
+    "14": "Pab. Guayasamín",
+    "15": "Av. Geodésicos"
   },
   "points": {
     "centro_medico": {

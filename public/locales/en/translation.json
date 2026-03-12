@@ -35,21 +35,21 @@
   },
 
   "destinos": {
-    "1": "Point 1 Housing",
-    "2": "Point 2 Festival Museum",
-    "3": "Point 3 Tiangues",
-    "4": "Point 4 Chapel",
-    "5": "Point 5 Beer Museum",
-    "6": "Point 6 Cocoa Museum",
-    "7": "Point 7 Monument",
-    "8": "Point 8 Pichincha Store",
-    "9": "Point 9 Egg Experiment",
-    "10": "Point 10 Virtual Legacy",
-    "11": "Point 11 Ecuador Pavilion",
-    "12": "Point 12 Planetarium",
-    "13": "Point 13 France Pavilion",
-    "14": "Point 14 Guayasamín Pavilion",
-    "15": "Point 15 Geodesic Avenue"
+    "1": "Housing",
+    "2": "Festival Museum",
+    "3": "Tiangues",
+    "4": "Chapel",
+    "5": "Beer Museum",
+    "6": "Cocoa Museum",
+    "7": "Monument",
+    "8": "Pichincha Store",
+    "9": "Egg Experiment",
+    "10": "Virtual Legacy",
+    "11": "Ecuador Pavilion",
+    "12": "Planetarium",
+    "13": "France Pavilion",
+    "14": "Guayasamín Pavilion",
+    "15": "Geodesic Avenue"
   },
   "points": {
   "centro_medico": {
