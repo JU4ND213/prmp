@@ -19,3 +19,6 @@ If you are developing a production application, we recommend using TypeScript wi
 npm install
 ## Correr
 npm run dev
+## IOS
+npm run build
+npx cap sync ios
