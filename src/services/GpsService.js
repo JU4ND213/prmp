@@ -19,4 +19,3 @@ export function startGps(onUpdate) {
     }
   );
 }
-
