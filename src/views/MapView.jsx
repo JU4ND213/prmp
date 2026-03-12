@@ -26,6 +26,7 @@ export default function MapView() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [rutaActiva, setRutaActiva] = useState(false);
   const [puntosVisibles, setPuntosVisibles] = useState([]);
+  const [panelMinimizado, setPanelMinimizado] = useState(false);
   const cambiarIdioma = (lng) => {
     i18n.changeLanguage(lng);
     setIdiomaMenuAbierto(false);
@@ -204,36 +205,39 @@ useEffect(() => {
       <div ref={mapContainerRef} className="map-container" />
       {/* 🌟 NUEVO: PANEL DE LISTA DE PUNTOS VISIBLES */}
       {(activeCategories.length > 0 || debouncedSearch.trim() !== "") && (
-        <div className="results-panel">
-          <div className="results-header">
-            <h3>
-              {t("listTitle", "Lugares")} ({puntosVisibles.length})
-            </h3>
-          </div>
-          <div className="results-list">
-            {puntosVisibles.length > 0 ? (
-              puntosVisibles.map((punto, index) => (
-                <div
-                  key={index}
-                  className="result-card"
-                  onClick={() => handleResultClick(punto)}
-                >
-                  <h4>{punto.name}</h4>
-                  {punto.description && <p>{punto.description}</p>}
-                </div>
-              ))
-            ) : (
-              <p className="no-results">
-                {t("noResults", "No se encontraron lugares.")}
-              </p>
-            )}
-          </div>
-        </div>
+        <div className={`results-panel ${panelMinimizado ? "minimized" : ""}`}>
+    <div className="results-header">
+      <h3>{t("listTitle", "Lugares")} ({puntosVisibles.length})</h3>
+      <button
+        className="panel-minimize-btn"
+        onClick={() => setPanelMinimizado(!panelMinimizado)}
+        title={panelMinimizado ? "Expandir" : "Minimizar"}
+      >
+        <span className="material-symbols-outlined">
+          {panelMinimizado ? "expand_more" : "expand_less"}
+        </span>
+      </button>
+    </div>
+    {!panelMinimizado && (
+      <div className="results-list">
+        {puntosVisibles.length > 0 ? (
+          puntosVisibles.map((punto, index) => (
+            <div key={index} className="result-card" onClick={() => handleResultClick(punto)}>
+              <h4>{punto.name}</h4>
+              {punto.description && <p>{punto.description}</p>}
+            </div>
+          ))
+        ) : (
+          <p className="no-results">{t("noResults", "No se encontraron lugares.")}</p>
+        )}
+      </div>
+    )}
+  </div>
       )}
 
       {/* PANEL DE DETALLES FLOTANTE */}
       {selectedPunto && (
-        <div className="detail-floating-panel">
+        <div className={`detail-floating-panel ${menuAbierto ? "panel-open" : ""}`}>
           <button
             className="detail-close-btn"
             onClick={() => setSelectedPunto(null)}

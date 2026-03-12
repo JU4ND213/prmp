@@ -1,6 +1,6 @@
 /* ================= VARIABLES BASE ================= */
 :root {
-  --bg-panel: rgba(255, 255, 255, 0.65); /* más transparente para glass */
+  --bg-panel: rgba(255, 255, 255, 0.65);
   --shadow-panel: 0 8px 30px rgba(0,0,0,0.18);
   --radius-lg: 16px;
   --radius-pill: 999px;
@@ -11,6 +11,7 @@
   --compact-pad: 10px;
   --compact-font: 0.72rem;
 }
+
 /* ================= PANEL DE DETALLES FLOTANTE ================= */
 .detail-floating-panel {
   position: fixed;
@@ -23,44 +24,19 @@
   padding: 16px;
   max-width: 300px;
   width: auto;
-  z-index: 1150; /* Por encima del panel de resultados */
+  z-index: 1150;
   word-wrap: break-word;
 
-  /* Posición por defecto (escritorio) */
+  /* Desktop — sin tocar */
   top: 20px;
-  left: 320px; /* al lado del panel de resultados (280px + 20px) */
+  left: 320px;
 }
 
-/* En móviles, debajo del panel de resultados */
-@media (max-width: 768px) {
-  .detail-floating-panel {
-    left: 10px;
-    right: 10px;
-    top: auto;
-    bottom: 20px;       /* flota en la parte inferior */
-    max-width: none;
-    width: auto;
-    max-height: 40vh;   /* opcional: límite de altura con scroll */
-    overflow-y: auto;
-  }
-}
-
-/* Ajuste fino para pantallas muy pequeñas */
-@media (max-width: 480px) {
-  .detail-floating-panel {
-    bottom: 10px;
-    left: 8px;
-    right: 8px;
-    padding: 12px;
-  }
-}
-
-/* Estilos internos (puedes reutilizar los que ya tenías) */
 .detail-floating-panel h4 {
   margin: 0 0 8px 0;
   color: #007aff;
   font-size: 1rem;
-  padding-right: 24px; /* espacio para el botón cerrar */
+  padding-right: 24px;
 }
 
 .detail-floating-panel p {
@@ -97,33 +73,25 @@
   color: #ff3b30;
 }
 
-/* Marcador seleccionado - Outline Corregido */
+/* ================= MARCADOR SELECCIONADO ================= */
 .marker-selected {
-  /* Línea principal sólida */
-  outline: 10px solid rgb(255, 0, 0); 
+  outline: 10px solid rgb(255, 0, 0);
   outline-offset: 1px;
-  
-  /* Sombra del mismo color sin transparencia (rgb en lugar de rgba) para un borde doble sólido */
-  box-shadow: 0 0 0 2px rgb(255, 0, 0); 
-  
+  box-shadow: 0 0 0 2px rgb(255, 0, 0);
   transform: scale(1.2);
-  transition: all 0.25s ease-out; /* Transición un poco más suave */
+  transition: all 0.25s ease-out;
   z-index: 20;
 }
 
-
-
-
 /* ================= RESET NATIVO ================= */
 * {
-  /* Apaga el destello azul al tocar botones en móviles */
   -webkit-tap-highlight-color: transparent;
 }
 
 button {
-  /* Quita el borde de "foco" que a veces ponen los navegadores */
-  outline: none; 
+  outline: none;
 }
+
 /* ================= MAP VIEW ================= */
 .map-view {
   position: relative;
@@ -139,20 +107,14 @@ button {
 /* ================= PANEL DE CONTROLES ================= */
 .controls-panel {
   z-index: 1100;
-
   background: var(--bg-panel);
-
-  /* EFECTO GLASS */
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   border: 1px solid rgba(255,255,255,0.35);
-
   box-shadow: var(--shadow-panel);
-
   display: flex;
   flex-direction: column;
   gap: var(--compact-gap);
-
   pointer-events: auto;
   box-sizing: border-box;
 }
@@ -162,90 +124,38 @@ button {
   position: fixed;
   bottom: 20px;
   right: 20px;
-
   width: auto;
   height: 40px;
   padding: 8px 14px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   border-radius: var(--radius-pill);
   background: #007aff;
   color: #fff;
   font-weight: 700;
-
   border: none;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   cursor: pointer;
-
   z-index: 1200;
 }
 
 /* ================= DESKTOP ================= */
-@media (min-width: 768px) {
-
+@media (min-width: 769px) {
   .controls-panel {
-
     position: fixed;
     right: 20px;
     bottom: 140px;
-
     width: 260px;
     max-height: 60vh;
-
     padding: 12px;
     border-radius: var(--radius-lg);
-
     overflow-y: auto;
-
     transform: translateX(120%);
   }
 
-  .controls-panel.open {
-    transform: translateX(0);
-  }
-
-  .controls-panel.closed {
-    transform: translateX(120%);
-  }
-
-}
-
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
-
-  .toggle-btn {
-    right: 16px;
-  }
-
-  .controls-panel {
-
-    position: fixed;
-
-    bottom: 0;
-    left: 0;
-
-    width: 100%;
-    max-height: 55vh;
-
-    padding: 12px 12px 16px;
-
-    border-radius: 16px 16px 0 0;
-
-    transform: translateY(120%);
-    overflow: hidden;
-  }
-
-  .controls-panel.open {
-    transform: translateY(0);
-  }
-
-  .controls-panel.closed {
-    transform: translateY(120%);
-  }
-
+  .controls-panel.open   { transform: translateX(0); }
+  .controls-panel.closed { transform: translateX(120%); }
 }
 
 /* ================= ESTADO BOTÓN ================= */
@@ -295,52 +205,31 @@ button {
   transition: transform var(--transition-fast), opacity var(--transition-fast);
 }
 
-.chip:hover { opacity: 0.9; }
+.chip:hover  { opacity: 0.9; }
 .chip:active { transform: scale(0.96); }
 
-/* ================= BOTÓN CIRCULAR (ESTILO GLASS) ================= */
+/* ================= BOTÓN CIRCULAR ================= */
 .circle {
-  width: 34px; /* Un poquito más grande para facilitar el toque */
+  width: 34px;
   height: 34px;
   border-radius: 50%;
-  
-  /* Estética Glass: Blanco semi-transparente */
   background: rgba(193, 199, 195, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  /* Bordes sutiles como tus otros paneles */
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   cursor: pointer;
   padding: 0;
   transition: all var(--transition-fast);
   font-size: 1rem;
 }
 
-/* Efecto al pasar el mouse */
-.circle:hover {
-  background: #0400ff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Efecto cuando los marcadores están ACTIVOS */
-/* Suponiendo que añades la clase .active dinámicamente */
-.circle.active {
-  background: #0400ff; /* El azul de tu toggle-btn */
-  color: white;
-  border-color: transparent;
-}
-
-.circle:active {
-  transform: scale(0.92);
-}
+.circle:hover  { background: #0400ff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.circle.active { background: #0400ff; color: white; border-color: transparent; }
+.circle:active { transform: scale(0.92); }
 
 /* ================= CHIP PÍLDORA ================= */
 .chip--pill {
@@ -437,9 +326,7 @@ button {
   font-weight: 600;
 }
 
-.language-menu button:hover {
-  background: #f2f2f2;
-}
+.language-menu button:hover { background: #f2f2f2; }
 
 /* ================= ESTADOS ================= */
 .category-chip,
@@ -464,45 +351,27 @@ button {
   text-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
-/* ================= CARRUSEL POPUPS (Estilo Glass) ================= */
+/* ================= CARRUSEL POPUPS ================= */
 .popup-carousel {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: 12px; 
-  padding: 16px; 
+  gap: 12px;
+  padding: 16px;
   scrollbar-width: thin;
-  
-  /* --- Efecto Glassmorphism Corregido (Sutil y Transparente) --- */
-  background: rgba(255, 255, 255, 0.1); 
-  backdrop-filter: blur(12px); 
-  -webkit-backdrop-filter: blur(12px); 
-  border: 1px solid rgba(255, 255, 255, 0.3); 
-  border-radius: 16px; 
-  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2); 
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 16px;
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
 }
 
-/* Scrollbar estilizado para combinar con el cristal */
-.popup-carousel::-webkit-scrollbar {
-  height: 6px;
-}
+.popup-carousel::-webkit-scrollbar        { height: 6px; }
+.popup-carousel::-webkit-scrollbar-track  { background: rgba(255,255,255,0.05); border-radius: 10px; }
+.popup-carousel::-webkit-scrollbar-thumb  { background-color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; }
+.popup-carousel::-webkit-scrollbar-thumb:hover { background-color: rgba(255,255,255,0.8); }
 
-.popup-carousel::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-.popup-carousel::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-}
-
-.popup-carousel::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-/* Imágenes dentro del carrusel */
 .popup-carousel img {
   scroll-snap-align: center;
   flex: 0 0 100%;
@@ -510,38 +379,32 @@ button {
   height: 150px;
   object-fit: contain;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.1); 
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease; 
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
 }
 
-.popup-carousel img:hover {
-  transform: scale(1.02); 
-}
-/* ================= CONTENEDOR PRINCIPAL DEL POPUP (MapLibre Glass) ================= */
+.popup-carousel img:hover { transform: scale(1.02); }
 
-/* Hacer el fondo de todo el popup transparente para ver el cristal */
+/* ================= MAPLIBRE POPUP ================= */
 .maplibregl-popup-tip {
-  /* La flechita de abajo */
-  border-top-color: rgba(255, 255, 255, 0.65) !important;
+  border-top-color: rgba(255,255,255,0.65) !important;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }
 
 .maplibregl-popup-content {
-  /* El cuadro blanco principal */
-  background: var(--bg-panel) !important; /* Usamos la variable que ya tenías para tu panel */
+  background: var(--bg-panel) !important;
   backdrop-filter: blur(14px) saturate(140%) !important;
   -webkit-backdrop-filter: blur(14px) saturate(140%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border: 1px solid rgba(255,255,255,0.35) !important;
   border-radius: var(--radius-lg) !important;
   box-shadow: var(--shadow-panel) !important;
-  color: #333 !important; /* Color del texto del título */
-  padding: 15px 10px 10px 10px !important; /* Ajuste de márgenes internos */
+  color: #333 !important;
+  padding: 15px 10px 10px 10px !important;
 }
 
-/* Estilizar el botoncito de Cerrar (X) para que combine */
 .maplibregl-popup-close-button {
   color: #555 !important;
   font-size: 20px !important;
@@ -551,35 +414,34 @@ button {
 }
 
 .maplibregl-popup-close-button:hover {
-  background-color: rgba(0, 0, 0, 0.1) !important;
+  background-color: rgba(0,0,0,0.1) !important;
   color: #000 !important;
 }
-/* ================= PANEL DE RESULTADOS (LISTA DE LUGARES) ================= */
+
+/* ================= PANEL DE RESULTADOS ================= */
 .results-panel {
   position: fixed;
   top: 20px;
   left: 20px;
   width: 280px;
-  max-height: 60vh; /* Ocupa hasta el 60% del alto de la pantalla */
+  max-height: 60vh;
   z-index: 1100;
-  
-  /* Efecto Glassmorphism usando tus variables */
   background: var(--bg-panel);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255,255,255,0.35);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-panel);
-
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Mantiene las esquinas redondas */
+  overflow: hidden;
 }
 
 .results-header {
   padding: 12px 16px;
-  background: rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  flex-shrink: 0;
 }
 
 .results-header h3 {
@@ -589,7 +451,6 @@ button {
   color: #2c3e50;
 }
 
-/* El contenedor que hace scroll */
 .results-list {
   padding: 12px;
   overflow-y: auto;
@@ -599,37 +460,28 @@ button {
   scrollbar-width: thin;
 }
 
-/* Scrollbar para la lista de resultados */
-.results-list::-webkit-scrollbar {
-  width: 6px;
-}
-.results-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-.results-list::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-}
+.results-list::-webkit-scrollbar        { width: 6px; }
+.results-list::-webkit-scrollbar-track  { background: transparent; }
+.results-list::-webkit-scrollbar-thumb  { background-color: rgba(0,0,0,0.2); border-radius: 10px; }
 
-/* Cada tarjeta de lugar */
 .result-card {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.5);
   padding: 10px 12px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   transition: transform var(--transition-fast), background var(--transition-fast);
   cursor: pointer;
 }
 
 .result-card:hover {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255,255,255,0.95);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .result-card h4 {
-  margin: 0 0 4px 0;
+  margin: 0 0 4px;
   font-size: 0.8rem;
   color: #007aff;
 }
@@ -640,8 +492,8 @@ button {
   color: #555;
   line-height: 1.3;
   display: -webkit-box;
-  -webkit-line-clamp: 2; 
-  line-clamp: 2;         
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -653,72 +505,35 @@ button {
   margin: 20px 0;
 }
 
-/* === RESPONSIVE MOBILE === */
-@media (max-width: 768px) {
-  .results-panel {
-    top: 70px; /* Debajo del idioma en móviles */
-    left: 10px;
-    right: 10px;
-    width: auto;
-    max-height: 35vh; /* Más pequeñito en móvil para no tapar todo el mapa */
-  }
-}
 /* ================= BOTÓN GPS ================= */
 .locate-btn {
-
   position: fixed;
-
   right: 20px;
   bottom: 80px;
-
   width: 48px;
   height: 48px;
-
   border-radius: 50%;
   background-color: rgba(255,255,255,0.85);
   color: #007aff;
-
   border: none;
   box-shadow: var(--shadow-panel);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 1.5rem;
   cursor: pointer;
-
   z-index: 1150;
-
   transition: transform var(--transition-fast), background-color var(--transition-fast);
 }
 
-.locate-btn:hover {
-  background-color: #f0f0f0;
-  transform: scale(1.05);
-}
-
-.locate-btn:active {
-  transform: scale(0.95);
-}
-
-/* ================= MOBILE GPS ================= */
-@media (max-width:768px){
-
-  .locate-btn{
-    bottom: 90px;
-  }
-
-  .controls-panel.open ~ .locate-btn{
-    bottom: calc(55vh + 20px);
-  }
-
-}
+.locate-btn:hover  { background-color: #f0f0f0; transform: scale(1.05); }
+.locate-btn:active { transform: scale(0.95); }
 
 .locate-btn .material-symbols-outlined {
   user-select: none;
   line-height: 1;
 }
+
 /* ================= BUSCADOR ================= */
 .search-bar-container {
   position: relative;
@@ -730,8 +545,8 @@ button {
   width: 100%;
   padding: 10px 40px 10px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0,0,0,0.15);
+  background-color: rgba(255,255,255,0.9);
   box-sizing: border-box;
   font-family: inherit;
   font-size: 0.75rem;
@@ -741,9 +556,10 @@ button {
 
 .search-input:focus {
   outline: none;
-  border-color: #007aff; /* Azul de tu tema */
-  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
 }
+
 .search-clear-btn {
   position: absolute;
   right: 6px;
@@ -752,7 +568,7 @@ button {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #888; /* Color gris suave por defecto */
+  color: #888;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -761,13 +577,315 @@ button {
   transition: color var(--transition-fast), background-color var(--transition-fast);
 }
 
-/* Controlamos el tamaño específico del icono para que no explote */
 .search-clear-btn .material-symbols-outlined {
-  font-size: 18px !important; 
+  font-size: 18px !important;
   line-height: 1;
 }
 
 .search-clear-btn:hover {
-  color: #ff3b30; /* Solo se pone rojo al pasar el mouse */
-  background-color: rgba(0, 0, 0, 0.05);
+  color: #ff3b30;
+  background-color: rgba(0,0,0,0.05);
+}
+
+
+/* =========================================================
+   MOBILE (≤ 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+
+  /* ── Botón de idioma ─────────────────────────────────── */
+  .language-wrapper {
+    top: 50px;
+    right: 10px;
+  }
+
+  /* ── Panel de resultados ─────────────────────────────── */
+  .results-panel {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 20vh;
+    border-radius: 12px;
+  }
+
+  .results-header {
+    padding: 5px 10px;
+  }
+
+  .results-header h3 {
+    font-size: 0.7rem;
+  }
+
+  .results-list {
+    padding: 5px 8px;
+    gap: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .results-list::-webkit-scrollbar { display: none; }
+
+  .result-card {
+    padding: 5px 8px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .result-card h4 {
+    font-size: 0.72rem;
+    margin: 0;
+  }
+
+  .result-card p {
+    font-size: 0.63rem;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    color: #777;
+  }
+
+  /* ── Panel de controles ──────────────────────────────── */
+  .controls-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 42vh;
+    padding: 4px 10px 12px;    /* menos padding-top: el handle lo ocupa */
+    border-radius: 14px 14px 0 0;
+    transform: translateY(120%);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 4px;
+  }
+
+  .controls-panel.open   { transform: translateY(0); }
+  .controls-panel.closed { transform: translateY(120%); }
+
+  /* Drag handle visual — no requiere cambio en JSX */
+  .controls-panel::before {
+    content: "";
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: rgba(0,0,0,0.18);
+    border-radius: 2px;
+    margin: 0 auto 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── "Panel de control" header ───────────────────────── */
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .panel-header h3 {
+    font-size: 0.68rem;
+    color: #888;               /* más sutil, no tan dominante */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Labels de sección (Puntos de interés, Circuitos) ── */
+  .controls-panel label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ── Buscador ────────────────────────────────────────── */
+  .search-bar-container { margin: 2px 0; }
+
+  .search-input {
+    padding: 6px 30px 6px 10px;
+    font-size: 0.7rem;
+    height: 30px;
+    border-radius: 7px;
+  }
+
+  /* ── GPS row: separa buscador de botones ─────────────── */
+  .gps-row {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  /* El search-bar-container ocupa toda la fila */
+  .gps-row .search-bar-container {
+    flex: 1 1 100%;            /* fila propia */
+    margin: 0;
+  }
+
+  /* Los botones van en una segunda mini-fila */
+  .gps-row .circle,
+  .gps-row .route-select,
+  .gps-row .ir-btn,
+  .gps-row .cancelar-btn {
+    flex: 1 1 auto;
+  }
+
+  .route-select {
+    height: 28px;
+    font-size: 0.68rem;
+  }
+
+  /* ── Chips de categorías ─────────────────────────────── */
+  .categories-grid { gap: 5px; padding: 2px 0; }
+
+  .chip--pill {
+    padding: 3px 8px;
+    font-size: 0.62rem;
+  }
+
+  /* ── Botones circulares ──────────────────────────────── */
+  .circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.85rem;
+  }
+
+  /* ── Rutas ───────────────────────────────────────────── */
+  .ruta-pacha,
+  .ruta-inti,
+  .ruta-killa {
+    font-size: 0.58rem;
+    padding: 4px 2px;
+  }
+
+  /* ── Dividers más finos ──────────────────────────────── */
+  .divider { margin: 2px 0; }
+
+  /* ── Botones flotantes ───────────────────────────────── */
+  .toggle-btn {
+    right: 12px;
+    bottom: 14px;
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .locate-btn {
+    right: 12px;
+    bottom: 62px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  /* Brújula — sobreescribe el bottom: 140px del JSX */
+  .locate-btn.compass-btn {
+    bottom: 110px !important;
+  }
+
+  .controls-panel.open ~ .locate-btn {
+    bottom: calc(42vh + 12px);
+  }
+
+  /* ── Panel de detalles ───────────────────────────────── */
+  .detail-floating-panel {
+    left: 8px;
+    right: 8px;
+    top: auto;
+    bottom: 30vh;   /* centro visual del mapa */
+    max-width: none;
+    max-height: 18vh;          /* más bajo: evita tapar el mapa */
+    overflow-y: auto;
+    padding: 8px 10px;
+    -webkit-overflow-scrolling: touch;
+    transition: bottom 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  /* panel-open: no se mueve, siempre en el centro del mapa */
+
+  .detail-floating-panel h4 {
+    font-size: 0.78rem;
+    margin-bottom: 2px;
+  }
+
+  .detail-floating-panel p  { font-size: 0.7rem; margin: 2px 0; }
+
+  /* Lista del menú: compacta y con scroll si hay muchos items */
+  .detail-floating-panel ul {
+    font-size: 0.65rem;
+    margin: 2px 0;
+    padding-left: 14px;
+    max-height: 7vh;           /* limita la lista para no explotar el panel */
+    overflow-y: auto;
+  }
+
+  .detail-floating-panel strong {
+    font-size: 0.68rem;
+  }
+
+  .detail-floating-panel .detail-close-btn {
+    width: 22px;
+    height: 22px;
+    top: 6px;
+    right: 6px;
+  }
+
+  /* ── Carrusel ────────────────────────────────────────── */
+  .popup-carousel        { padding: 8px; gap: 8px; }
+  .popup-carousel img    { height: 100px; }
+}
+
+/* =========================================================
+   Pantallas muy pequeñas (≤ 390px)
+   ========================================================= */
+@media (max-width: 390px) {
+  .results-panel           { max-height: 18vh; }
+  .controls-panel          { max-height: 38vh; }
+  .detail-floating-panel   { max-height: 16vh; }
+  .detail-floating-panel ul{ max-height: 5vh; }
+  .locate-btn              { width: 36px; height: 36px; }
+  .toggle-btn              { height: 32px; font-size: 0.7rem; }
+}
+
+/* ================= BOTÓN MINIMIZAR PANEL ================= */
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-minimize-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.panel-minimize-btn .material-symbols-outlined {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.panel-minimize-btn:hover {
+  background-color: rgba(0,0,0,0.08);
+  color: #333;
+}
+
+/* Estado minimizado — solo el header visible */
+.results-panel.minimized {
+  max-height: none;    /* cancelamos el max-height dinámico */
+  overflow: hidden;
+}
+
+.results-panel.minimized .results-header {
+  border-bottom: none;
 }
