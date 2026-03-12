@@ -22,3 +22,9 @@ npm run dev
 ## IOS
 npm run build
 npx cap sync ios
+## ANDROID
+npm run build 
+npx cap sync android
+cd android
+.\gradlew assembleRelease
+cd ..
