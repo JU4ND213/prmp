@@ -297,7 +297,7 @@ useEffect(() => {
       >
         <span className="material-symbols-outlined">explore</span>
       </button>
-
+ 
       {/* ===== BOTÓN PANEL ===== */}
       <button
         className="toggle-btn"

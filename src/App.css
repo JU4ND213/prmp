@@ -822,7 +822,7 @@ button {
     max-height: 7vh;           /* limita la lista para no explotar el panel */
     overflow-y: auto;
   }
-
+ 
   .detail-floating-panel strong {
     font-size: 0.68rem;
   }
