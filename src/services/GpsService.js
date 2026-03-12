@@ -3,7 +3,6 @@ export function startGps(onUpdate) {
     console.warn("Geolocation no soportado");
     return;
   }
-
   return navigator.geolocation.watchPosition(
     (pos) => {
       onUpdate({
