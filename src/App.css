@@ -292,40 +292,118 @@ button {
   filter: grayscale(1);
 }
 
-/* ================= IDIOMA ================= */
-.language-wrapper {
+/* ================= BARRA LATERAL (HERRAMIENTAS) ================= */
+.sidebar-toolbar {
   position: fixed;
-  top: 14px;
-  right: 14px;
+  top: 20px;
+  right: 0;
+  background-color: #3b474b; 
+  border-radius: 16px 0 0 16px;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 2000;
+  box-shadow: -3px 4px 15px rgba(0,0,0,0.25);
 }
 
-.language-icon .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
-  font-size: 1.2rem;
-  user-select: none;
-  line-height: 1;
+.settings-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-smooth);
 }
 
+.settings-btn .material-symbols-outlined {
+  font-size: 32px;
+  font-weight: 300;
+}
+
+.sidebar-toolbar.open .settings-btn {
+  transform: rotate(90deg); 
+}
+
+.sidebar-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  /* Animación sin romper el overflow del menú de idiomas */
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  transform: translateY(-10px);
+  transition: all var(--transition-smooth);
+}
+
+.sidebar-toolbar.open .sidebar-items {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+  transform: translateY(0);
+  margin-top: 16px; 
+}
+
+.sidebar-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.sidebar-icon:hover {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+
+.sidebar-icon:active {
+  transform: scale(0.95);
+}
+
+.sidebar-icon .material-symbols-outlined {
+  font-size: 22px;
+}
+
+.icon-lang { background-color: #3b82f6; } 
+.icon-compass { background-color: #d4a373; color: #4a3b32; } 
+.icon-compass.active { border: 2px solid white; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.icon-location { background-color: #1f2937; border: 2px solid #111; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.1); } 
+.icon-user { background-color: transparent; border: 2px solid white; box-shadow: none; }
+.icon-user .material-symbols-outlined { font-size: 28px; }
+
+/* Menú de idioma dentro de la barra lateral */
 .language-menu {
   position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 6px;
+  top: 0;
+  right: 55px; /* Aparece a la izquierda del botón */
   background: rgba(255,255,255,0.95);
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.35);
   overflow: hidden;
+  width: 90px;
 }
 
 .language-menu button {
   width: 100%;
-  padding: 6px 10px;
+  padding: 8px 10px;
   border: none;
   background: none;
   cursor: pointer;
   font-size: 0.75rem;
   font-weight: 600;
+  text-align: left;
 }
 
 .language-menu button:hover { background: #f2f2f2; }
@@ -507,35 +585,6 @@ button {
   margin: 20px 0;
 }
 
-/* ================= BOTÓN GPS ================= */
-.locate-btn {
-  position: fixed;
-  right: 20px;
-  bottom: 80px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: rgba(255,255,255,0.85);
-  color: #007aff;
-  border: none;
-  box-shadow: var(--shadow-panel);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 1150;
-  transition: transform var(--transition-fast), background-color var(--transition-fast);
-}
-
-.locate-btn:hover  { background-color: #f0f0f0; transform: scale(1.05); }
-.locate-btn:active { transform: scale(0.95); }
-
-.locate-btn .material-symbols-outlined {
-  user-select: none;
-  line-height: 1;
-}
-
 /* ================= BUSCADOR ================= */
 .search-bar-container {
   position: relative;
@@ -595,12 +644,6 @@ button {
    ========================================================= */
 @media (max-width: 768px) {
 
-  /* ── Botón de idioma ─────────────────────────────────── */
-  .language-wrapper {
-    top: 50px;
-    right: 10px;
-  }
-
   /* ── Panel de resultados ─────────────────────────────── */
   .results-panel {
     top: 8px;
@@ -648,6 +691,17 @@ button {
     color: #777;
   }
 
+  /* ── Barra Lateral Herramientas ─────────────────────── */
+  .sidebar-toolbar {
+    top: 80px; 
+    padding: 10px 8px;
+  }
+
+  .sidebar-icon {
+    width: 36px;
+    height: 36px;
+  }
+
   /* ── Panel de controles ──────────────────────────────── */
   .controls-panel {
     position: fixed;
@@ -655,7 +709,7 @@ button {
     left: 0;
     width: 100%;
     max-height: 42vh;
-    padding: 4px 10px 12px;    /* menos padding-top: el handle lo ocupa */
+    padding: 4px 10px 12px; 
     border-radius: 14px 14px 0 0;
     transform: translateY(120%);
     overflow-y: auto;
@@ -666,7 +720,6 @@ button {
   .controls-panel.open   { transform: translateY(0); }
   .controls-panel.closed { transform: translateY(120%); }
 
-  /* Drag handle visual — no requiere cambio en JSX */
   .controls-panel::before {
     content: "";
     display: block;
@@ -687,13 +740,12 @@ button {
 
   .panel-header h3 {
     font-size: 0.68rem;
-    color: #888;               /* más sutil, no tan dominante */
+    color: #888;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
 
-  /* ── Labels de sección (Puntos de interés, Circuitos) ── */
   .controls-panel label {
     font-size: 0.62rem;
     font-weight: 700;
@@ -709,24 +761,21 @@ button {
 
   .search-input {
     padding: 6px 30px 6px 10px;
-    font-size: 16px;           /* ← iOS no hace zoom si font-size >= 16px */
+    font-size: 16px; 
     height: 30px;
     border-radius: 7px;
   }
 
-  /* ── GPS row: separa buscador de botones ─────────────── */
   .gps-row {
     flex-wrap: wrap;
     gap: 5px;
   }
 
-  /* El search-bar-container ocupa toda la fila */
   .gps-row .search-bar-container {
-    flex: 1 1 100%;            /* fila propia */
+    flex: 1 1 100%;
     margin: 0;
   }
 
-  /* Los botones van en una segunda mini-fila */
   .gps-row .circle,
   .gps-row .route-select,
   .gps-row .ir-btn,
@@ -739,7 +788,6 @@ button {
     font-size: 0.68rem;
   }
 
-  /* ── Chips de categorías ─────────────────────────────── */
   .categories-grid { gap: 5px; padding: 2px 0; }
 
   .chip--pill {
@@ -747,14 +795,12 @@ button {
     font-size: 0.62rem;
   }
 
-  /* ── Botones circulares ──────────────────────────────── */
   .circle {
     width: 28px;
     height: 28px;
     font-size: 0.85rem;
   }
 
-  /* ── Rutas ───────────────────────────────────────────── */
   .ruta-pacha,
   .ruta-inti,
   .ruta-killa {
@@ -762,10 +808,8 @@ button {
     padding: 4px 2px;
   }
 
-  /* ── Dividers más finos ──────────────────────────────── */
   .divider { margin: 2px 0; }
 
-  /* ── Botones flotantes ───────────────────────────────── */
   .toggle-btn {
     right: 12px;
     bottom: 14px;
@@ -774,80 +818,41 @@ button {
     font-size: 0.75rem;
   }
 
-  .locate-btn {
-    right: 12px;
-    bottom: 62px;
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
-  }
-
-  /* Brújula — sobreescribe el bottom: 140px del JSX */
-  .locate-btn.compass-btn {
-    bottom: 110px !important;
-  }
-
-  .controls-panel.open ~ .locate-btn {
-    bottom: calc(42vh + 12px);
-  }
-
-  /* ── Panel de detalles ───────────────────────────────── */
   .detail-floating-panel {
     left: 8px;
     right: 8px;
     top: auto;
-    bottom: 30vh;   /* centro visual del mapa */
+    bottom: 30vh;
     max-width: none;
-    max-height: 18vh;          /* más bajo: evita tapar el mapa */
+    max-height: 18vh;
     overflow-y: auto;
     padding: 8px 10px;
     -webkit-overflow-scrolling: touch;
     transition: bottom 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 
-  /* panel-open: no se mueve, siempre en el centro del mapa */
-
-  .detail-floating-panel h4 {
-    font-size: 0.78rem;
-    margin-bottom: 2px;
-  }
-
+  .detail-floating-panel h4 { font-size: 0.78rem; margin-bottom: 2px; }
   .detail-floating-panel p  { font-size: 0.7rem; margin: 2px 0; }
 
-  /* Lista del menú: compacta y con scroll si hay muchos items */
   .detail-floating-panel ul {
     font-size: 0.65rem;
     margin: 2px 0;
     padding-left: 14px;
-    max-height: 7vh;           /* limita la lista para no explotar el panel */
+    max-height: 7vh; 
     overflow-y: auto;
   }
  
-  .detail-floating-panel strong {
-    font-size: 0.68rem;
-  }
-
-  .detail-floating-panel .detail-close-btn {
-    width: 22px;
-    height: 22px;
-    top: 6px;
-    right: 6px;
-  }
-
-  /* ── Carrusel ────────────────────────────────────────── */
+  .detail-floating-panel strong { font-size: 0.68rem; }
+  .detail-floating-panel .detail-close-btn { width: 22px; height: 22px; top: 6px; right: 6px; }
   .popup-carousel        { padding: 8px; gap: 8px; }
   .popup-carousel img    { height: 100px; }
 }
 
-/* =========================================================
-   Pantallas muy pequeñas (≤ 390px)
-   ========================================================= */
 @media (max-width: 390px) {
   .results-panel           { max-height: 18vh; }
   .controls-panel          { max-height: 38vh; }
   .detail-floating-panel   { max-height: 16vh; }
   .detail-floating-panel ul{ max-height: 5vh; }
-  .locate-btn              { width: 36px; height: 36px; }
   .toggle-btn              { height: 32px; font-size: 0.7rem; }
 }
 
@@ -882,9 +887,8 @@ button {
   color: #333;
 }
 
-/* Estado minimizado — solo el header visible */
 .results-panel.minimized {
-  max-height: none;    /* cancelamos el max-height dinámico */
+  max-height: none;   
   overflow: hidden;
 }
 

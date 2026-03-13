@@ -27,6 +27,7 @@ export default function MapView() {
   const [rutaActiva, setRutaActiva] = useState(false);
   const [puntosVisibles, setPuntosVisibles] = useState([]);
   const [panelMinimizado, setPanelMinimizado] = useState(false);
+  const [toolbarOpen, setToolbarOpen] = useState(false);
   const cambiarIdioma = (lng) => {
     i18n.changeLanguage(lng);
     setIdiomaMenuAbierto(false);
@@ -260,43 +261,56 @@ useEffect(() => {
         </div>
       )}
       
-      {/* ===== BOTÓN DE IDIOMA ===== */}
-      <div className="language-wrapper">
+      {/* ===== BARRA LATERAL DERECHA (HERRAMIENTAS) ===== */}
+      <div className={`sidebar-toolbar ${toolbarOpen ? "open" : ""}`}>
+        {/* Tuerca principal */}
         <button
-          className="circle language-icon"
-          onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
-          title="Idioma"
+          className="settings-btn"
+          onClick={() => setToolbarOpen(!toolbarOpen)}
+          title="Herramientas"
         >
-          <span className="material-symbols-outlined">g_translate</span>
+          <span className="material-symbols-outlined">settings</span>
         </button>
-
-        {idiomaMenuAbierto && (
-          <div className="language-menu">
-            <button onClick={() => cambiarIdioma("es")}>Español</button>
-            <button onClick={() => cambiarIdioma("en")}>English</button>
+        
+        {/* Iconos que se despliegan */}
+        <div className="sidebar-items">
+          
+          {/* Idioma */}
+          <div style={{ position: "relative" }}>
+            <button 
+              className="sidebar-icon icon-lang" 
+              onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)} 
+              title="Idioma"
+            >
+              <span className="material-symbols-outlined">g_translate</span>
+            </button>
+            {idiomaMenuAbierto && (
+              <div className="language-menu">
+                <button onClick={() => cambiarIdioma("es")}>Español</button>
+                <button onClick={() => cambiarIdioma("en")}>English</button>
+              </div>
+            )}
           </div>
-        )}
+
+          {/* Brújula */}
+          <button 
+            className={`sidebar-icon icon-compass ${compassActive ? "active" : ""}`} 
+            onClick={toggleCompass} 
+            title={t("compassMode", "Modo brújula")}
+          >
+            <span className="material-symbols-outlined">explore</span>
+          </button>
+
+          {/* Centrar Ubicación */}
+          <button 
+            className="sidebar-icon icon-location" 
+            onClick={centrarCamara} 
+            title={t("centerLocation", "Centrar en mi ubicación")}
+          >
+            <span className="material-symbols-outlined">my_location</span>
+          </button>
+        </div>
       </div>
-
-      {/* ===== BOTÓN FLOTANTE "CENTRAR EN MI UBICACIÓN" ===== */}
-      <button
-        className="locate-btn"
-        onClick={centrarCamara}
-        title={t("centerLocation", "Centrar en mi ubicación")}
-        style={{ bottom: "500px" }}
-      >
-        <span className="material-symbols-outlined">my_location</span>
-      </button>
-
-      {/* ===== BOTÓN FLOTANTE compass ===== */}
-      <button
-        className={`locate-btn ${compassActive ? "active" : ""}`}
-        onClick={toggleCompass}
-        title={t("compassMode", "Modo brújula")}
-        style={{ bottom: "550px" }}
-      >
-        <span className="material-symbols-outlined">explore</span>
-      </button>
  
       {/* ===== BOTÓN PANEL ===== */}
       <button
