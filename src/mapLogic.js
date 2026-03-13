@@ -637,7 +637,6 @@ export function startMap(container, initialT, maskOptions = {}) {
       const textDiv = document.createElement("div");
       textDiv.className = "custom-text-marker";
       textDiv.style.marginTop = "2px";
-      textDiv.style.fontSize = "13px";
       textDiv.innerText = p.name;
       container.appendChild(textDiv);
 
