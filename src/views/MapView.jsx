@@ -204,6 +204,33 @@ useEffect(() => {
   return (
     <div className="map-view">
       <div ref={mapContainerRef} className="map-container" />
+
+      {/* ===== BUSCADOR FLOTANTE (ESTILO MOCKUP) ===== */}
+      <div className="floating-search-container">
+        <input
+          type="text"
+          className="search-input"
+          placeholder={t("searchPlaceholder", "Busca lugar, plato o servicio...")}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter") e.target.blur(); }}
+        />
+
+        <div className="search-icon-wrapper">
+          {searchTerm ? (
+            <button
+              className="search-clear-btn"
+              onClick={() => setSearchTerm("")}
+              title={t("clearSearch", "Limpiar búsqueda")}
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          ) : (
+            <span className="material-symbols-outlined">search</span>
+          )}
+        </div>
+      </div>
+      
       {/* 🌟 NUEVO: PANEL DE LISTA DE PUNTOS VISIBLES */}
       {(activeCategories.length > 0 || debouncedSearch.trim() !== "") && (
         <div className={`results-panel ${panelMinimizado ? "minimized" : ""}`}>
@@ -311,6 +338,7 @@ useEffect(() => {
           </button>
         </div>
       </div>
+
  
       {/* ===== BOTÓN PANEL ===== */}
       <button
@@ -329,33 +357,6 @@ useEffect(() => {
         </div>
 
         <div className="gps-row">
-          {/* ===== BUSCADOR ===== */}
-          <div className="search-bar-container">
-            <input
-              type="text"
-              className="search-input"
-              placeholder={t("searchPlaceholder", "Busca lugar, plato o servicio...")}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") e.target.blur(); }}
-            />
-
-            {searchTerm && (
-              <button
-                className="search-clear-btn"
-                onClick={() => setSearchTerm("")}
-                title={t("clearSearch", "Limpiar búsqueda")}
-              >
-                <span
-                  className="material-symbols-outlined"
-                  style={{ fontSize: "20px" }}
-                >
-                  close
-                </span>
-              </button>
-            )}
-          </div>
-          <div className="divider"></div>
           
           {/* PUNTOS BASE */}
           <button
