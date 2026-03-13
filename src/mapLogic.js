@@ -3,6 +3,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { Geolocation } from "@capacitor/geolocation";
 import { RUTAS_CAMINABLES } from "./constants/rutasCaminables";
 import { Capacitor } from "@capacitor/core";
+
 /* ================= DATOS ================= */
 export const DESTINOS = [
   { 
@@ -105,6 +106,7 @@ export const CIRCUITOS_OBJ = {
   INTI: new Circuito([1, 2, 5, 6, 8, 9, 7, 10, 11, 12, 13, 14], "#2ecc71"),
   KILLA: new Circuito([15, 14, 13, 12, 11, 10, 7], "#f39c12")
 };
+
 /* ================= MOTOR DE ENRUTAMIENTO ================= */
 const precision = 4;
 const toKey = (lng, lat) => `${lng.toFixed(precision)},${lat.toFixed(precision)}`;
@@ -220,6 +222,7 @@ function encontrarRutaMasCorta(inicioKey, finKey) {
   }
   return ruta;
 }
+
 /* ---------------- MAPA ---------------- */
 export function startMap(container, initialT, maskOptions = {}) {
   if (!container) return;
@@ -354,7 +357,8 @@ export function startMap(container, initialT, maskOptions = {}) {
     // Iniciar el GPS
     iniciarGPS();
   }); 
- /* ---------- GPS CON CAPACITOR ----------- */
+
+  /* ---------- GPS CON CAPACITOR ----------- */
   let watchId = null;
   let primeraVez = true;
   // 👉 1. Agregamos esta variable para controlar el tiempo
@@ -416,7 +420,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     }
   }
 
-  /* ---------- MARCADORES BASE ---------- */
+  /* ---------- MARCADORES BASE POPUP ---------- */
   function crearPopupBase(d, t) {
     const nombre = t ? t(`destinos.${d.id}`, d.nombre) : d.nombre;
     
@@ -444,15 +448,24 @@ export function startMap(container, initialT, maskOptions = {}) {
   /* ---------- MARCADORES BASE ---------- */
   function inicializarMarcadoresBase() {
     DESTINOS.forEach(d => {
-      const el = document.createElement("div");
-      
-      // 👇 AQUÍ REEMPLAZAMOS EL EMOJI POR EL ÍCONO DE GOOGLE FONTS
-      // Le puse color rojo (#ea4335) y una sombrita para que parezca un pin real
-      el.innerHTML = '<span class="material-symbols-outlined" style="color: #ea4335; font-size: 32px; text-shadow: 0px 2px 4px rgba(0,0,0,0.5);">location_on</span>';
-      el.style.cursor = "pointer";
+      // Contenedor principal para alinear icono y texto
+      const container = document.createElement("div");
+      container.style.display = "flex";
+      container.style.flexDirection = "column"; 
+      container.style.alignItems = "center";
+      container.style.cursor = "pointer";
+
+      // Obtenemos el nombre traducido
+      const nombre = initialT ? initialT(`destinos.${d.id}`, d.nombre) : d.nombre;
+
+      // Estructura: Icono + Etiqueta de texto personalizada
+      container.innerHTML = `
+        <span class="material-symbols-outlined" style="color: #ea4335; font-size: 32px; text-shadow: 0px 2px 4px rgba(0,0,0,0.5);">location_on</span>
+        <div class="custom-text-marker" style="margin-top: -2px;">${nombre}</div>
+      `;
 
       const popup = new maplibregl.Popup({ offset: 25 }).setHTML(crearPopupBase(d, initialT));
-      const marker = new maplibregl.Marker({ element: el })
+      const marker = new maplibregl.Marker({ element: container })
         .setLngLat([d.lng, d.lat])
         .setPopup(popup)
         .addTo(map);
@@ -465,7 +478,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     Object.values(marcadoresBase).forEach(marker => {
       const el = marker.getElement();
       if (el) {
-        el.style.display = mostrar ? "block" : "none";
+        el.style.display = mostrar ? "flex" : "none";
       }
     });
   }
@@ -475,6 +488,12 @@ export function startMap(container, initialT, maskOptions = {}) {
       const destino = DESTINOS.find(d => d.id === Number(id));
       if (destino) {
         marker.getPopup().setHTML(crearPopupBase(destino, nuevoT));
+        
+        // Actualizar el texto del pin directamente
+        const textEl = marker.getElement().querySelector('.custom-text-marker');
+        if (textEl) {
+          textEl.innerText = nuevoT(`destinos.${destino.id}`, destino.nombre);
+        }
       }
     });
   }
@@ -488,8 +507,6 @@ export function startMap(container, initialT, maskOptions = {}) {
       Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
-
-  
 
   let routePointsMap = [];
 
@@ -580,11 +597,19 @@ export function startMap(container, initialT, maskOptions = {}) {
     map.fitBounds(bounds, { padding: 50 });
   }
 
-  function dibujarPuntos(lista, onMarkerClick,selectedId) {
+  function dibujarPuntos(lista, onMarkerClick, selectedId) {
     marcadoresCategorias.forEach(marker => marker.remove());
     marcadoresCategorias = [];
 
     lista.forEach(p => {
+      // Contenedor principal flex
+      const container = document.createElement("div");
+      container.style.display = "flex";
+      container.style.flexDirection = "column";
+      container.style.alignItems = "center";
+      container.style.cursor = "pointer";
+
+      // Círculo de color (tu código original)
       const el = document.createElement("div");
       el.style.width = "24px";
       el.style.height = "24px";
@@ -596,22 +621,33 @@ export function startMap(container, initialT, maskOptions = {}) {
       el.style.justifyContent = "center";
       el.style.alignItems = "center";
       el.style.color = "#fff"; 
-      el.style.cursor = "pointer";
 
       // ✅ RESALTAR SI ES EL SELECCIONADO
-    if (p.id === selectedId) {
-      el.classList.add("marker-selected");
-    }
+      if (p.id === selectedId) {
+        el.classList.add("marker-selected");
+      }
       
       if (p.icon) {
         el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
       }
+      
+      container.appendChild(el);
+
+      // Creamos el texto y lo agregamos usando tu clase CSS
+      const textDiv = document.createElement("div");
+      textDiv.className = "custom-text-marker";
+      textDiv.style.marginTop = "2px";
+      textDiv.style.fontSize = "13px";
+      textDiv.innerText = p.name;
+      container.appendChild(textDiv);
+
       if (onMarkerClick) {
-        el.addEventListener("click", (e) => {
+        container.addEventListener("click", (e) => {
           e.stopPropagation();
           onMarkerClick(p);
         });
       }
+
       const popup = new maplibregl.Popup({ offset: 15 }).setHTML(`
         <div style="max-width:200px; font-family: sans-serif;">
           <strong>${p.name}</strong><br/>
@@ -619,7 +655,7 @@ export function startMap(container, initialT, maskOptions = {}) {
         </div>
       `);
 
-      const marker = new maplibregl.Marker({ element: el })
+      const marker = new maplibregl.Marker({ element: container })
         .setLngLat([p.lng, p.lat])
         .setPopup(popup)
         .addTo(map);
@@ -627,6 +663,7 @@ export function startMap(container, initialT, maskOptions = {}) {
       marcadoresCategorias.push(marker);
     });
   }
+
   /* ---------- NUEVA FUNCIÓN PARA LIMPIAR LA RUTA GPS ---------- */
   function limpiarRutaGps() {
     // 1. Vaciamos la variable interna que guarda los puntos
@@ -640,6 +677,7 @@ export function startMap(container, initialT, maskOptions = {}) {
       });
     }
   }
+
   /* ---------- NUEVA FUNCIÓN PARA CENTRAR EN EL USUARIO ---------- */
   function centrarEnUsuario() {
     if (!userMarker) return;
@@ -655,181 +693,177 @@ export function startMap(container, initialT, maskOptions = {}) {
     // Movemos la cámara hacia el usuario
     map.flyTo({
       center: [userLngLat.lng, userLngLat.lat],
-      zoom: 18,         
+      zoom: 18,        
       pitch: 50,        
       essential: true   
     });
   }
+
   // ========== DECLARACIONES DE BRÚJULA (ANTES DE USARLAS) ==========
-let compassActive = false;
-let orientationHandler = null;
-let filteredHeading = null;
-let animationFrame = null;
-let userArrowContainer = null; // Referencia al contenedor de la flecha
+  let compassActive = false;
+  let orientationHandler = null;
+  let filteredHeading = null;
+  let animationFrame = null;
+  let userArrowContainer = null; // Referencia al contenedor de la flecha
 
-const SMOOTHING_FACTOR = 0.2; // Suavizado
-const DEAD_ZONE = 2;          // Grados mínimos de cambio
+  const SMOOTHING_FACTOR = 0.2; // Suavizado
+  const DEAD_ZONE = 2;          // Grados mínimos de cambio
 
-function normalizeAngle(angle) {
-  return ((angle % 360) + 360) % 360;
-}
-
-// Obtiene el heading de la parte superior del dispositivo (0 = norte, 90 = este)
-function getDeviceHeading(event) {
-  if (event.webkitCompassHeading !== undefined) {
-    // iOS
-    return event.webkitCompassHeading;
-  } else {
-    // Android
-    const alpha = event.alpha;
-    const beta = event.beta;
-    const gamma = event.gamma;
-    if (alpha === null || beta === null || gamma === null) return null;
-
-    const a = alpha * Math.PI / 180;
-    const b = beta * Math.PI / 180;
-    const g = gamma * Math.PI / 180;
-
-    let heading = Math.atan2(
-      Math.sin(a) * Math.cos(g) + Math.cos(a) * Math.sin(b) * Math.sin(g),
-      Math.cos(a) * Math.cos(g) - Math.sin(a) * Math.sin(b) * Math.sin(g)
-    ) * 180 / Math.PI;
-
-    if (window.orientation !== undefined) {
-      heading += window.orientation;
-    }
-    heading = normalizeAngle(heading);
-    return heading;
-  }
-}
-
-function handleOrientation(event) {
-  if (!compassActive) return;
-
-  let heading = getDeviceHeading(event);
-  if (heading === null || isNaN(heading)) return;
-
-  // Elige UNA de estas opciones (descomenta la que funcione):
-  // let viewHeading = heading;                           // Opción 0: sin offset
-  // let viewHeading = normalizeAngle(heading + 90);      // Opción 1: +90°
-  // let viewHeading = normalizeAngle(heading - 90);      // Opción 2: -90°
-  let viewHeading = normalizeAngle(heading + 180);     // Opción 3: +180° (ajústala)
-  // let viewHeading = normalizeAngle(heading - 180);     // Opción 4: -180°
-  // let viewHeading = normalizeAngle(-heading);          // Opción 5: inversión pura
-  // let viewHeading = normalizeAngle(-heading + 90);     // Opción 6: inversión +90°
-
-  if (filteredHeading === null) {
-    filteredHeading = viewHeading;
-    map.setBearing(filteredHeading);
-    if (userArrowContainer) {
-      userArrowContainer.style.transform = `rotate(${filteredHeading}deg)`;
-    }
-    return;
+  function normalizeAngle(angle) {
+    return ((angle % 360) + 360) % 360;
   }
 
-  let diff = viewHeading - filteredHeading;
-  if (diff > 180) diff -= 360;
-  if (diff < -180) diff += 360;
-
-  if (Math.abs(diff) < DEAD_ZONE) return;
-
-  filteredHeading += diff * SMOOTHING_FACTOR;
-  filteredHeading = normalizeAngle(filteredHeading);
-
-  if (animationFrame) cancelAnimationFrame(animationFrame);
-  animationFrame = requestAnimationFrame(() => {
-    map.setBearing(filteredHeading);
-    if (userArrowContainer) {
-      userArrowContainer.style.transform = `rotate(${filteredHeading}deg)`;
-    }
-    animationFrame = null;
-  });
-}
-
-function startCompass() {
-  if (!window.DeviceOrientationEvent) {
-    console.warn("Este dispositivo no soporta eventos de orientación.");
-    return;
-  }
-  const startListening = () => {
-    window.addEventListener('deviceorientation', handleOrientation);
-    orientationHandler = handleOrientation;
-    compassActive = true;
-    filteredHeading = null;
-  };
-  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-    DeviceOrientationEvent.requestPermission()
-      .then(permissionState => {
-        if (permissionState === 'granted') {
-          startListening();
-        } else {
-          console.warn("Permiso de orientación denegado");
-        }
-      })
-      .catch(console.error);
-  } else {
-    startListening();
-  }
-}
-
-function stopCompass() {
-  if (orientationHandler) {
-    window.removeEventListener('deviceorientation', orientationHandler);
-    orientationHandler = null;
-  }
-  if (animationFrame) {
-    cancelAnimationFrame(animationFrame);
-    animationFrame = null;
-  }
-  compassActive = false;
-  filteredHeading = null;
-}
-
-function toggleCompassMode() {
-  if (compassActive) {
-    stopCompass();
-  } else {
-    startCompass();
-  }
-  return compassActive;
-}
-
-function isCompassActive() {
-  return compassActive;
-}
-/* ---------- PROXIMIDAD AUTO-POPUP ---------- */
-const RADIO_METROS = 10;          // distancia en metros para abrir popup
-let ultimoPopupAbierto = null;    // evita abrir el mismo popup en bucle
-
-function verificarProximidad(lat, lng) {
-  DESTINOS.forEach(d => {
-    const distancia = distanceMeters(lat, lng, d.lat, d.lng);
-
-    if (distancia <= RADIO_METROS) {
-      const marker = marcadoresBase[d.id];
-      if (!marker) return;
-
-      // Solo abre si no está ya abierto este popup
-      if (ultimoPopupAbierto !== d.id) {
-        ultimoPopupAbierto = d.id;
-        marker.togglePopup();
-
-        // Centra el mapa en el destino
-        map.flyTo({
-          center: [d.lng, d.lat],
-          zoom: 18,
-          pitch: 50,
-          essential: true
-        });
-      }
+  // Obtiene el heading de la parte superior del dispositivo (0 = norte, 90 = este)
+  function getDeviceHeading(event) {
+    if (event.webkitCompassHeading !== undefined) {
+      // iOS
+      return event.webkitCompassHeading;
     } else {
-      // Si se aleja, resetea para que pueda volver a abrirse
-      if (ultimoPopupAbierto === d.id) {
-        ultimoPopupAbierto = null;
+      // Android
+      const alpha = event.alpha;
+      const beta = event.beta;
+      const gamma = event.gamma;
+      if (alpha === null || beta === null || gamma === null) return null;
+
+      const a = alpha * Math.PI / 180;
+      const b = beta * Math.PI / 180;
+      const g = gamma * Math.PI / 180;
+
+      let heading = Math.atan2(
+        Math.sin(a) * Math.cos(g) + Math.cos(a) * Math.sin(b) * Math.sin(g),
+        Math.cos(a) * Math.cos(g) - Math.sin(a) * Math.sin(b) * Math.sin(g)
+      ) * 180 / Math.PI;
+
+      if (window.orientation !== undefined) {
+        heading += window.orientation;
       }
+      heading = normalizeAngle(heading);
+      return heading;
     }
-  });
-}
+  }
+
+  function handleOrientation(event) {
+    if (!compassActive) return;
+
+    let heading = getDeviceHeading(event);
+    if (heading === null || isNaN(heading)) return;
+
+    let viewHeading = normalizeAngle(heading + 180);     // Opción 3: +180° (ajústala)
+
+    if (filteredHeading === null) {
+      filteredHeading = viewHeading;
+      map.setBearing(filteredHeading);
+      if (userArrowContainer) {
+        userArrowContainer.style.transform = `rotate(${filteredHeading}deg)`;
+      }
+      return;
+    }
+
+    let diff = viewHeading - filteredHeading;
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+
+    if (Math.abs(diff) < DEAD_ZONE) return;
+
+    filteredHeading += diff * SMOOTHING_FACTOR;
+    filteredHeading = normalizeAngle(filteredHeading);
+
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+    animationFrame = requestAnimationFrame(() => {
+      map.setBearing(filteredHeading);
+      if (userArrowContainer) {
+        userArrowContainer.style.transform = `rotate(${filteredHeading}deg)`;
+      }
+      animationFrame = null;
+    });
+  }
+
+  function startCompass() {
+    if (!window.DeviceOrientationEvent) {
+      console.warn("Este dispositivo no soporta eventos de orientación.");
+      return;
+    }
+    const startListening = () => {
+      window.addEventListener('deviceorientation', handleOrientation);
+      orientationHandler = handleOrientation;
+      compassActive = true;
+      filteredHeading = null;
+    };
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(permissionState => {
+          if (permissionState === 'granted') {
+            startListening();
+          } else {
+            console.warn("Permiso de orientación denegado");
+          }
+        })
+        .catch(console.error);
+    } else {
+      startListening();
+    }
+  }
+
+  function stopCompass() {
+    if (orientationHandler) {
+      window.removeEventListener('deviceorientation', orientationHandler);
+      orientationHandler = null;
+    }
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+    compassActive = false;
+    filteredHeading = null;
+  }
+
+  function toggleCompassMode() {
+    if (compassActive) {
+      stopCompass();
+    } else {
+      startCompass();
+    }
+    return compassActive;
+  }
+
+  function isCompassActive() {
+    return compassActive;
+  }
+
+  /* ---------- PROXIMIDAD AUTO-POPUP ---------- */
+  const RADIO_METROS = 10;          // distancia en metros para abrir popup
+  let ultimoPopupAbierto = null;    // evita abrir el mismo popup en bucle
+
+  function verificarProximidad(lat, lng) {
+    DESTINOS.forEach(d => {
+      const distancia = distanceMeters(lat, lng, d.lat, d.lng);
+
+      if (distancia <= RADIO_METROS) {
+        const marker = marcadoresBase[d.id];
+        if (!marker) return;
+
+        // Solo abre si no está ya abierto este popup
+        if (ultimoPopupAbierto !== d.id) {
+          ultimoPopupAbierto = d.id;
+          marker.togglePopup();
+
+          // Centra el mapa en el destino
+          map.flyTo({
+            center: [d.lng, d.lat],
+            zoom: 18,
+            pitch: 50,
+            essential: true
+          });
+        }
+      } else {
+        // Si se aleja, resetea para que pueda volver a abrirse
+        if (ultimoPopupAbierto === d.id) {
+          ultimoPopupAbierto = null;
+        }
+      }
+    });
+  }
+  
   return {
     dibujarCircuito,
     dibujarPuntos,
