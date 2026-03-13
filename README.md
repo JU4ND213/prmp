@@ -23,8 +23,4 @@ npm run dev
 npm run build
 npx cap sync ios
 ## ANDROID
-npm run build 
-npx cap sync android
-cd android
-.\gradlew assembleRelease
-cd ..
+npm run build ; npx cap sync android ; cd android ; .\gradlew assembleRelease ; cd ..
