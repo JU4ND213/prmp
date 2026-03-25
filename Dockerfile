@@ -6,7 +6,7 @@ FROM node:22-alpine AS build
 
 # Creamos un directorio de trabajo dentro del contenedor
 WORKDIR /app
-
+ 
 # Copiamos los archivos de dependencias primero (para aprovechar el caché de Docker)
 COPY package*.json ./
 
