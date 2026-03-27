@@ -682,7 +682,7 @@ button {
   .results-panel {
     top: 70px;
     left: 8px;
-    right: 8px;
+    right: 70px;
     width: auto;
     max-height: 20vh;
     border-radius: 12px;
