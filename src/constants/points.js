@@ -12,6 +12,8 @@ export const POINTS_BY_COLOR = {
     { id: "bano", name: "Baño", description: "Lugar para hacer necesidades biológicas", lat: -0.0025649, lng: -78.4555165, color: "#00e1ff", icon: "wc" },
     { id: "bano", name: "Baño", description: "Lugar para hacer necesidades biológicas", lat: -0.0018595, lng: -78.45485, color: "#00e1ff", icon: "wc" },
     { id: "bano", name: "Baño", description: "Lugar para hacer necesidades biológicas", lat: -0.0015322, lng: -78.4557687, color: "#00e1ff", icon: "wc" }, 
+    { id: "bano", name: "Baño", description: "Lugar para hacer necesidades biológicas", lat:-0.0021758358447320275, lng: -78.45399906875143, color: "#00e1ff", icon: "wc" },
+    { id: "bano", name: "Baño", description: "Lugar para hacer necesidades biológicas", lat:-0.002682773343595662, lng: -78.45421029270598, color: "#00e1ff", icon: "wc" },
   ],
 
   // Atracciones y Museos
@@ -31,6 +33,7 @@ export const POINTS_BY_COLOR = {
     { id: "tren_mitad_mundo", name: "Tren Mitad del Mundo", description: "Tren que recorre el monumento", lat: -0.0016097, lng: -78.4541643, color: "#ffc800", icon: "attractions" },
     { id: "viviendas_ancestrales", name: "Viviendas ancestrales", description: "Viviendas tradicionales ancestrales", lat: -0.0026562, lng: -78.4537317, color: "#ffc800", icon: "attractions" },
     { id: "inti_raymi", name: "Inti Raymi Fiesta del sol", description: "Fiesta del sol celebrada en el monumento", lat: -0.0029441, lng: -78.454315, color: "#ffc800", icon: "attractions" },
+    { id: "Monumento", name: "Monumento a la Mitad del Mundo", description: "Monumento que marca la línea ecuatorial", lat: -0.0021191507224225577, lng: -78.45583279786655 , color: "#ffc800", icon: "attractions" },
   ],
 
   // Restaurantes
