@@ -237,7 +237,7 @@ export function startMap(container, initialT, maskOptions = {}) {
   const map = new maplibregl.Map({
     container: container,
     center: [-78.454012, -0.003140], 
-    zoom: 16,
+    zoom: 17.9,
     maxZoom: 19, 
     pitch: 50,  
     style: {
