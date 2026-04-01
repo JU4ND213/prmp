@@ -18,7 +18,7 @@ export default function MapView() {
   const { t, i18n } = useTranslation();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [activeCategories, setActiveCategories] = useState([]);
-  const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(true);
+  const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(false);
   const [activeCircuito, setActiveCircuito] = useState(null);
   const [destinoId, setDestinoId] = useState("");
   const [idiomaMenuAbierto, setIdiomaMenuAbierto] = useState(false);

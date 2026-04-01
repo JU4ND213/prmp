@@ -8,7 +8,6 @@ import { Capacitor } from "@capacitor/core";
 export const DESTINOS = [
   { 
     id: 7, 
-    nombre: "Monumento", 
     imagen: "/images/Mitad_del_Mundo_01.png", 
     imagenes: [
       "/images/Mitad_del_Mundo_01.png", 
@@ -353,6 +352,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     
     // Inicializar marcadores base
     inicializarMarcadoresBase();
+    toggleMarcadoresBase(false);
     
     // Iniciar el GPS
     iniciarGPS();
@@ -450,7 +450,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     DESTINOS.forEach(d => {
       // Contenedor principal para alinear icono y texto
       const container = document.createElement("div");
-      container.style.display = "flex";
+      container.style.display = "none";
       container.style.flexDirection = "column"; 
       container.style.alignItems = "center";
       container.style.cursor = "pointer";
@@ -461,7 +461,6 @@ export function startMap(container, initialT, maskOptions = {}) {
       // Estructura: Icono + Etiqueta de texto personalizada
       container.innerHTML = `
         <span class="material-symbols-outlined" style="color: #ea4335; font-size: 32px; text-shadow: 0px 2px 4px rgba(0,0,0,0.5);">location_on</span>
-        <div class="custom-text-marker" style="margin-top: -2px;">${nombre}</div>
       `;
 
       const popup = new maplibregl.Popup({ offset: 25 }).setHTML(crearPopupBase(d, initialT));
