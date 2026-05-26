@@ -2,12 +2,15 @@
   "searchPlaceholder": "Busca lugar, plato o servicio...",
   "clearSearch": "Limpiar búsqueda",
   "centerLocation": "Centrar en mi ubicación",
+  "compassMode": "Modo brújula",
   
   "controlPanel": "Panel de control",
   "selectPlace": "Seleccionar destino",
   "go": "Ir",
   "pointsOfInterest": "Puntos de interés",
   "touristCircuits": "Circuitos turísticos",
+  "listTitle": "Lugares",
+  "noResults": "No se encontraron lugares.",
 
   "panel": {
     "title": "Panel de Control",

@@ -2,12 +2,15 @@
   "searchPlaceholder": "Search for place, dish, or service...",
   "clearSearch": "Clear search",
   "centerLocation": "Center on my location",
+  "compassMode": "Compass mode",
   
   "controlPanel": "Control Panel",
   "selectPlace": "Select destination",
   "go": "Go",
   "pointsOfInterest": "Points of Interest",
   "touristCircuits": "Tourist Circuits",
+  "listTitle": "Places",
+  "noResults": "No places found.",
 
   "panel": {
     "title": "Control Panel",
