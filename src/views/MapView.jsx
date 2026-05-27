@@ -7,15 +7,18 @@ import { useTranslation } from "react-i18next";
 export default function MapView() {
   const [selectedPunto, setSelectedPunto] = useState(null);
   const [compassActive, setCompassActive] = useState(false);
+  
   const toggleCompass = () => {
     if (mapRef.current?.toggleCompassMode) {
       const nuevoEstado = mapRef.current.toggleCompassMode();
       setCompassActive(nuevoEstado);
     }
   };
+
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const { t, i18n } = useTranslation();
+  
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [activeCategories, setActiveCategories] = useState([]);
   const [mostrarMarcadoresBase, setMostrarMarcadoresBase] = useState(false);
@@ -28,6 +31,10 @@ export default function MapView() {
   const [puntosVisibles, setPuntosVisibles] = useState([]);
   const [panelMinimizado, setPanelMinimizado] = useState(false);
   const [toolbarOpen, setToolbarOpen] = useState(false);
+  
+  // 👇 ESTADO PARA LA GALERÍA ESTILO GOOGLE MAPS 👇
+  const [galeria, setGaleria] = useState({ activa: false, imagenes: [], indice: 0 });
+
   const cambiarIdioma = (lng) => {
     i18n.changeLanguage(lng);
     setIdiomaMenuAbierto(false);
@@ -64,7 +71,6 @@ export default function MapView() {
       cleanup,
     } = mapApi;
 
-    // Guardamos las funciones en la referencia para poder llamarlas desde los botones
     mapRef.current = {
       dibujarCircuito,
       dibujarPuntos,
@@ -80,6 +86,37 @@ export default function MapView() {
 
     return () => cleanup?.();
   }, []);
+
+  /* ===============================
+     PUENTE PARA LA GALERÍA (Desde mapLogic.js)
+  =============================== */
+  useEffect(() => {
+    // Definimos la función global que el popup del mapa va a llamar
+    window.abrirGaleriaReact = (destinoId, index) => {
+      const destino = DESTINOS.find(d => d.id === destinoId);
+      if (destino && destino.imagenes) {
+        setGaleria({ activa: true, imagenes: destino.imagenes, indice: index });
+      }
+    };
+
+    return () => {
+      delete window.abrirGaleriaReact;
+    };
+  }, []);
+
+  // Funciones de navegación de la galería
+  const galeriaSiguiente = () => {
+    setGaleria(prev => ({ ...prev, indice: (prev.indice + 1) % prev.imagenes.length }));
+  };
+
+  const galeriaAnterior = () => {
+    setGaleria(prev => ({ ...prev, indice: (prev.indice - 1 + prev.imagenes.length) % prev.imagenes.length }));
+  };
+
+  const cerrarGaleria = () => {
+    setGaleria({ activa: false, imagenes: [], indice: 0 });
+  };
+
 
   useEffect(() => {
     setSelectedPunto(null);
@@ -119,13 +156,12 @@ export default function MapView() {
     );
   };
 
-  // Manejador de clic en un punto (tarjeta o marcador) - definido ANTES del useEffect que lo usa
   const handleResultClick = useCallback((punto) => {
     setSelectedPunto(punto);
     mapRef.current?.flyTo(punto.lng, punto.lat);
   }, []);
 
-useEffect(() => {
+  useEffect(() => {
     if (!mapRef.current) return;
 
     let puntosParaDibujar = [];
@@ -158,10 +194,10 @@ useEffect(() => {
       menu: p.id && p.menu ? t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu }) : p.menu
     }));
 
-    // Llamada a dibujarPuntos con el callback y el ID seleccionado
     mapRef.current.dibujarPuntos(puntosTraducidos, handleResultClick, selectedPunto?.id);
     setPuntosVisibles(puntosTraducidos);
   }, [activeCategories, debouncedSearch, i18n.language, t, selectedPunto, handleResultClick]);
+
   /* ===============================
      RUTA GPS
   =============================== */
@@ -187,7 +223,6 @@ useEffect(() => {
       limpiarRuta();
     }
   };
-
 
   /* ===============================
      CENTRAR CÁMARA EN USUARIO
@@ -234,33 +269,33 @@ useEffect(() => {
       {/* 🌟 NUEVO: PANEL DE LISTA DE PUNTOS VISIBLES */}
       {(activeCategories.length > 0 || debouncedSearch.trim() !== "") && (
         <div className={`results-panel ${panelMinimizado ? "minimized" : ""}`}>
-    <div className="results-header">
-      <h3>{t("listTitle", "Lugares")} ({puntosVisibles.length})</h3>
-      <button
-        className="panel-minimize-btn"
-        onClick={() => setPanelMinimizado(!panelMinimizado)}
-        title={panelMinimizado ? "Expandir" : "Minimizar"}
-      >
-        <span className="material-symbols-outlined">
-          {panelMinimizado ? "expand_more" : "expand_less"}
-        </span>
-      </button>
-    </div>
-    {!panelMinimizado && (
-      <div className="results-list">
-        {puntosVisibles.length > 0 ? (
-          puntosVisibles.map((punto, index) => (
-            <div key={index} className="result-card" onClick={() => handleResultClick(punto)}>
-              <h4>{punto.name}</h4>
-              {punto.description && <p>{punto.description}</p>}
+          <div className="results-header">
+            <h3>{t("listTitle", "Lugares")} ({puntosVisibles.length})</h3>
+            <button
+              className="panel-minimize-btn"
+              onClick={() => setPanelMinimizado(!panelMinimizado)}
+              title={panelMinimizado ? "Expandir" : "Minimizar"}
+            >
+              <span className="material-symbols-outlined">
+                {panelMinimizado ? "expand_more" : "expand_less"}
+              </span>
+            </button>
+          </div>
+          {!panelMinimizado && (
+            <div className="results-list">
+              {puntosVisibles.length > 0 ? (
+                puntosVisibles.map((punto, index) => (
+                  <div key={index} className="result-card" onClick={() => handleResultClick(punto)}>
+                    <h4>{punto.name}</h4>
+                    {punto.description && <p>{punto.description}</p>}
+                  </div>
+                ))
+              ) : (
+                <p className="no-results">{t("noResults", "No se encontraron lugares.")}</p>
+              )}
             </div>
-          ))
-        ) : (
-          <p className="no-results">{t("noResults", "No se encontraron lugares.")}</p>
-        )}
-      </div>
-    )}
-  </div>
+          )}
+        </div>
       )}
 
       {/* PANEL DE DETALLES FLOTANTE */}
@@ -290,7 +325,6 @@ useEffect(() => {
       
       {/* ===== BARRA LATERAL DERECHA (HERRAMIENTAS) ===== */}
       <div className={`sidebar-toolbar ${toolbarOpen ? "open" : ""}`}>
-        {/* Tuerca principal */}
         <button
           className="settings-btn"
           onClick={() => setToolbarOpen(!toolbarOpen)}
@@ -299,10 +333,7 @@ useEffect(() => {
           <span className="material-symbols-outlined">settings</span>
         </button>
         
-        {/* Iconos que se despliegan */}
         <div className="sidebar-items">
-          
-          {/* Idioma */}
           <div style={{ position: "relative" }}>
             <button 
               className="sidebar-icon icon-lang" 
@@ -319,7 +350,6 @@ useEffect(() => {
             )}
           </div>
 
-          {/* Brújula */}
           <button 
             className={`sidebar-icon icon-compass ${compassActive ? "active" : ""}`} 
             onClick={toggleCompass} 
@@ -328,7 +358,6 @@ useEffect(() => {
             <span className="material-symbols-outlined">explore</span>
           </button>
 
-          {/* Centrar Ubicación */}
           <button 
             className="sidebar-icon icon-location" 
             onClick={centrarCamara} 
@@ -339,7 +368,6 @@ useEffect(() => {
         </div>
       </div>
 
- 
       {/* ===== BOTÓN PANEL ===== */}
       <button
         className="toggle-btn"
@@ -357,8 +385,6 @@ useEffect(() => {
         </div>
 
         <div className="gps-row">
-          
-          {/* PUNTOS BASE */}
           <button
             className="circle"
             onClick={() => {
@@ -373,7 +399,6 @@ useEffect(() => {
             </span>
           </button>
 
-          {/* SELECTOR (Listbox) */}
           <select
             className="route-select"
             value={destinoId}
@@ -387,7 +412,6 @@ useEffect(() => {
             ))}
           </select>
 
-          {/* BOTÓN IR / LIMPIAR */}
           <button
             className={`circle ${rutaActiva ? "cancelar-btn" : "ir-btn"}`}
             onClick={rutaActiva ? limpiarRuta : irAlDestino}
@@ -403,7 +427,6 @@ useEffect(() => {
 
         <div className="divider"></div>
 
-        {/* CATEGORÍAS */}
         <label>{t("pointsOfInterest")}</label>
         <div className="categories-grid">
           {Object.entries(CATEGORY_DETAILS).map(([key, config]) => {
@@ -412,9 +435,7 @@ useEffect(() => {
             return (
               <button
                 key={key}
-                className={`chip chip--pill category-chip ${
-                  isActive ? "active" : ""
-                }`}
+                className={`chip chip--pill category-chip ${isActive ? "active" : ""}`}
                 style={{ backgroundColor: config.color }}
                 onClick={() => toggleCategory(key)}
               >
@@ -422,11 +443,7 @@ useEffect(() => {
                 {isActive && (
                   <span
                     className="material-symbols-outlined"
-                    style={{
-                      fontSize: "16px",
-                      marginLeft: "4px",
-                      verticalAlign: "text-bottom",
-                    }}
+                    style={{ fontSize: "16px", marginLeft: "4px", verticalAlign: "text-bottom" }}
                   >
                     check
                   </span>
@@ -438,7 +455,6 @@ useEffect(() => {
 
         <div className="divider"></div>
 
-        {/* CIRCUITOS */}
         <label>{t("touristCircuits")}</label>
         <div className="circuits-grid">
           {[
@@ -458,11 +474,7 @@ useEffect(() => {
                 {isActive && (
                   <span
                     className="material-symbols-outlined"
-                    style={{
-                      fontSize: "18px",
-                      marginLeft: "4px",
-                      verticalAlign: "text-bottom",
-                    }}
+                    style={{ fontSize: "18px", marginLeft: "4px", verticalAlign: "text-bottom" }}
                   >
                     check
                   </span>
@@ -472,6 +484,43 @@ useEffect(() => {
           })}
         </div>
       </div>
+
+      {/* ===== 🌟 GALERÍA DE IMÁGENES ESTILO GOOGLE MAPS ===== */}
+      {galeria.activa && galeria.imagenes.length > 0 && (
+        <div className="lightbox-overlay">
+          {/* Header con contador y botón cerrar */}
+          <div className="lightbox-header">
+            <span className="lightbox-counter">
+              {galeria.indice + 1} / {galeria.imagenes.length}
+            </span>
+            <button className="lightbox-close" onClick={cerrarGaleria}>
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
+
+          {/* Botón Anterior */}
+          {galeria.imagenes.length > 1 && (
+            <button className="lightbox-nav left" onClick={galeriaAnterior}>
+              <span className="material-symbols-outlined">chevron_left</span>
+            </button>
+          )}
+
+          {/* Imagen Principal */}
+          <img 
+            src={galeria.imagenes[galeria.indice]} 
+            alt="Vista detallada del punto turístico" 
+            className="lightbox-main-img" 
+          />
+
+          {/* Botón Siguiente */}
+          {galeria.imagenes.length > 1 && (
+            <button className="lightbox-nav right" onClick={galeriaSiguiente}>
+              <span className="material-symbols-outlined">chevron_right</span>
+            </button>
+          )}
+        </div>
+      )}
+
     </div>
   );
 }

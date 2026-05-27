@@ -4,89 +4,279 @@ import { Geolocation } from "@capacitor/geolocation";
 import { RUTAS_CAMINABLES } from "./constants/rutasCaminables";
 import { Capacitor } from "@capacitor/core";
 
+function imgs(folder, files) {
+  return files.map(file => `/images/${folder}/${file}`);
+}
+
 /* ================= DATOS ================= */
 export const DESTINOS = [
   { 
-    id: 7, 
-    imagen: "/images/Mitad_del_Mundo_01.png", 
-    imagenes: [
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/turismo-ecuador.png", 
-      "/images/monu.png"
-    ],
-    lat: -0.0021191507224225577, 
-    lng: -78.45583279786655 
+    id: 7,
+    nombre: "Monumento",
+    imagenes: imgs("15.MONUMENRO E INTERIOR", [
+      "Mitad_del_Mundo_01.png",
+      "IMG_9046.png",
+      "IMG_9085.png",
+      "IMG_9087.png",
+    ]),
+    lat: -0.0021191507224225577,
+    lng: -78.45583279786655
   },
-  { id: 1, nombre: "Viviendas", imagen: "/images/Viviendas.png", imagenes: [
-      "/images/Viviendas.png", 
-      "/images/vivendass.png", 
-      "/images/vivendassss.png"
-    ], lat: -0.0026339, lng: -78.4536447 },
-  { id: 2, nombre: "Museo Fiestas", imagen: "/images/Museo Fiestas.png", imagenes: [
-      "/images/Museo Fiestas.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ],lat: -0.00254709, lng: -78.45416508 },
-  { id: 3, nombre: "Tiangues", imagen: "/images/Tiangues.png", imagenes: [
-      "/images/Tiangues.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.002419977392211793,  lng: -78.45455274302334 },
-  { id: 4, nombre: "Capilla", imagen: "/images/Iglesia.png", imagenes: [
-      "/images/Iglesia.png", 
-      "/images/inglees.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.00217993, lng: -78.45443815 },
-  { id: 5, nombre: "Museo Cerveza", imagen: "/images/Museo Cerveza.png", imagenes: [
-      "/images/Museo Cerveza.png", 
-      "/images/cervezzz.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.00172532, lng: -78.45456769 },
-  { id: 6, nombre: "Museo Cacao", imagen: "/images/Muiseo cacao.png", imagenes: [
-      "/images/Muiseo cacao.png", 
-      "/images/museocc.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.0016318614649577512,  lng: -78.45513804232704 },
-  { id: 8, nombre: "Tienda Pichincha", imagen: "/images/Tienda pichincha.png", imagenes: [
-      "/images/Tienda pichincha.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.0019201542192408055,  lng: -78.45507887340779 },
-  { id: 9, nombre: "Exp. Huevo", imagen: "/images/Exp Huevo.png", imagenes: [
-      "/images/Exp Huevo.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.002128299975813348,  lng: -78.45500898876774 },
-  { id: 10, nombre: "Legado Virtual", imagen: "/images/Legado Virtual.png", imagenes: [
-      "/images/Legado Virtual.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.0027321406845731214,  lng: -78.45531831507765 },
-  { id: 11, nombre: "Pab. Ecuador", imagen: "/images/PabellonEcu.png", imagenes: [
-      "/images/PabellonEcu.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.00295948, lng: -78.45520276 },
-  { id: 12, nombre: "Planetario", imagen: "/images/Planetario.png", imagenes: [
-      "/images/Planetario.png", 
-      "/images/planet.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.00287231, lng: -78.45505122 },
-  { id: 13, nombre: "Pab. Francia", imagen: "/images/PabellonFrancia.png", imagenes: [
-      "/images/PabellonFrancia.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.00308018, lng: -78.45503877 },
-  { id: 14, nombre: "Pab. Guayasamín", imagen: "/images/Pabellon Guayasamin.png", imagenes: [
-      "/images/Pabellon Guayasamin.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.0030547, lng: -78.45482457 },
-  { id: 15, nombre: "Av. Geodésicos", imagen: "/images/Av. Geodésicos.png", imagenes: [
-      "/images/Av. Geodésicos.png", 
-      "/images/Mitad_del_Mundo_01.png", 
-      "/images/Mitad_del_Mundo_01.png"
-    ], lat: -0.0031959, lng: -78.45422637 }
+
+  { 
+    id: 1,
+    nombre: "Viviendas",
+    imagenes: imgs("13.VIVI.ANCESTRALES", [
+      "Viviendas.png",
+      "IMG_8852.png",
+      "IMG_8854.png",
+      "IMG_8856.png",
+      "IMG_8857.png",
+      "IMG_8861.png",
+      "IMG_8862.png",
+      "IMG_8865.png",
+      "IMG_8867.png",
+      "IMG_8871.png",
+    ]),
+    lat: -0.0026339,
+    lng: -78.4536447
+  },
+
+  { 
+    id: 2,
+    nombre: "BALBANERA",
+    imagenes: imgs("5.CAP.BALBANERA", [
+      "IMG_8763.png",
+      "IMG_8767.png",
+    ]),
+    lat: -0.0027890538128072626,
+    lng: -78.45448036946725
+  },
+
+  { 
+    id: 3,
+    nombre: "Tiangues",
+    imagenes: imgs("4.TIANGUES", [
+      "IMG_8739.png",
+      "IMG_8742.png",
+      "IMG_8743.png",
+      "IMG_8744.png",
+      "IMG_8745.png",
+      "IMG_8746.png",
+      "IMG_8747.png",
+      "IMG_8756.png",
+      "IMG_8757.png",
+      "IMG_8758.png",
+      "IMG_8759.png",
+    ]),
+    lat: -0.002419977392211793,
+    lng: -78.45455274302334
+  },
+
+  { 
+    id: 4,
+    nombre: "ZONA LLAMAS",
+    imagenes: imgs("6.ZONA DE LLAMAS", [
+      "IMG_8768.png",
+      "IMG_8769.png",
+      "IMG_8770.png",
+      "IMG_8771.png",
+      "IMG_8772.png",
+      "IMG_8773.png",
+      "IMG_8774.png",
+      "IMG_8775.png",
+      "IMG_8776.png",
+      "IMG_8777.png",
+    ]),
+    lat: -0.0016606417341177837, lng: -78.4564242259298
+  },
+
+  { 
+    id: 5,
+    nombre: "Museo Cerveza",
+    imagenes: imgs("14.MUSEO CERVEZA", [
+        "IMG_8872.png",
+        "IMG_8873.png",
+        "IMG_8874.png",
+        "IMG_8875.png",
+        "IMG_8876.png",
+        "IMG_8877.png",
+        "IMG_8878.png",
+        "IMG_8879.png",
+        "IMG_8880.png",
+        "IMG_8881.png",
+        "IMG_8882.png",
+        "IMG_8883.png",
+        "IMG_8884.png",
+        "IMG_8885.png",
+        "IMG_8886.png",
+        "IMG_8887.png",
+        "IMG_8888.png",
+        "IMG_8889.png",
+        "Museo Cerveza.png",
+    ]),
+    lat: -0.00172532,
+    lng: -78.45456769
+  },
+
+  { 
+    id: 6,
+    nombre: "Museo Cacao",
+    imagenes: imgs("1.MUSEO CHOCOLATE", [
+      "IMG_8713.png",
+      "IMG_8714.png",
+      "IMG_8715.png",
+      "IMG_8716.png",
+      "IMG_8717.png",
+      "IMG_8718.png",
+      "IMG_8719.png",
+      "IMG_8720.png",
+      "IMG_8721.png",
+      "Muiseo cacao.png",
+    ]),
+    lat: -0.0016318614649577512,
+    lng: -78.45513804232704
+  },
+
+  { 
+    id: 8,
+    nombre: "Tienda Pichincha",
+    imagenes: imgs("2.TIENDA PICHINCHA", [
+      "IMG_8722.png",
+      "IMG_8723.png",
+      "IMG_8724.png",
+      "IMG_8725.png",
+      "IMG_8726.png",
+      "Tienda pichincha.png",
+    ]),
+    lat: -0.0019201542192408055,
+    lng: -78.45507887340779
+  },
+
+  { 
+    id: 9,
+    nombre: "Exp. Huevo",
+    imagenes: imgs("3.EXPE.HUEVO", [
+      "Exp Huevo.png",
+      "IMG_8728.png",
+      "IMG_8729.png",
+      "IMG_8730.png",
+      "IMG_8731.png",
+      "IMG_8732.png",
+      "IMG_8733.png",
+      "IMG_8735.png",
+      "IMG_8736.png",
+    ]),
+    lat: -0.002128299975813348,
+    lng: -78.45500898876774
+  },
+
+  { 
+    id: 10,
+    nombre: "Legado Virtual",
+    imagenes: imgs("7.LEGADO VIERTUAL", [
+      "IMG_8778.png",
+      "IMG_8781.png",
+      "IMG_8783.png",
+      "IMG_8791.png",
+      "Legado Virtual.png",
+    ]),
+    lat: -0.0027321406845731214,
+    lng: -78.45531831507765
+  },
+
+  { 
+    id: 11,
+    nombre: "Pab. Ecuador",
+    imagenes: imgs("8.PABELLON ECUADOR", [
+      "IMG_8801.png",
+      "IMG_8802.png",
+      "IMG_8803.png",
+      "IMG_8804.png",
+      "IMG_8805.png",
+      "IMG_8806.png",
+      "IMG_8807.png",
+      "IMG_8808.png",
+      "IMG_8809.png",
+      "IMG_8810.png",
+      "IMG_8811.png",
+      "IMG_8812.png",
+    ]),
+    lat: -0.00295948,
+    lng: -78.45520276
+  },
+
+  { 
+    id: 12,
+    nombre: "Planetario",
+    imagenes: imgs("11.PLANETARIO", [
+      "20260413_211934886_iOS 1.png",
+      "20260413_211951202_iOS 1.png",
+      "20260413_212237656_iOS.png",
+      "20260413_212249254_iOS.png",
+      "20260413_212658167_iOS.png",
+      "IMG_8835.png",
+      "IMG_8840.png",
+      "IMG_8842.png",
+      "Planetario.png",
+    ]),
+    lat: -0.00287231,
+    lng: -78.45505122
+  },
+
+  { 
+    id: 13,
+    nombre: "Pab. Francia",
+    imagenes: imgs("9.PABELLON FRANCIA", [
+      "IMG_8813.png",
+      "IMG_8815.png",
+      "IMG_8816.png",
+      "IMG_8817.png",
+      "IMG_8818.png",
+      "IMG_8819.png",
+      "IMG_8820.png",
+      "IMG_8821.png",
+      "IMG_8822.png",
+      "IMG_8823.png",
+      "IMG_8824.png",
+    ]),
+    lat: -0.00308018,
+    lng: -78.45503877
+  },
+
+  { 
+    id: 14,
+    nombre: "Pab. Guayasamín",
+    imagenes: imgs("10.PAVELLON GUAYASAMIN", [
+      "IMG_8825.png",
+      "IMG_8827.png",
+      "IMG_8828.png",
+      "IMG_8829.png",
+      "IMG_8830.png",
+      "IMG_8831.png",
+      "IMG_8832.png",
+      "IMG_8833.png",
+      "IMG_8834.png",
+    ]),
+    lat: -0.0030547,
+    lng: -78.45482457
+  },
+
+  { 
+    id: 15,
+    nombre: "Av. Geodésicos",
+    imagenes: imgs("12.AV.GEODESICOS", [
+      "Av. Geodésicos.png",
+      "IMG_8843.png",
+      "IMG_8844.png",
+      "IMG_8845.png",
+      "IMG_8846.png",
+      "IMG_8847.png",
+      "IMG_8848.png",
+    ]),
+    lat: -0.0031959,
+    lng: -78.45422637
+  }
 ];
 
 /* ================= CIRCUITOS ================= */
@@ -303,6 +493,8 @@ export function startMap(container, initialT, maskOptions = {}) {
 
       map.addSource("mask", {
         type: "geojson",
+        tolerance: 0,
+        lineMetrics: false,
         data: {
           type: "Feature",
           geometry: {
@@ -318,10 +510,11 @@ export function startMap(container, initialT, maskOptions = {}) {
         source: "mask",
         paint: {
           "fill-color": color,
-          "fill-opacity": opacity
+          "fill-opacity": opacity,
+          "fill-antialias": false 
         }
       });
-    }
+    } // Cerramos correctamente el if (enabled)
 
     /* ---- PREPARACIÓN PARA RUTAS ---- */
     map.addSource("circuito-source", {
@@ -361,7 +554,6 @@ export function startMap(container, initialT, maskOptions = {}) {
   /* ---------- GPS CON CAPACITOR ----------- */
   let watchId = null;
   let primeraVez = true;
-  // 👉 1. Agregamos esta variable para controlar el tiempo
   let ultimoTiempoCalculo = 0; 
 
   async function iniciarGPS() {
@@ -392,7 +584,6 @@ export function startMap(container, initialT, maskOptions = {}) {
           
           const { latitude: lat, longitude: lng } = position.coords;
 
-          // 1. El marcador del usuario SIEMPRE se actualiza rápido (es muy ligero)
           userMarker.setLngLat([lng, lat]);
           userEl.style.display = "block";
 
@@ -406,12 +597,11 @@ export function startMap(container, initialT, maskOptions = {}) {
             primeraVez = false; 
           }
           
-          // 👉 2. LA MAGIA: Solo recalculamos la ruta cada 3 segundos (3000 ms)
           const ahora = Date.now();
           if (ahora - ultimoTiempoCalculo > 3000) {
             actualizarRutaConUsuario(lat, lng);
             verificarProximidad(lat, lng);   
-            ultimoTiempoCalculo = ahora; // Actualizamos el cronómetro
+            ultimoTiempoCalculo = ahora; 
           }
         }
       );
@@ -426,7 +616,11 @@ export function startMap(container, initialT, maskOptions = {}) {
     
     let imagesHtml = "";
     if (d.imagenes && d.imagenes.length > 0) {
-      const imgTags = d.imagenes.map(img => `<img src="${img}" alt="${nombre}" />`).join('');
+      // MAGIA AQUI: Evento onclick que llama a la función global en React
+      const imgTags = d.imagenes.map((img, idx) => 
+        `<img src="${img}" alt="${nombre}" style="cursor: zoom-in;" onclick="window.abrirGaleriaReact(${d.id}, ${idx})" />`
+      ).join('');
+      
       imagesHtml = `
         <div class="popup-carousel">
           ${imgTags}
@@ -448,17 +642,14 @@ export function startMap(container, initialT, maskOptions = {}) {
   /* ---------- MARCADORES BASE ---------- */
   function inicializarMarcadoresBase() {
     DESTINOS.forEach(d => {
-      // Contenedor principal para alinear icono y texto
       const container = document.createElement("div");
       container.style.display = "none";
       container.style.flexDirection = "column"; 
       container.style.alignItems = "center";
       container.style.cursor = "pointer";
 
-      // Obtenemos el nombre traducido
       const nombre = initialT ? initialT(`destinos.${d.id}`, d.nombre) : d.nombre;
 
-      // Estructura: Icono + Etiqueta de texto personalizada
       container.innerHTML = `
         <span class="material-symbols-outlined" style="color: #ea4335; font-size: 32px; text-shadow: 0px 2px 4px rgba(0,0,0,0.5);">location_on</span>
       `;
@@ -488,7 +679,6 @@ export function startMap(container, initialT, maskOptions = {}) {
       if (destino) {
         marker.getPopup().setHTML(crearPopupBase(destino, nuevoT));
         
-        // Actualizar el texto del pin directamente
         const textEl = marker.getElement().querySelector('.custom-text-marker');
         if (textEl) {
           textEl.innerText = nuevoT(`destinos.${destino.id}`, destino.nombre);
@@ -601,14 +791,12 @@ export function startMap(container, initialT, maskOptions = {}) {
     marcadoresCategorias = [];
 
     lista.forEach(p => {
-      // Contenedor principal flex
       const container = document.createElement("div");
       container.style.display = "flex";
       container.style.flexDirection = "column";
       container.style.alignItems = "center";
       container.style.cursor = "pointer";
 
-      // Círculo de color (tu código original)
       const el = document.createElement("div");
       el.style.width = "24px";
       el.style.height = "24px";
@@ -621,7 +809,6 @@ export function startMap(container, initialT, maskOptions = {}) {
       el.style.alignItems = "center";
       el.style.color = "#fff"; 
 
-      // ✅ RESALTAR SI ES EL SELECCIONADO
       if (p.id === selectedId) {
         el.classList.add("marker-selected");
       }
@@ -632,7 +819,6 @@ export function startMap(container, initialT, maskOptions = {}) {
       
       container.appendChild(el);
 
-      // Creamos el texto y lo agregamos usando tu clase CSS
       const textDiv = document.createElement("div");
       textDiv.className = "custom-text-marker";
       textDiv.style.marginTop = "2px";
@@ -662,33 +848,26 @@ export function startMap(container, initialT, maskOptions = {}) {
     });
   }
 
-  /* ---------- NUEVA FUNCIÓN PARA LIMPIAR LA RUTA GPS ---------- */
   function limpiarRutaGps() {
-    // 1. Vaciamos la variable interna que guarda los puntos
     routePointsMap = [];
-
-    // 2. Actualizamos el mapa enviando un LineString vacío
     if (map.getSource("gps-route-source")) {
       map.getSource("gps-route-source").setData({
         type: "Feature",
-        geometry: { type: "LineString", coordinates: [] } // Coordenadas vacías borran la línea
+        geometry: { type: "LineString", coordinates: [] } 
       });
     }
   }
 
-  /* ---------- NUEVA FUNCIÓN PARA CENTRAR EN EL USUARIO ---------- */
   function centrarEnUsuario() {
     if (!userMarker) return;
     
     const userLngLat = userMarker.getLngLat();
     
-    // Validamos que el GPS ya haya capturado una coordenada válida
     if (!userLngLat || (userLngLat.lng === 0 && userLngLat.lat === 0)) {
       console.warn("Aún no tenemos tu ubicación exacta.");
       return; 
     }
 
-    // Movemos la cámara hacia el usuario
     map.flyTo({
       center: [userLngLat.lng, userLngLat.lat],
       zoom: 18,        
@@ -697,27 +876,26 @@ export function startMap(container, initialT, maskOptions = {}) {
     });
   }
 
-  // ========== DECLARACIONES DE BRÚJULA (ANTES DE USARLAS) ==========
+  // ========== DECLARACIONES DE BRÚJULA ==========
   let compassActive = false;
   let orientationHandler = null;
   let filteredHeading = null;
   let animationFrame = null;
-  let userArrowContainer = null; // Referencia al contenedor de la flecha
+  
+  // AQUI ASIGNAMOS LA VARIABLE PARA QUE EL MARCADOR GIRE CON LA BRÚJULA
+  let userArrowContainer = userEl; 
 
-  const SMOOTHING_FACTOR = 0.2; // Suavizado
-  const DEAD_ZONE = 2;          // Grados mínimos de cambio
+  const SMOOTHING_FACTOR = 0.2; 
+  const DEAD_ZONE = 2;          
 
   function normalizeAngle(angle) {
     return ((angle % 360) + 360) % 360;
   }
 
-  // Obtiene el heading de la parte superior del dispositivo (0 = norte, 90 = este)
   function getDeviceHeading(event) {
     if (event.webkitCompassHeading !== undefined) {
-      // iOS
       return event.webkitCompassHeading;
     } else {
-      // Android
       const alpha = event.alpha;
       const beta = event.beta;
       const gamma = event.gamma;
@@ -746,7 +924,7 @@ export function startMap(container, initialT, maskOptions = {}) {
     let heading = getDeviceHeading(event);
     if (heading === null || isNaN(heading)) return;
 
-    let viewHeading = normalizeAngle(heading + 180);     // Opción 3: +180° (ajústala)
+    let viewHeading = normalizeAngle(heading + 180);     
 
     if (filteredHeading === null) {
       filteredHeading = viewHeading;
@@ -829,8 +1007,8 @@ export function startMap(container, initialT, maskOptions = {}) {
   }
 
   /* ---------- PROXIMIDAD AUTO-POPUP ---------- */
-  const RADIO_METROS = 10;          // distancia en metros para abrir popup
-  let ultimoPopupAbierto = null;    // evita abrir el mismo popup en bucle
+  const RADIO_METROS = 10;          
+  let ultimoPopupAbierto = null;    
 
   function verificarProximidad(lat, lng) {
     DESTINOS.forEach(d => {
@@ -840,12 +1018,10 @@ export function startMap(container, initialT, maskOptions = {}) {
         const marker = marcadoresBase[d.id];
         if (!marker) return;
 
-        // Solo abre si no está ya abierto este popup
         if (ultimoPopupAbierto !== d.id) {
           ultimoPopupAbierto = d.id;
           marker.togglePopup();
 
-          // Centra el mapa en el destino
           map.flyTo({
             center: [d.lng, d.lat],
             zoom: 18,
@@ -854,7 +1030,6 @@ export function startMap(container, initialT, maskOptions = {}) {
           });
         }
       } else {
-        // Si se aleja, resetea para que pueda volver a abrirse
         if (ultimoPopupAbierto === d.id) {
           ultimoPopupAbierto = null;
         }
@@ -872,15 +1047,23 @@ export function startMap(container, initialT, maskOptions = {}) {
     isCompassActive,
     actualizarIdiomaBase,
     centrarEnUsuario, 
-    flyTo: (lng,lat)=> {
-     map.flyTo({ center: [lng,lat],zoom:40, pitch: 50, essential: true }); 
+    flyTo: (lng, lat) => {
+      map.flyTo({ 
+        center: [lng, lat],
+        zoom: 18.5, 
+        pitch: 50, 
+        speed: 1.2, 
+        curve: 1.4, 
+        essential: true 
+      }); 
     },
     getBearing: () => map.getBearing(),
     cleanup: () => {
+      stopCompass(); 
       map.remove();
       if (watchId) {
         Geolocation.clearWatch({ id: watchId }).catch(console.error);
       }
     }
-  };
+  }
 }
