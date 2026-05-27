@@ -276,7 +276,15 @@ export const DESTINOS = [
     ]),
     lat: -0.0031959,
     lng: -78.45422637
-  }
+  },
+  { 
+    id: 17,
+    nombre: "Capilla",
+    imagenes: imgs("17.CAPILLA", [
+      "CAPILLA.png",
+    ]),
+    lat: -0.002182081172006663, lng: -78.45446572853807
+  },
 ];
 
 /* ================= CIRCUITOS ================= */
@@ -291,7 +299,7 @@ export class Circuito {
 }
 
 export const CIRCUITOS_OBJ = {
-  PACHA: new Circuito([1, 2, 3, 4, 5, 6, 7], "#2b6cff"),
+  PACHA: new Circuito([1, 2, 3, 17, 5, 6, 7], "#2b6cff"),
   INTI: new Circuito([1, 2, 5, 6, 8, 9, 7, 10, 11, 12, 13, 14], "#2ecc71"),
   KILLA: new Circuito([15, 14, 13, 12, 11, 10, 7], "#f39c12")
 };
