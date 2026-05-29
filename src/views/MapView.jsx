@@ -256,7 +256,7 @@ useEffect(() => {
                       <div className="action-circle primary">
                         <span className="material-symbols-outlined">directions</span>
                       </div>
-                      <span>Indicaciones</span>
+                      <span>¿Cómo llegar?</span>
                     </div>
                   ) : (
                     <div className="action-btn-wrapper" onClick={limpiarRuta}>

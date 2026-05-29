@@ -314,12 +314,9 @@ function construirGrafo(geojson) {
     return grafo;
   }
 
-  geojson.features.forEach((feature, index) => {
-    if (feature.geometry.type !== "LineString") {
-      console.warn(`La feature en el índice ${index} no es un LineString. Tipo actual: ${feature.geometry.type}`);
-      return;
-    }
+  const soloRutas = geojson.features.filter(feature => feature.geometry.type === "LineString");
 
+  soloRutas.forEach((feature, index) => {
     const coords = feature.geometry.coordinates;
 
     for (let i = 0; i < coords.length - 1; i++) {
@@ -330,13 +327,13 @@ function construirGrafo(geojson) {
 
       if (typeof lng1 !== 'number' || typeof lat1 !== 'number' || 
           typeof lng2 !== 'number' || typeof lat2 !== 'number') {
-        console.warn(`Coordenadas inválidas encontradas en la feature ${index}`);
+        console.warn(`Coordenadas inválidas encontradas en la ruta ${index}`);
         continue;
       }
 
       const p1 = toKey(lng1, lat1);
       const p2 = toKey(lng2, lat2);
-      const dist = calculateDistance(lat1, lng1, lat2, lng2); // Actualizado aquí
+      const dist = calculateDistance(lat1, lng1, lat2, lng2); 
 
       if (!grafo[p1]) grafo[p1] = { coord: [lng1, lat1], vecinos: {} };
       if (!grafo[p2]) grafo[p2] = { coord: [lng2, lat2], vecinos: {} };
