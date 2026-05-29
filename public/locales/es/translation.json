@@ -12,6 +12,18 @@
   "listTitle": "Lugares",
   "noResults": "No se encontraron lugares.",
 
+  "view": "Ver",
+  "photos": "fotos",
+  "howToGetThere": "¿Cómo llegar?",
+  "cancel": "Cancelar",
+  "pointOfInterest": "Punto de interés",
+  "availableMenu": "Menú disponible:",
+  "expand": "Expandir",
+  "minimize": "Minimizar",
+  "tools": "Herramientas",
+  "language": "Idioma",
+  "detailedView": "Vista detallada",
+
   "panel": {
     "title": "Panel de Control",
     "toggleBase": "Ocultar puntos base",

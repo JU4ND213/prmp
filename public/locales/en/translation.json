@@ -12,6 +12,18 @@
   "listTitle": "Places",
   "noResults": "No places found.",
 
+  "view": "View",
+  "photos": "photos",
+  "howToGetThere": "How to get there?",
+  "cancel": "Cancel",
+  "pointOfInterest": "Point of interest",
+  "availableMenu": "Available menu:",
+  "expand": "Expand",
+  "minimize": "Minimize",
+  "tools": "Tools",
+  "language": "Language",
+  "detailedView": "Detailed view",
+
   "panel": {
     "title": "Control Panel",
     "toggleBase": "Hide base points",

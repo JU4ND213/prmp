@@ -234,15 +234,29 @@ useEffect(() => {
                   <img src={selectedPunto.imagenes[0]} alt={selectedPunto.nombre || selectedPunto.name} />
                   <div className="hero-overlay">
                     <span className="material-symbols-outlined">photo_library</span>
-                    <span>Ver {selectedPunto.imagenes.length} fotos</span>
+                    {/* Interpolación básica para evitar problemas complejos en tu i18n */}
+                    <span>{t("view", "Ver")} {selectedPunto.imagenes.length} {t("photos", "fotos")}</span>
                   </div>
                 </div>
               )}
 
               <div className="detail-body">
                 <div className="detail-header-text">
-                  <h2 className="detail-title">{selectedPunto.nombre || selectedPunto.name}</h2>
-                  {!rutaActiva && <p className="detail-subtitle">{selectedPunto.description || "Punto de interés"}</p>}
+                  {/* Traducción en vivo del Título */}
+                  <h2 className="detail-title">
+                    {selectedPunto.id 
+                      ? t(`points.${selectedPunto.id}.name`, selectedPunto.nombre || selectedPunto.name) 
+                      : (selectedPunto.nombre || selectedPunto.name)}
+                  </h2>
+                  
+                  {/* Traducción en vivo de la Descripción */}
+                  {!rutaActiva && (
+                    <p className="detail-subtitle">
+                      {selectedPunto.id 
+                        ? t(`points.${selectedPunto.id}.description`, selectedPunto.description) 
+                        : (selectedPunto.description || t("pointOfInterest", "Punto de interés"))}
+                    </p>
+                  )}
                 </div>
                 
                 <div className="action-buttons-row">
@@ -256,23 +270,27 @@ useEffect(() => {
                       <div className="action-circle primary">
                         <span className="material-symbols-outlined">directions</span>
                       </div>
-                      <span>¿Cómo llegar?</span>
+                      <span>{t("howToGetThere", "¿Cómo llegar?")}</span>
                     </div>
                   ) : (
                     <div className="action-btn-wrapper" onClick={limpiarRuta}>
                       <div className="action-circle danger">
                         <span className="material-symbols-outlined">close</span>
                       </div>
-                      <span>Cancelar</span>
+                      <span>{t("cancel", "Cancelar")}</span>
                     </div>
                   )}
                 </div>
 
+                {/* Traducción en vivo del Menú (si existe) */}
                 {!rutaActiva && selectedPunto.menu && selectedPunto.menu.length > 0 && (
                   <div className="detail-menu">
-                    <strong>Menú disponible:</strong>
+                    <strong>{t("availableMenu", "Menú disponible:")}</strong>
                     <ul>
-                      {selectedPunto.menu.map((item, idx) => (
+                      {(selectedPunto.id 
+                        ? t(`points.${selectedPunto.id}.menu`, { returnObjects: true, defaultValue: selectedPunto.menu }) 
+                        : selectedPunto.menu
+                      ).map((item, idx) => (
                         <li key={idx}>{item}</li>
                       ))}
                     </ul>
@@ -287,7 +305,7 @@ useEffect(() => {
                 <button
                   className="panel-minimize-btn"
                   onClick={() => setPanelMinimizado(!panelMinimizado)}
-                  title={panelMinimizado ? "Expandir" : "Minimizar"}
+                  title={panelMinimizado ? t("expand", "Expandir") : t("minimize", "Minimizar")}
                 >
                   <span className="material-symbols-outlined">
                     {panelMinimizado ? "expand_more" : "expand_less"}
@@ -315,13 +333,13 @@ useEffect(() => {
       
       {/* ===== BARRA LATERAL DERECHA ===== */}
       <div className={`sidebar-toolbar ${toolbarOpen ? "open" : ""}`}>
-        <button className="settings-btn" onClick={() => setToolbarOpen(!toolbarOpen)} title="Herramientas">
+        <button className="settings-btn" onClick={() => setToolbarOpen(!toolbarOpen)} title={t("tools", "Herramientas")}>
           <span className="material-symbols-outlined">settings</span>
         </button>
         
         <div className="sidebar-items">
           <div style={{ position: "relative" }}>
-            <button className="sidebar-icon icon-lang" onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)} title="Idioma">
+            <button className="sidebar-icon icon-lang" onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)} title={t("language", "Idioma")}>
               <span className="material-symbols-outlined">g_translate</span>
             </button>
             {idiomaMenuAbierto && (
@@ -423,7 +441,7 @@ useEffect(() => {
             </button>
           )}
 
-          <img src={galeria.imagenes[galeria.indice]} alt="Vista detallada" className="lightbox-main-img" />
+          <img src={galeria.imagenes[galeria.indice]} alt={t("detailedView", "Vista detallada")} className="lightbox-main-img" />
 
           {galeria.imagenes.length > 1 && (
             <button className="lightbox-nav right" onClick={galeriaSiguiente}>
