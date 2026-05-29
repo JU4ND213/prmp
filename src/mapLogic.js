@@ -433,7 +433,7 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact) {
         satellite: {
           type: "raster",
           tiles: [
-            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            "https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/52930/{z}/{y}/{x}"
           ],
           tileSize: 256,
           maxzoom: 19
