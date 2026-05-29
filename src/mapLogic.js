@@ -451,8 +451,8 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact) {
   let marcadoresCategorias = [];
 
   const userEl = document.createElement("div");
-  userEl.style.width = "30px";
-  userEl.style.height = "65px";
+  userEl.style.width = "85px";
+  userEl.style.height = "250px";
   userEl.style.backgroundImage = "url('/images/Sin_título-removebg-preview.png')";
   userEl.style.backgroundSize = "contain";
   userEl.style.backgroundRepeat = "no-repeat";

@@ -26,7 +26,7 @@
     "atracciones_museos": "Attractions",
     "restaurantes": "Food",
     "tiendas_artesanias": "Handicrafts",
-    "plazas": "Squares",
+    "plazas": "Plazas",
     "estacionamiento": "Parking",
     "administracion": "Administration"
   },
@@ -38,7 +38,7 @@
   },
 
   "destinos": {
-    "1": "Housing",
+    "1": "Dwellings",
     "2": "Balbanera",
     "3": "Tiangues",
     "4": "Llama Zone",
@@ -46,194 +46,227 @@
     "6": "Cocoa Museum",
     "7": "Monument",
     "8": "Pichincha Store",
-    "9": "Egg Experiment",
+    "9": "Egg Exp.",
     "10": "Virtual Legacy",
-    "11": "Ecuador Pavilion",
+    "11": "Ecuador Pav.",
     "12": "Planetarium",
-    "13": "France Pavilion",
-    "14": "Guayasamín Pavilion",
-    "15": "Geodesic Avenue",
+    "13": "France Pav.",
+    "14": "Guayasamín Pav.",
+    "15": "Geodesic Ave.",
     "17": "Chapel"
   },
   "points": {
-  "centro_medico": {
-    "name": "Medical Center",
-    "description": "Medical assistance"
-  },
-  "lactario": {
-    "name": "Nursing Room",
-    "description": "Nursing room for infants"
-  },
-  "cajero_bg": {
-    "name": "Banco Guayaquil ATM",
-    "description": "Banco Guayaquil automated teller machine"
-  },
-  "bano": {
-    "name": "Restroom",
-    "description": "Place for biological needs"
-  },
-  "boleteria": {
-    "name": "Middle of the World Ticket Office",
-    "description": "Monument ticket office"
-  },
-  "pab_guayasamin": {
-    "name": "Guayasamín Pavilion",
-    "description": "Pavilion dedicated to Guayasamín culture"
-  },
-  "planetario": {
-    "name": "Planetarium",
-    "description": "Planetarium with star projections"
-  },
-  "museo_cacao": {
-    "name": "Cocoa Museum",
-    "description": "Museum dedicated to cocoa and its history"
-  },
-  "legado_virtual": {
-    "name": "Virtual Legacy",
-    "description": "Virtual experience about cultural heritage"
-  },
-  "experimento_huevo": {
-    "name": "Egg Experiment",
-    "description": "Playful activity about the egg"
-  },
-  "museo_cerveza": {
-    "name": "Craft Beer Museum",
-    "description": "Museum dedicated to beer"
-  },
-  "pabellon_francia": {
-    "name": "France Pavilion",
-    "description": "Pavilion dedicated to French culture"
-  },
-  "pabellon_ecuador": {
-    "name": "Ecuador Pavilion",
-    "description": "Pavilion dedicated to Ecuadorian culture"
-  },
-  "iglesia_mitad_mundo": {
-    "name": "Middle of the World Church",
-    "description": "Church located at the monument"
-  },
-  "tiangues": {
-    "name": "Tiangues",
-    "description": "Tiangues area with cultural exhibitions"
-  },
-  "zona_llamas": {
-    "name": "Llama Zone",
-    "description": "Area with llamas and Andean animals exhibition"
-  },
-  "tren_mitad_mundo": {
-    "name": "Middle of the World Train",
-    "description": "Train that tours the monument"
-  },
-  "viviendas_ancestrales": {
-    "name": "Ancestral Dwellings",
-    "description": "Traditional ancestral homes"
-  },
-  "inti_raymi": {
-    "name": "Inti Raymi Sun Festival",
-    "description": "Sun festival celebrated at the monument"
-  },
-  "piel_y_cuero": {
-    "name": "Leather and Hide",
-    "description": "Leather and hide products"
-  },
-  "local_27_native_crafts": {
-    "name": "Shop 27 - Native Crafts",
-    "description": "Native handicrafts shop"
-  },
-  "amor_n83": {
-    "name": "Amor (No. 83)",
-    "description": "Local handicrafts and regional products"
-  },
-  "local_42_maki_rurashka": {
-    "name": "Shop 42 - Maki Rurashka",
-    "description": "Rural products and local handicrafts"
-  },
-  "local_26_claya": {
-    "name": "Shop 26 - Claya",
-    "description": "Local products and traditional handicrafts"
-  },
-  "origenes_ecuador": {
-    "name": "Origins Ecuador",
-    "description": "Local products and traditional handicrafts"
-  },
-  "ricon_musical": {
-    "name": "Ricon Musical",
-    "description": "Local musical products"
-  },
-  "local_95a_huiñay": {
-    "name": "Shop 95A - Huiñay",
-    "description": "Local handicrafts and regional products"
-  },
-  "haku_andean_chick": {
-    "name": "Haku Andean Chick",
-    "description": "Andean products and traditional handicrafts"
-  },
-  "tienda_pichincha": {
-    "name": "Pichincha Store",
-    "description": "Local products and traditional handicrafts"
-  },
-  "plaza_cultura": {
-    "name": "Culture Plaza",
-    "description": "Cultural events plaza"
-  },
-  "plaza_central": {
-    "name": "Central Plaza",
-    "description": "Main plaza of the monument"
-  },
-  "plaza_de_colores": {
-    "name": "Colorful Plaza",
-    "description": "Plaza with colorful decorative elements"
-  },
-  "arena_top": {
-    "name": "Top Arena",
-    "description": "Special events arena"
-  },
-  "estacionamiento_principal": {
-    "name": "Main Parking Lot",
-    "description": "Monument parking area"
-  },
-  "nuca_llacta": {
-    "name": "Ñuca Llacta Restaurant",
-    "description": "Traditional Ecuadorian food",
-    "menu": ["cuy (guinea pig)", "fritada (fried pork)", "locro de papa (potato soup)", "empanadas"]
-  },
-  "restaurante": {
-    "name": "RESTAURANT",
-    "description": "General restaurant with a variety of dishes"
-  },
-  "calima": {
-    "name": "Calima",
-    "description": "Restaurant with regional menu"
-  },
-  "cafe_sinchi_warmi": {
-    "name": "Sinchi Warmi Café",
-    "description": "Café with a warm atmosphere"
-  },
-  "raqeri_cacao": {
-    "name": "Raqeri Cacao",
-    "description": "Cocoa-specialized café"
-  },
-  "restaurante_balcon_al_mundo": {
-    "name": "Balcony to the World Restaurant",
-    "description": "Panoramic view of the monument"
-  },
-  "el_orgánico_star_coffee": {
-    "name": "El Orgánico Star Coffee",
-    "description": "Organic coffee specialty café"
-  },
-  "cafe_guayasamin": {
-    "name": "Guayasamín Café",
-    "description": "Café with local products"
-  },
-  "parking": {
+    "centro_medico": {
+      "name": "Medical Center",
+      "description": "Medical assistance"
+    },
+    "lactario": {
+      "name": "Nursing Room",
+      "description": "Nursing room for infants"
+    },
+    "cajero_bg": {
+      "name": "Banco Guayaquil ATM",
+      "description": "Banco Guayaquil automated teller machine"
+    },
+
+    "bano_1": {
+      "name": "Restroom",
+      "description": "Place for biological needs"
+    },
+    "bano_2": {
+      "name": "Restroom",
+      "description": "Place for biological needs"
+    },
+    "bano": {
+      "name": "Restroom",
+      "description": "Place for biological needs"
+    },
+    "bano_3": {
+      "name": "Restroom",
+      "description": "Place for biological needs"
+    },
+    "bano_4": {
+      "name": "Restroom",
+      "description": "Place for biological needs"
+    },
+    "bano_5": {
+      "name": "Restroom",
+      "description": "Place for biological needs"
+    },
+
+    "boleteria": {
+      "name": "Middle of the World Ticket Office",
+      "description": "Monument ticket office"
+    },
+    "pab_guayasamin": {
+      "name": "Guayasamín Pavilion",
+      "description": "Discover the works of the famous Ecuadorian painter and sculptor Oswaldo Guayasamín"
+    },
+    "planetario": {
+      "name": "Planetarium",
+      "description": "Immerse yourself in a fascinating journey through the wonders of the universe and discover the cosmos in a unique way"
+    },
+    "museo_cacao": {
+      "name": "Cocoa Museum",
+      "description": "Learn the history of one of Ecuador's most exported and valued products and taste the best chocolate in the world"
+    },
+    "legado_virtual": {
+      "name": "Virtual Legacy",
+      "description": "Get to know the province of Pichincha through virtual reality glasses"
+    },
+    "experimento_huevo": {
+      "name": "Egg Experiment",
+      "description": "Playful activity about the egg"
+    },
+    "museo_cerveza": {
+      "name": "Craft Beer Museum",
+      "description": "Discover a unique sensory experience in the center of the planet. Delve into the fascinating world of craft beer and learn about its brewing process, from ancestral ingredients to aromas and flavors inspired by Ecuador's natural wealth"
+    },
+    "pabellon_francia": {
+      "name": "France Pavilion",
+      "description": "Learn about the main contributions of the first and second Hispanic-French Geodesic Mission"
+    },
+    "pabellon_ecuador": {
+      "name": "Ecuador Pavilion",
+      "description": "Tourist and gastronomic information about the provinces of Ecuador"
+    },
+    "iglesia_mitad_mundo": {
+      "name": "Middle of the World Chapel",
+      "description": "Discover the only colonial-style chapel crossed by the equatorial line"
+    },
+    "tiangues": {
+      "name": "Tiangues",
+      "description": "Tiangues area with cultural exhibitions"
+    },
+    "zona_llamas": {
+      "name": "Llama Zone",
+      "description": "Get up close to these friendly inhabitants of the Andes and learn more about them"
+    },
+    "tren_mitad_mundo": {
+      "name": "Middle of the World Train",
+      "description": "Embark on a unique experience aboard the Middle of the World City Tourist Train. Enjoy continuous 15-minute rides each way and discover the magic of the center of the planet in a different way"
+    },
+    "viviendas_ancestrales": {
+      "name": "Ancestral Dwellings",
+      "description": "Explore and discover the construction methods of the ancestral homes of the Pacific Coast, the Andes, and the Amazon"
+    },
+    "inti_raymi": {
+      "name": "Inti Raymi Sun Festival",
+      "description": "Sun festival celebrated at the monument"
+    },
+    "Monumento": {
+      "name": "Middle of the World Monument",
+      "description": "Visit the iconic monument built in honor of the first and second Hispanic-French Geodesic Mission"
+    },
+
+    "nuca_llacta": {
+      "name": "Ñuca Llacta Restaurant",
+      "description": "Traditional Ecuadorian food"
+    },
+    "restaurante": {
+      "name": "RESTAURANT",
+      "description": "General restaurant with a variety of dishes"
+    },
+    "calima": {
+      "name": "Calima",
+      "description": "Restaurant with regional menu"
+    },
+    "cafe_sinchi_warmi": {
+      "name": "Sinchi Warmi Café",
+      "description": "Café with a warm atmosphere"
+    },
+    "raqeri_cacao": {
+      "name": "Raqeri Cacao",
+      "description": "Cocoa-specialized café"
+    },
+    "restaurante_balcon_al_mundo": {
+      "name": "Balcony to the World Restaurant",
+      "description": "Panoramic view of the monument"
+    },
+    "el_orgánico_star_coffee": {
+      "name": "El Orgánico Star Coffee",
+      "description": "Organic coffee specialty café"
+    },
+    "cafe_guayasamin": {
+      "name": "Guayasamín Café",
+      "description": "Café with local products"
+    },
+    "tienda_delicatessen_rosita": {
+      "name": "Rosita Delicatessen Shop",
+      "description": "Gourmet products shop"
+    },
+
+    "piel_y_cuero": {
+      "name": "Leather and Hide",
+      "description": "Leather and hide products"
+    },
+    "local_27_native_crafts": {
+      "name": "Shop 27 - Native Crafts",
+      "description": "Native handicrafts shop"
+    },
+    "amor_n83": {
+      "name": "Amor (No. 83)",
+      "description": "Local handicrafts and regional products"
+    },
+    "warmi": {
+      "name": "Warmi",
+      "description": "Traditional Andean handicrafts"
+    },
+    "local_42_maki_rurashka": {
+      "name": "Shop 42 - Maki Rurashka",
+      "description": "Rural products and local handicrafts"
+    },
+    "local_26_claya": {
+      "name": "Shop 26 - Claya",
+      "description": "Local products and traditional handicrafts"
+    },
+    "origenes_ecuador": {
+      "name": "Origins Ecuador",
+      "description": "Local products and traditional handicrafts"
+    },
+    "ricon_musical": {
+      "name": "Ricon Musical",
+      "description": "Local musical products"
+    },
+    "local_95a_huiñay": {
+      "name": "Shop 95A - Huiñay",
+      "description": "Local handicrafts and regional products"
+    },
+    "haku_andean_chick": {
+      "name": "Haku Andean Chick",
+      "description": "Andean products and traditional handicrafts"
+    },
+    "tienda_pichincha": {
+      "name": "Pichincha Store",
+      "description": "Local products and traditional handicrafts"
+    },
+
+    "plaza_cultura": {
+      "name": "Culture Plaza",
+      "description": "Stage for various cultural and artistic shows"
+    },
+    "plaza_central": {
+      "name": "Central Plaza",
+      "description": "The heart of the Middle of the World City, where culture, history, and the main cultural shows come to life right in the center of the planet"
+    },
+    "plaza_de_colores": {
+      "name": "Colorful Plaza",
+      "description": "Plaza with colorful decorative elements"
+    },
+    "arena_top": {
+      "name": "Top Arena",
+      "description": "Special events arena"
+    },
+    
+    "estacionamiento_principal": {
+      "name": "Main Parking Lot",
+      "description": "Monument parking area"
+    },
+    "parking": {
       "name": "Parking",
       "description": "General parking"
-    },
-  "tienda_delicatessen_rosita": {
-    "name": "Rosita Delicatessen Shop",
-    "description": "Gourmet products shop"
-  }
-},
+    }
+  },
   "language_selector": {
     "label": "Language",
     "es": "Spanish",

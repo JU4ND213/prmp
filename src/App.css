@@ -1,5 +1,25 @@
+/* ================= FUENTES ================= */
+@font-face {
+  font-family: 'Montserrat';
+  /* Asegúrate de que la ruta apunte correctamente a la carpeta donde guardaste los archivos .ttf */
+  src: url('/public/locales/fonts/Montserrat-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900; /* Esto permite usar cualquier font-weight entre 100 y 900 */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/public/locales/fonts/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* ================= VARIABLES BASE (ESTILO MATERIAL/SOLID) ================= */
 :root {
+  --font-main: 'Montserrat', system-ui, -apple-system, sans-serif; /* Tipografía principal */
+  
   --bg-panel: #ffffff;
   --bg-card: #f8f9fa;
   --bg-hover: #f1f3f4;
@@ -21,6 +41,26 @@
   --compact-gap: 8px;
   --compact-pad: 12px;
   --compact-font: 0.75rem;
+}
+
+/* ================= RESET NATIVO Y TIPOGRAFÍA GLOBAL ================= */
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box; /* Recomendado para que los paddings no rompan el grid */
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+button, input, select, textarea {
+  font-family: inherit; /* Hace que los botones e inputs hereden Montserrat automáticamente */
+  outline: none;
 }
 
 /* ================= MARCADOR SELECCIONADO ================= */

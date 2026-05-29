@@ -65,11 +65,31 @@
       "description": "Lactario para lactantes"
     },
     "cajero_bg": {
-      "name": "Cajero Banco Guayaquil",
-      "description": "Cajero automático del Banco Guayaquil"
+      "name": "Cajero banco Guayaquil",
+      "description": "Cajero automático del banco Guayaquil"
     },
 
+    "bano_1": {
+      "name": "Baño",
+      "description": "Lugar para hacer necesidades biológicas"
+    },
+    "bano_2": {
+      "name": "Baño",
+      "description": "Lugar para hacer necesidades biológicas"
+    },
     "bano": {
+      "name": "Baño",
+      "description": "Lugar para hacer necesidades biológicas"
+    },
+    "bano_3": {
+      "name": "Baño",
+      "description": "Lugar para hacer necesidades biológicas"
+    },
+    "bano_4": {
+      "name": "Baño",
+      "description": "Lugar para hacer necesidades biológicas"
+    },
+    "bano_5": {
       "name": "Baño",
       "description": "Lugar para hacer necesidades biológicas"
     },
@@ -79,20 +99,20 @@
       "description": "Boletería del monumento"
     },
     "pab_guayasamin": {
-      "name": "Pabellón Guayasamín",
-      "description": "Pabellón dedicado a la cultura Guayasamín"
+      "name": "Pabellón Guayasamin",
+      "description": "Descubre las obras del famoso pintor y escultor ecuatoriano Oswaldo Guayasamín"
     },
     "planetario": {
       "name": "Planetario",
-      "description": "Planetario con proyección de estrellas"
+      "description": "Sumérgete en un fascinante viaje a través de las maravillas del universo y descubre el cosmos de una manera única"
     },
     "museo_cacao": {
-      "name": "Museo del Cacao",
-      "description": "Museo dedicado al cacao y su historia"
+      "name": "Museo del cacao",
+      "description": "Conoce la historia de uno de los productos más exportados y valorados del Ecuador y prueba el mejor chocolate del mundo"
     },
     "legado_virtual": {
       "name": "Legado Virtual",
-      "description": "Experiencia virtual sobre el legado cultural"
+      "description": "Conoce la provincia de Pichincha a través de gafas de realidad virtual"
     },
     "experimento_huevo": {
       "name": "Experimento del Huevo",
@@ -104,100 +124,41 @@
     },
     "pabellon_francia": {
       "name": "Pabellón de Francia",
-      "description": "Pabellón dedicado a la cultura francesa"
+      "description": "Conoce los principales aportes de la primera y segunda Misión Geodésica Hispano-Francesa"
     },
     "pabellon_ecuador": {
-      "name": "Pabellón de Ecuador",
-      "description": "Pabellón dedicado a la cultura ecuatoriana"
+      "name": "Pabellón Ecuador",
+      "description": "Información turística y gastronómica de las provincias del Ecuador"
     },
     "iglesia_mitad_mundo": {
-      "name": "Iglesia Mitad del Mundo",
-      "description": "Iglesia ubicada en el monumento"
+      "name": "Capilla Mitad del Mundo",
+      "description": "Conoce la única capilla de estilo colonial atravesada por la línea ecuatorial"
     },
     "tiangues": {
       "name": "Tiangues",
       "description": "Área de tiangues con exhibiciones culturales"
     },
     "zona_llamas": {
-      "name": "Zona de Llamas",
-      "description": "Zona con exhibición de llamas y animales andinos"
+      "name": "Zona de llamas",
+      "description": "Observa de cerca a estos amigables habitantes de los Andes y aprende más sobre ellos"
     },
     "tren_mitad_mundo": {
       "name": "Tren Mitad del Mundo",
-      "description": "Tren que recorre el monumento"
+      "description": "Embárcate en una experiencia única a bordo del Tren Turístico Ciudad Mitad del Mundo Disfruta de recorridos continuos de 15 minutos por trayecto y descubre, de una manera diferente, la magia del centro del planeta"
     },
     "viviendas_ancestrales": {
-      "name": "Viviendas Ancestrales",
-      "description": "Viviendas tradicionales ancestrales"
+      "name": "Viviendas ancestrales",
+      "description": "Explora y descubre los métodos constructivos de las viviendas ancestrales de la Costa del Pacífico, los Andes y la Amazonía"
     },
     "inti_raymi": {
-      "name": "Inti Raymi Fiesta del Sol",
+      "name": "Inti Raymi Fiesta del sol",
       "description": "Fiesta del sol celebrada en el monumento"
     },
-    "piel_y_cuero": {
-      "name": "Piel y Cuero",
-      "description": "Productos de piel y cuero"
+    "Monumento": {
+      "name": "Monumento a la Mitad del Mundo",
+      "description": "Visita el emblemático monumento construido en honor a la primera y segunda Misión Geodésica Hispano-Francesa"
     },
-    "local_27_native_crafts": {
-      "name": "Local 27 - Native Crafts",
-      "description": "Tienda de artesanías nativas"
-    },
-    "amor_n83": {
-      "name": "Amor (n°83)",
-      "description": "Artesanías locales y productos regionales"
-    },
-    "local_42_maki_rurashka": {
-      "name": "Local 42 - Maki Rurashka",
-      "description": "Productos rurales y artesanías locales"
-    },
-    "local_26_claya": {
-      "name": "Local 26 - Claya",
-      "description": "Productos locales y artesanías tradicionales"
-    },
-    "origenes_ecuador": {
-      "name": "Origenes Ecuador",
-      "description": "Productos locales y artesanías tradicionales"
-    },
-    "ricon_musical": {
-      "name": "Ricon Musical",
-      "description": "Productos musicales locales"
-    },
-    "local_95a_huiñay": {
-      "name": "Local 95A - Huiñay",
-      "description": "Artesanías locales y productos regionales"
-    },
-    "haku_andean_chick": {
-      "name": "Haku Andean Chick",
-      "description": "Productos andinos y artesanías tradicionales"
-    },
-    "tienda_pichincha": {
-      "name": "Tienda Pichincha",
-      "description": "Productos locales y artesanías tradicionales"
-    },
-    "plaza_cultura": {
-      "name": "Plaza Cultura",
-      "description": "Plaza de eventos culturales"
-    },
-    "plaza_central": {
-      "name": "Plaza Central",
-      "description": "Plaza central del monumento"
-    },
-    "plaza_de_colores": {
-      "name": "Plaza de colores",
-      "description": "Plaza con elementos decorativos de colores"
-    },
-    "arena_top": {
-      "name": "Arena top",
-      "description": "Arena de eventos especiales"
-    },
-    "parking": {
-      "name": "Parking",
-      "description": "Estacionamiento general"
-    },
-    "estacionamiento_principal": {
-      "name": "Estacionamiento Principal",
-      "description": "Estacionamiento del monumento"
-    },
+
     "nuca_llacta": {
       "name": "Ñuca Llacta Restaurant",
       "description": "Comida tradicional ecuatoriana"
@@ -233,6 +194,77 @@
     "tienda_delicatessen_rosita": {
       "name": "Tienda Delicatessen Rosita",
       "description": "Tienda de productos gourmet"
+    },
+
+    "piel_y_cuero": {
+      "name": "Piel y Cuero",
+      "description": "Productos de piel y cuero"
+    },
+    "local_27_native_crafts": {
+      "name": "Local 27 - Native Crafts",
+      "description": "Tienda de artesanías nativas"
+    },
+    "amor_n83": {
+      "name": "Amor (n°83)",
+      "description": "Artesanías locales y productos regionales"
+    },
+    "warmi": {
+      "name": "Warmi",
+      "description": "Artesanías tradicionales andinas"
+    },
+    "local_42_maki_rurashka": {
+      "name": "Local 42 - Maki Rurashka",
+      "description": "Productos rurales y artesanías locales"
+    },
+    "local_26_claya": {
+      "name": "Local 26 - Claya",
+      "description": "Productos locales y artesanías tradicionales"
+    },
+    "origenes_ecuador": {
+      "name": "Origenes Ecuador",
+      "description": "Productos locales y artesanías tradicionales"
+    },
+    "ricon_musical": {
+      "name": "Ricon Musical",
+      "description": "Productos musicales locales"
+    },
+    "local_95a_huiñay": {
+      "name": "Local 95A - Huiñay",
+      "description": "Artesanías locales y productos regionales"
+    },
+    "haku_andean_chick": {
+      "name": "Haku Andean Chick",
+      "description": "Productos andinos y artesanías tradicionales"
+    },
+    "tienda_pichincha": {
+      "name": "Tienda Pichincha",
+      "description": "Productos locales y artesanías tradicionales"
+    },
+
+    "plaza_cultura": {
+      "name": "Plaza Cultural",
+      "description": "Escenario para diversos espectáculos culturales y artísticos"
+    },
+    "plaza_central": {
+      "name": "Plaza Central",
+      "description": "El corazón de la Ciudad Mitad del Mundo, donde la cultura, la historia y los principales espectáculos culturales cobran vida justo en el centro del planeta"
+    },
+    "plaza_de_colores": {
+      "name": "Plaza de colores",
+      "description": "Plaza con elementos decorativos de colores"
+    },
+    "arena_top": {
+      "name": "Arena top",
+      "description": "Arena de eventos especiales"
+    },
+    
+    "estacionamiento_principal": {
+      "name": "Estacionamiento Principal",
+      "description": "Estacionamiento del monumento"
+    },
+    "parking": {
+      "name": "Parking",
+      "description": "Estacionamiento general"
     }
   },
   "language_selector": {
