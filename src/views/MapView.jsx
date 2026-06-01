@@ -51,17 +51,15 @@ export default function MapView() {
     mapRef.current?.flyTo(punto.lng, punto.lat);
   }, []);
 
-  /* ===============================
+/* ===============================
      INICIALIZAR MAPA
   =============================== */
-useEffect(() => {
-    
+  useEffect(() => {
     if (!mapContainerRef.current || isMapInitialized.current) return;
 
-    
     isMapInitialized.current = true;
 
-    const mapApi = startMap(mapContainerRef.current, {}, handleResultClick);
+    const mapApi = startMap(mapContainerRef.current, {}, handleResultClick, i18n.language);
     if (!mapApi) return;
 
     const {
@@ -72,6 +70,7 @@ useEffect(() => {
       toggleCompassMode,
       isCompassActive,
       centrarEnUsuario,
+      actualizarImagenUsuario,
       flyTo,
       cleanup,
     } = mapApi;
@@ -85,6 +84,7 @@ useEffect(() => {
       isCompassActive,
       flyTo,
       centrarEnUsuario,
+      actualizarImagenUsuario,
     };
 
 
@@ -93,6 +93,12 @@ useEffect(() => {
       isMapInitialized.current = false; 
     };
   }, []);
+  
+  useEffect(() => {
+    if (mapRef.current?.actualizarImagenUsuario) {
+      mapRef.current.actualizarImagenUsuario(i18n.language);
+    }
+  }, [i18n.language]);
 
   const galeriaSiguiente = () => {
     setGaleria(prev => ({ ...prev, indice: (prev.indice + 1) % prev.imagenes.length }));

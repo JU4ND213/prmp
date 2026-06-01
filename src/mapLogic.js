@@ -403,7 +403,7 @@ function encontrarRutaMasCorta(inicioKey, finKey) {
 }
 
 /* ---------------- MAPA ---------------- */
-export function startMap(container, maskOptions = {}, onMarkerClickReact) {
+export function startMap(container, maskOptions = {}, onMarkerClickReact, initialLang = 'es') {
   if (!container) return;
 
   const {
@@ -445,17 +445,30 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact) {
     }
   });
 
-  let marcadoresCategorias = [];
+let marcadoresCategorias = [];
 
   const userEl = document.createElement("div");
   userEl.style.width = "85px";
   userEl.style.height = "250px";
-  userEl.style.backgroundImage = "url('/images/Sin_título-removebg-preview.png')";
+  // 2. Quitamos el backgroundImage quemado de aquí
   userEl.style.backgroundSize = "contain";
   userEl.style.backgroundRepeat = "no-repeat";
   userEl.style.backgroundPosition = "center";
   userEl.style.backgroundColor = "transparent";
   userEl.style.display = "none";
+
+  // 3. NUEVA FUNCIÓN: Actualiza la imagen según el idioma pasado
+  function actualizarImagenUsuario(lng) {
+    if (lng === 'en') {
+      // Reemplaza esto con el nombre de tu imagen en inglés
+      userEl.style.backgroundImage = "url('/images/ingles.png')"; 
+    } else {
+      userEl.style.backgroundImage = "url('/images/español.png')";
+    }
+  }
+
+  // Seteamos la imagen inicial al momento de crear el mapa
+  actualizarImagenUsuario(initialLang);
 
   let userMarker = new maplibregl.Marker({ element: userEl })
     .setLngLat([-78.454012, -0.003140])
@@ -908,6 +921,7 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact) {
     toggleCompassMode,
     isCompassActive,
     centrarEnUsuario,
+    actualizarImagenUsuario,
     flyTo: (lng, lat) => {
       map.flyTo({
         center: [lng, lat],
