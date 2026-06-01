@@ -4,6 +4,21 @@ import { startMap, CIRCUITOS_OBJ, DESTINOS } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 import { useTranslation } from "react-i18next";
 
+const LINEA_EQUINOCCIAL = {
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [
+          [ -78.45801359138946,-0.0021278767966066425],[ -78.4519691, -0.0022173]
+        ],
+        "type": "LineString"
+      }
+    }
+  ]
+};
 export default function MapView() {
   const [selectedPunto, setSelectedPunto] = useState(null);
   const [compassActive, setCompassActive] = useState(false);
@@ -72,6 +87,7 @@ export default function MapView() {
       centrarEnUsuario,
       actualizarImagenUsuario,
       flyTo,
+      dibujarLineaFija,
       cleanup,
     } = mapApi;
 
@@ -87,13 +103,16 @@ export default function MapView() {
       actualizarImagenUsuario,
     };
 
+    if (dibujarLineaFija) {
+      dibujarLineaFija(LINEA_EQUINOCCIAL, 'linea-equinoccial', '#FFFF00');
+    }
 
     return () => {
       cleanup?.();
       isMapInitialized.current = false; 
     };
   }, []);
-  
+
   useEffect(() => {
     if (mapRef.current?.actualizarImagenUsuario) {
       mapRef.current.actualizarImagenUsuario(i18n.language);

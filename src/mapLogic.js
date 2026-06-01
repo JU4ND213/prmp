@@ -495,22 +495,26 @@ let marcadoresCategorias = [];
         [-78.45736631985848, -0.001120821264123606], [-78.45735017679192, -0.0011238105713999857]
       ];
 
-      const exteriorWorld = [
-        [-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]
-      ];
+const exteriorMask = [
+  [-78.45942261292699, -0.006626470159685912], // SW
+  [-78.44891908276314, -0.006626470159685912], // SE
+  [-78.44891908276314, 0.00040374536742011913], // NE
+  [-78.45942261292699, 0.0016454623011196194], // NW
+  [-78.45942261292699, -0.006626470159685912] // cierre
+];
 
-      map.addSource("mask", {
-        type: "geojson",
-        tolerance: 0,
-        lineMetrics: false,
-        data: {
-          type: "Feature",
-          geometry: {
-            type: "Polygon",
-            coordinates: [exteriorWorld, polygonHole]
-          }
-        }
-      });
+map.addSource("mask", {
+  type: "geojson",
+  tolerance: 0,
+  lineMetrics: false,
+  data: {
+    type: "Feature",
+    geometry: {
+      type: "Polygon",
+      coordinates: [exteriorMask, polygonHole]
+    }
+  }
+});
 
       map.addLayer({
         id: "mask-layer",
@@ -783,6 +787,37 @@ let marcadoresCategorias = [];
       essential: true
     });
   }
+  function dibujarLineaFija(geoJson, sourceId, color) {
+    const agregarCapa = () => {
+      if (!map.getSource(sourceId)) {
+        map.addSource(sourceId, {
+          type: 'geojson',
+          data: geoJson
+        });
+
+        map.addLayer({
+          id: sourceId,
+          type: 'line',
+          source: sourceId,
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': color,
+            'line-width': 7
+          }
+        });
+      }
+    };
+
+    // Verificamos si el estilo del mapa ya terminó de cargar
+    if (map.loaded()) {
+      agregarCapa();
+    } else {
+      map.on("load", agregarCapa);
+    }
+  }
 
   /* ========== BRÚJULA ========== */
   let compassActive = false;
@@ -922,6 +957,7 @@ let marcadoresCategorias = [];
     isCompassActive,
     centrarEnUsuario,
     actualizarImagenUsuario,
+    dibujarLineaFija,
     flyTo: (lng, lat) => {
       map.flyTo({
         center: [lng, lat],
