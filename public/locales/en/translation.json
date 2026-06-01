@@ -1,4 +1,5 @@
 {
+  "whatAreYouLookingFor": "What are you looking for?",
   "searchPlaceholder": "Search for place, dish, or service...",
   "clearSearch": "Clear search",
   "centerLocation": "Center on my location",
@@ -80,7 +81,6 @@
       "name": "Banco Guayaquil ATM",
       "description": "Banco Guayaquil automated teller machine"
     },
-
     "bano_1": {
       "name": "Restroom",
       "description": "Place for biological needs"
@@ -105,7 +105,6 @@
       "name": "Restroom",
       "description": "Place for biological needs"
     },
-
     "boleteria": {
       "name": "Middle of the World Ticket Office",
       "description": "Monument ticket office"
@@ -170,7 +169,6 @@
       "name": "Middle of the World Monument",
       "description": "Visit the iconic monument built in honor of the first and second Hispanic-French Geodesic Mission"
     },
-
     "nuca_llacta": {
       "name": "Ñuca Llacta Restaurant",
       "description": "Traditional Ecuadorian food"
@@ -205,9 +203,13 @@
     },
     "tienda_delicatessen_rosita": {
       "name": "Rosita Delicatessen Shop",
-      "description": "Gourmet products shop"
+      "description": "Gourmet products shop",
+      "menu": [
+        "Specialty Cheeses",
+        "Cold Cuts",
+        "Wines"
+      ]
     },
-
     "piel_y_cuero": {
       "name": "Leather and Hide",
       "description": "Leather and hide products"
@@ -252,7 +254,6 @@
       "name": "Pichincha Store",
       "description": "Local products and traditional handicrafts"
     },
-
     "plaza_cultura": {
       "name": "Culture Plaza",
       "description": "Stage for various cultural and artistic shows"
@@ -269,7 +270,6 @@
       "name": "Top Arena",
       "description": "Special events arena"
     },
-    
     "estacionamiento_principal": {
       "name": "Main Parking Lot",
       "description": "Monument parking area"

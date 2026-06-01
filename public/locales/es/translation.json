@@ -1,4 +1,5 @@
 {
+  "whatAreYouLookingFor": "¿Qué buscas?",
   "searchPlaceholder": "Busca lugar, plato o servicio...",
   "clearSearch": "Limpiar búsqueda",
   "centerLocation": "Centrar en mi ubicación",
@@ -80,7 +81,6 @@
       "name": "Cajero banco Guayaquil",
       "description": "Cajero automático del banco Guayaquil"
     },
-
     "bano_1": {
       "name": "Baño",
       "description": "Lugar para hacer necesidades biológicas"
@@ -105,7 +105,6 @@
       "name": "Baño",
       "description": "Lugar para hacer necesidades biológicas"
     },
-
     "boleteria": {
       "name": "Boletería Mitad del Mundo",
       "description": "Boletería del monumento"
@@ -170,7 +169,6 @@
       "name": "Monumento a la Mitad del Mundo",
       "description": "Visita el emblemático monumento construido en honor a la primera y segunda Misión Geodésica Hispano-Francesa"
     },
-
     "nuca_llacta": {
       "name": "Ñuca Llacta Restaurant",
       "description": "Comida tradicional ecuatoriana"
@@ -205,9 +203,13 @@
     },
     "tienda_delicatessen_rosita": {
       "name": "Tienda Delicatessen Rosita",
-      "description": "Tienda de productos gourmet"
+      "description": "Tienda de productos gourmet",
+      "menu": [
+        "Quesos Especiales",
+        "Embutidos",
+        "Vinos"
+      ]
     },
-
     "piel_y_cuero": {
       "name": "Piel y Cuero",
       "description": "Productos de piel y cuero"
@@ -252,7 +254,6 @@
       "name": "Tienda Pichincha",
       "description": "Productos locales y artesanías tradicionales"
     },
-
     "plaza_cultura": {
       "name": "Plaza Cultural",
       "description": "Escenario para diversos espectáculos culturales y artísticos"
@@ -269,7 +270,6 @@
       "name": "Arena top",
       "description": "Arena de eventos especiales"
     },
-    
     "estacionamiento_principal": {
       "name": "Estacionamiento Principal",
       "description": "Estacionamiento del monumento"

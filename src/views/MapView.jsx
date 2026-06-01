@@ -19,6 +19,7 @@ const LINEA_EQUINOCCIAL = {
     }
   ]
 };
+
 export default function MapView() {
   const [selectedPunto, setSelectedPunto] = useState(null);
   const [compassActive, setCompassActive] = useState(false);
@@ -259,7 +260,6 @@ export default function MapView() {
                   <img src={selectedPunto.imagenes[0]} alt={selectedPunto.nombre || selectedPunto.name} />
                   <div className="hero-overlay">
                     <span className="material-symbols-outlined">photo_library</span>
-                    {/* Interpolación básica para evitar problemas complejos en tu i18n */}
                     <span>{t("view", "Ver")} {selectedPunto.imagenes.length} {t("photos", "fotos")}</span>
                   </div>
                 </div>
@@ -267,14 +267,12 @@ export default function MapView() {
 
               <div className="detail-body">
                 <div className="detail-header-text">
-                  {/* Traducción en vivo del Título */}
                   <h2 className="detail-title">
                     {selectedPunto.id 
                       ? t(`points.${selectedPunto.id}.name`, selectedPunto.nombre || selectedPunto.name) 
                       : (selectedPunto.nombre || selectedPunto.name)}
                   </h2>
                   
-                  {/* Traducción en vivo de la Descripción */}
                   {!rutaActiva && (
                     <p className="detail-subtitle">
                       {selectedPunto.id 
@@ -307,7 +305,6 @@ export default function MapView() {
                   )}
                 </div>
 
-                {/* Traducción en vivo del Menú (si existe) */}
                 {!rutaActiva && selectedPunto.menu && selectedPunto.menu.length > 0 && (
                   <div className="detail-menu">
                     <strong>{t("availableMenu", "Menú disponible:")}</strong>
@@ -398,50 +395,68 @@ export default function MapView() {
 
       {/* ===== PANEL DE CONTROLES INFERIOR ===== */}
       <div className={`controls-panel ${menuAbierto ? "open" : "closed"}`}>
-        <label>{t("pointsOfInterest")}</label>
-        <div className="categories-grid">
+        
+        {/* TÍTULO PRINCIPAL ESTILO COMUNICACIÓN */}
+        <h3 className="panel-section-title">{t("whatAreYouLookingFor", "¿Qué buscas?")}</h3>
+        
+        {/* PUNTOS DE INTERÉS - 4 COLUMNAS */}
+        <div className="categories-grid-comunicacion">
           {Object.entries(CATEGORY_DETAILS).map(([key, config]) => {
             const isActive = activeCategories.includes(key);
             return (
               <button
                 key={key}
-                className={`chip chip--pill category-chip ${isActive ? "active" : ""}`}
+                className={`category-square-btn ${isActive ? "active" : ""}`}
                 style={{ backgroundColor: config.color }}
                 onClick={() => toggleCategory(key)}
               >
-                {t(`categories.${key}`)}{" "}
-                {isActive && (
-                  <span className="material-symbols-outlined" style={{ fontSize: "16px", marginLeft: "4px", verticalAlign: "text-bottom" }}>
-                    check
+                <div className="cat-icon-circle">
+                  <span className="material-symbols-outlined" style={{ color: config.color }}>
+                    {config.icon || "place"}
                   </span>
+                </div>
+                <span className="cat-label">{t(`categories.${key}`)}</span>
+                
+                {/* Visto bueno flotante */}
+                {isActive && (
+                  <div className="cat-check-badge">
+                    <span className="material-symbols-outlined">check</span>
+                  </div>
                 )}
               </button>
             );
           })}
         </div>
 
-        <div className="divider"></div>
+        <div className="divider" style={{ margin: "16px 0" }}></div>
 
-        <label>{t("touristCircuits")}</label>
-        <div className="circuits-grid">
+        {/* RUTAS TURÍSTICAS */}
+        <h3 className="panel-section-title">{t("touristCircuits", "Rutas Turísticas")}</h3>
+        
+        <div className="circuits-column">
           {[
-            { key: "PACHA", class: "ruta-pacha" },
-            { key: "INTI", class: "ruta-inti" },
-            { key: "KILLA", class: "ruta-killa" },
-          ].map(({ key, class: cls }) => {
+            { key: "PACHA", class: "ruta-pacha", icon: "landscape" },
+            { key: "INTI", class: "ruta-inti", icon: "wb_sunny" },
+            { key: "KILLA", class: "ruta-killa", icon: "nightlight" },
+          ].map(({ key, class: cls, icon }) => {
             const isActive = activeCircuito === key;
             return (
               <button
                 key={key}
-                className={`control-btn ${cls} ${isActive ? "active" : ""}`}
+                className={`circuit-card ${isActive ? "active" : ""}`}
                 onClick={() => toggleCircuito(key)}
               >
-                {t(`circuits.${key}`)}{" "}
-                {isActive && (
-                  <span className="material-symbols-outlined" style={{ fontSize: "18px", marginLeft: "4px", verticalAlign: "text-bottom" }}>
-                    check
+                <div className={`circuit-icon-block ${cls}`}>
+                  <span className="material-symbols-outlined">{icon}</span>
+                </div>
+                <div className="circuit-text">
+                  <span className={`circuit-title ${cls}-text`}>
+                    {t(`circuits.${key}`)}
                   </span>
-                )}
+                </div>
+                <div className="circuit-chevron">
+                  <span className="material-symbols-outlined">chevron_right</span>
+                </div>
               </button>
             );
           })}
