@@ -552,7 +552,11 @@ map.addSource("mask", {
       type: "line",
       source: "gps-route-source",
       layout: { "line-join": "round", "line-cap": "round" },
-      paint: { "line-color": "#2200fe", "line-width": 8 }
+      paint: { 
+        "line-color": "#2200fe", 
+        "line-width": 8,
+        "line-dasharray": [2, 2] 
+      }
     });
 
     iniciarGPS();
