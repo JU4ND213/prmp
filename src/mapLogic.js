@@ -436,10 +436,23 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact, initia
             "https://wayback.maptiles.arcgis.com/arcgis/rest/services/World_Imagery/MapServer/tile/52930/{z}/{y}/{x}"
           ],
           tileSize: 256,
-          maxzoom: 19
+          maxzoom: 19,
+          bounds: [
+            -78.45942261292699, // Oeste (SW lng)
+            -0.006626470159685912, // Sur (SW lat)
+            -78.44891908276314, // Este (NE lng)
+            0.0016454623011196194 // Norte (NE lat)
+          ]
         }
       },
       layers: [
+        {
+          id: "background-base",
+          type: "background",
+          paint: {
+            "background-color": "#ffffff" 
+          }
+        },
         { id: "satellite", type: "raster", source: "satellite" }
       ]
     }
@@ -466,8 +479,6 @@ let marcadoresCategorias = [];
       userEl.style.backgroundImage = "url('/images/español.png')";
     }
   }
-
-  // Seteamos la imagen inicial al momento de crear el mapa
   actualizarImagenUsuario(initialLang);
 
   let userMarker = new maplibregl.Marker({ element: userEl })
@@ -630,7 +641,7 @@ map.addSource("mask", {
     let minDist = Infinity;
 
     routePointsMap.forEach((p, i) => {
-      const d = calculateDistance(lat, lng, p[1], p[0]); // Actualizado aquí
+      const d = calculateDistance(lat, lng, p[1], p[0]); 
       if (d < minDist) {
         minDist = d;
         closestIndex = i;
@@ -738,7 +749,13 @@ map.addSource("mask", {
       }
 
       if (p.icon) {
-        el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
+        if (p.icon.includes('/')) {
+          el.innerHTML = `<img src="${p.icon}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
+          el.style.backgroundColor = "transparent"; 
+          el.style.border = "none";                  
+        } else {
+          el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
+        }
       }
 
       container.appendChild(el);
