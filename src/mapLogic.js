@@ -438,10 +438,10 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact, initia
           tileSize: 256,
           maxzoom: 19,
           bounds: [
-            -78.45942261292699, // Oeste (SW lng)
-            -0.006626470159685912, // Sur (SW lat)
-            -78.44891908276314, // Este (NE lng)
-            0.0016454623011196194 // Norte (NE lat)
+            -78.45909813943788, // Oeste (SW lng)
+            -0.004892657378941716,  // Sur (SW lat)
+            -78.44923186974154, // Este (NE lng)
+            0.00025025128775921907 // Norte (NE lat)
           ]
         }
       },
@@ -668,33 +668,36 @@ map.addSource("mask", {
       return;
     }
 
-    const nodoInicio = encontrarNodoMasCercano(userLngLat.lat, userLngLat.lng);
-    const nodoFin = encontrarNodoMasCercano(destino.lat, destino.lng);
+    // Diferimos el cálculo pesado para no bloquear el Main Thread
+    setTimeout(() => {
+      const nodoInicio = encontrarNodoMasCercano(userLngLat.lat, userLngLat.lng);
+      const nodoFin = encontrarNodoMasCercano(destino.lat, destino.lng);
 
-    if (!nodoInicio || !nodoFin) {
-      console.warn("No se pudo conectar a la red de caminos.");
-      return;
-    }
+      if (!nodoInicio || !nodoFin) {
+        console.warn("No se pudo conectar a la red de caminos.");
+        return;
+      }
 
-    let rutaCalculada = encontrarRutaMasCorta(nodoInicio, nodoFin);
+      let rutaCalculada = encontrarRutaMasCorta(nodoInicio, nodoFin);
 
-    if (rutaCalculada.length > 0) {
-      rutaCalculada.unshift([userLngLat.lng, userLngLat.lat]);
-      rutaCalculada.push([destino.lng, destino.lat]);
-    }
+      if (rutaCalculada.length > 0) {
+        rutaCalculada.unshift([userLngLat.lng, userLngLat.lat]);
+        rutaCalculada.push([destino.lng, destino.lat]);
+      }
 
-    routePointsMap = rutaCalculada;
+      routePointsMap = rutaCalculada;
 
-    if (map.getSource("gps-route-source")) {
-      map.getSource("gps-route-source").setData({
-        type: "Feature",
-        geometry: { type: "LineString", coordinates: routePointsMap }
-      });
+      if (map.getSource("gps-route-source")) {
+        map.getSource("gps-route-source").setData({
+          type: "Feature",
+          geometry: { type: "LineString", coordinates: routePointsMap }
+        });
 
-      const bounds = new maplibregl.LngLatBounds();
-      routePointsMap.forEach(coord => bounds.extend(coord));
-      map.fitBounds(bounds, { padding: 50 });
-    }
+        const bounds = new maplibregl.LngLatBounds();
+        routePointsMap.forEach(coord => bounds.extend(coord));
+        map.fitBounds(bounds, { padding: 50 });
+      }
+    }, 0);
   }
 
   function dibujarCircuito(circuito) {
@@ -721,63 +724,67 @@ map.addSource("mask", {
     map.fitBounds(bounds, { padding: 50 });
   }
 
+ // === REEMPLAZA dibujarPuntos ===
   function dibujarPuntos(lista, onMarkerClickReact, selectedId) {
-    marcadoresCategorias.forEach(marker => marker.remove());
-    marcadoresCategorias = [];
+    // requestAnimationFrame agrupa las actualizaciones del DOM para no penalizar el INP
+    requestAnimationFrame(() => {
+      marcadoresCategorias.forEach(marker => marker.remove());
+      marcadoresCategorias = [];
 
-    lista.forEach(p => {
-      const container = document.createElement("div");
-      container.style.display = "flex";
-      container.style.flexDirection = "column";
-      container.style.alignItems = "center";
-      container.style.cursor = "pointer";
+      lista.forEach(p => {
+        const container = document.createElement("div");
+        container.style.display = "flex";
+        container.style.flexDirection = "column";
+        container.style.alignItems = "center";
+        container.style.cursor = "pointer";
 
-      const el = document.createElement("div");
-      el.style.width = "24px";
-      el.style.height = "24px";
-      el.style.backgroundColor = p.color;
-      el.style.border = "2px solid #fff";
-      el.style.borderRadius = "50%";
-      el.style.boxShadow = "0 0 4px rgba(0,0,0,0.5)";
-      el.style.display = "flex";
-      el.style.justifyContent = "center";
-      el.style.alignItems = "center";
-      el.style.color = "#fff";
+        const el = document.createElement("div");
+        el.style.width = "24px";
+        el.style.height = "24px";
+        el.style.backgroundColor = p.color;
+        el.style.border = "2px solid #fff";
+        el.style.borderRadius = "50%";
+        el.style.boxShadow = "0 0 4px rgba(0,0,0,0.5)";
+        el.style.display = "flex";
+        el.style.justifyContent = "center";
+        el.style.alignItems = "center";
+        el.style.color = "#fff";
 
-      if (p.id === selectedId) {
-        el.classList.add("marker-selected");
-      }
-
-      if (p.icon) {
-        if (p.icon.includes('/')) {
-          el.innerHTML = `<img src="${p.icon}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
-          el.style.backgroundColor = "transparent"; 
-          el.style.border = "none";                  
-        } else {
-          el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
+        if (p.id === selectedId) {
+          el.classList.add("marker-selected");
         }
-      }
 
-      container.appendChild(el);
+        if (p.icon) {
+          if (p.icon.includes('/')) {
+            el.innerHTML = `<img src="${p.icon}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
+            el.style.backgroundColor = "transparent"; 
+            el.style.border = "none";                  
+          } else {
+            el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
+          }
+        }
 
-      const textDiv = document.createElement("div");
-      textDiv.className = "custom-text-marker";
-      textDiv.style.marginTop = "2px";
-      textDiv.innerText = p.name;
-      container.appendChild(textDiv);
+        container.appendChild(el);
 
-      if (onMarkerClickReact) {
-        container.addEventListener("click", (e) => {
-          e.stopPropagation();
-          onMarkerClickReact(p);
-        });
-      }
+        const textDiv = document.createElement("div");
+        textDiv.className = "custom-text-marker";
+        textDiv.style.marginTop = "2px";
+        textDiv.innerText = p.name;
+        container.appendChild(textDiv);
 
-      const marker = new maplibregl.Marker({ element: container })
-        .setLngLat([p.lng, p.lat])
-        .addTo(map);
+        if (onMarkerClickReact) {
+          container.addEventListener("click", (e) => {
+            e.stopPropagation();
+            onMarkerClickReact(p);
+          });
+        }
 
-      marcadoresCategorias.push(marker);
+        const marker = new maplibregl.Marker({ element: container })
+          .setLngLat([p.lng, p.lat])
+          .addTo(map);
+
+        marcadoresCategorias.push(marker);
+      });
     });
   }
 

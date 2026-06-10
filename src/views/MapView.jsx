@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo, useTransition } from "react";
 import "../App.css";
 import { startMap, CIRCUITOS_OBJ, DESTINOS } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 import { useTranslation } from "react-i18next";
+
 
 const LINEA_EQUINOCCIAL = {
   "type": "FeatureCollection",
@@ -12,7 +13,18 @@ const LINEA_EQUINOCCIAL = {
       "properties": {},
       "geometry": {
         "coordinates": [
-          [ -78.45801359138946,-0.0021278767966066425],[ -78.4519691, -0.0022173]
+          [
+            -78.4593326,
+            -0.0020944
+          ],
+          [
+            -78.4541878,
+            -0.0021865
+          ],
+          [
+            -78.4490476,
+            -0.0023089
+          ]
         ],
         "type": "LineString"
       }
@@ -46,6 +58,7 @@ export default function MapView() {
   const [puntosVisibles, setPuntosVisibles] = useState([]);
   const [panelMinimizado, setPanelMinimizado] = useState(false);
   const [toolbarOpen, setToolbarOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   
   const [galeria, setGaleria] = useState({ activa: false, imagenes: [], indice: 0 });
 
@@ -56,7 +69,9 @@ export default function MapView() {
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedSearch(searchTerm);
+      startTransition(() => {
+        setDebouncedSearch(searchTerm);
+      });
     }, 300);
     return () => clearTimeout(handler);
   }, [searchTerm]);
@@ -152,14 +167,14 @@ export default function MapView() {
      CATEGORÍAS Y BÚSQUEDA
   =============================== */
   const toggleCategory = (key) => {
-    setActiveCategories((prev) =>
-      prev.includes(key) ? prev.filter((c) => c !== key) : [...prev, key]
-    );
+    startTransition(() => {
+      setActiveCategories((prev) =>
+        prev.includes(key) ? prev.filter((c) => c !== key) : [...prev, key]
+      );
+    });
   };
 
-  useEffect(() => {
-    if (!mapRef.current) return;
-
+  const puntosVisiblesTraducidos = useMemo(() => {
     let puntosParaDibujar = [];
 
     if (debouncedSearch.trim() !== "") {
@@ -183,16 +198,19 @@ export default function MapView() {
       puntosParaDibujar = activeCategories.flatMap(cat => POINTS_BY_COLOR[cat] || []);
     }
 
-    const puntosTraducidos = puntosParaDibujar.map(p => ({
+    return puntosParaDibujar.map(p => ({
       ...p,
       name: p.id ? t(`points.${p.id}.name`, p.name) : p.name,
       description: p.id ? t(`points.${p.id}.description`, p.description) : p.description,
       menu: p.id && p.menu ? t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu }) : p.menu
     }));
+  }, [activeCategories, debouncedSearch, i18n.language, t]);
 
-    mapRef.current.dibujarPuntos(puntosTraducidos, handleResultClick, selectedPunto?.id);
-    setPuntosVisibles(puntosTraducidos);
-  }, [activeCategories, debouncedSearch, i18n.language, t, selectedPunto, handleResultClick]);
+  useEffect(() => {
+    if (!mapRef.current) return;
+    mapRef.current.dibujarPuntos(puntosVisiblesTraducidos, handleResultClick, selectedPunto?.id);
+    setPuntosVisibles(puntosVisiblesTraducidos);
+  }, [puntosVisiblesTraducidos, selectedPunto, handleResultClick]);
 
   /* ===============================
      RUTA GPS
