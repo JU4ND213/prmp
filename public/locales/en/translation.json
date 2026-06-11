@@ -69,6 +69,10 @@
     "17": "Chapel"
   },
   "points": {
+    "Hotel_Mitad_del_Mundo": {
+      "name": "Middle of the World Hotel",
+      "description": "Stay in a themed hotel with unique experiences and a privileged view of the Equatorial Monument."
+    },
     "centro_medico": {
       "name": "Medical Center",
       "description": "Medical assistance"
@@ -171,35 +175,78 @@
     },
     "nuca_llacta": {
       "name": "Ñuca Llacta Restaurant",
-      "description": "Traditional Ecuadorian food"
+      "description": "Traditional Ecuadorian food",
+      "menu": [
+        "guinea pig (cuy)",
+        "fritada",
+        "potato locro",
+        "empanadas"
+      ]
     },
     "restaurante": {
       "name": "RESTAURANT",
-      "description": "General restaurant with a variety of dishes"
+      "description": "General restaurant with a variety of dishes",
+      "menu": [
+        "humitas",
+        "chicken soup",
+        "carrot cream",
+        "pristiños"
+      ]
     },
     "calima": {
       "name": "Calima",
-      "description": "Restaurant with regional menu"
+      "description": "Restaurant with regional menu",
+      "menu": [
+        "goat stew",
+        "rice with menestra",
+        "canelazo",
+        "morocho"
+      ]
     },
     "cafe_sinchi_warmi": {
       "name": "Sinchi Warmi Café",
-      "description": "Café with a warm atmosphere"
+      "description": "Café with a warm atmosphere",
+      "menu": [
+        "coffee",
+        "tea",
+        "smoothies"
+      ]
     },
     "raqeri_cacao": {
       "name": "Raqeri Cacao",
-      "description": "Cocoa-specialized café"
+      "description": "Cocoa-specialized café",
+      "menu": [
+        "cocoa",
+        "chocolate",
+        "desserts"
+      ]
     },
     "restaurante_balcon_al_mundo": {
       "name": "Balcony to the World Restaurant",
-      "description": "Panoramic view of the monument"
+      "description": "Panoramic view of the monument",
+      "menu": [
+        "main courses",
+        "salads",
+        "drinks"
+      ]
     },
-    "el_orgánico_star_coffee": {
+    "el_organico_star_coffee": {
       "name": "El Orgánico Star Coffee",
-      "description": "Organic coffee specialty café"
+      "description": "Organic coffee specialty café",
+      "menu": [
+        "organic coffee",
+        "teas",
+        "smoothies"
+      ]
     },
     "cafe_guayasamin": {
       "name": "Guayasamín Café",
-      "description": "Café with local products"
+      "description": "Café with local products",
+      "menu": [
+        "local coffee",
+        "desserts",
+        "drinks"
+      ]
     },
     "tienda_delicatessen_rosita": {
       "name": "Rosita Delicatessen Shop",

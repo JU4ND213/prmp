@@ -4,7 +4,6 @@ import { startMap, CIRCUITOS_OBJ, DESTINOS } from "../mapLogic";
 import { POINTS_BY_COLOR, CATEGORY_DETAILS } from "../constants/points";
 import { useTranslation } from "react-i18next";
 
-
 const LINEA_EQUINOCCIAL = {
   "type": "FeatureCollection",
   "features": [
@@ -266,77 +265,99 @@ export default function MapView() {
           
           {selectedPunto ? (
             <div className={`point-detail-view ${rutaActiva ? "modo-ruta" : ""}`}>
-              <button className="back-btn" onClick={() => setSelectedPunto(null)}>
-                <span className="material-symbols-outlined">arrow_back</span>
-              </button>
               
-              {!rutaActiva && selectedPunto.imagenes && selectedPunto.imagenes.length > 0 && (
-                <div 
-                  className="hero-image-container" 
-                  onClick={() => setGaleria({ activa: true, imagenes: selectedPunto.imagenes, indice: 0 })}
-                >
-                  <img src={selectedPunto.imagenes[0]} alt={selectedPunto.nombre || selectedPunto.name} />
-                  <div className="hero-overlay">
-                    <span className="material-symbols-outlined">photo_library</span>
-                    <span>{t("view", "Ver")} {selectedPunto.imagenes.length} {t("photos", "fotos")}</span>
-                  </div>
-                </div>
-              )}
-
-              <div className="detail-body">
-                <div className="detail-header-text">
-                  <h2 className="detail-title">
-                    {selectedPunto.id 
-                      ? t(`points.${selectedPunto.id}.name`, selectedPunto.nombre || selectedPunto.name) 
-                      : (selectedPunto.nombre || selectedPunto.name)}
-                  </h2>
-                  
-                  {!rutaActiva && (
-                    <p className="detail-subtitle">
-                      {selectedPunto.id 
-                        ? t(`points.${selectedPunto.id}.description`, selectedPunto.description) 
-                        : (selectedPunto.description || t("pointOfInterest", "Punto de interés"))}
-                    </p>
-                  )}
-                </div>
+              {/* HEADER CON BOTÓN ATRÁS Y LÍNEA PARA MINIMIZAR */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <button className="back-btn" onClick={() => setSelectedPunto(null)}>
+                  <span className="material-symbols-outlined">arrow_back</span>
+                </button>
                 
-                <div className="action-buttons-row">
-                  {!rutaActiva ? (
-                    <div className="action-btn-wrapper" onClick={() => {
-                      if (mapRef.current?.dibujarRutaDesdeGps) {
-                        mapRef.current.dibujarRutaDesdeGps({ lat: selectedPunto.lat, lng: selectedPunto.lng });
-                        setRutaActiva(true);
-                      }
-                    }}>
-                      <div className="action-circle primary">
-                        <span className="material-symbols-outlined">directions</span>
+                <div 
+                  onClick={() => setPanelMinimizado(!panelMinimizado)}
+                  style={{
+                    width: '35px',
+                    height: '5px',
+                    backgroundColor: '#cbd5e1',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    marginRight: '10px'
+                  }}
+                  title={panelMinimizado ? t("expand", "Expandir") : t("minimize", "Minimizar")}
+                />
+              </div>
+              
+              {/* EL CONTENIDO SE OCULTA SI ESTÁ MINIMIZADO */}
+              {!panelMinimizado && (
+                <>
+                  {!rutaActiva && selectedPunto.imagenes && selectedPunto.imagenes.length > 0 && (
+                    <div 
+                      className="hero-image-container" 
+                      onClick={() => setGaleria({ activa: true, imagenes: selectedPunto.imagenes, indice: 0 })}
+                    >
+                      <img src={selectedPunto.imagenes[0]} alt={selectedPunto.nombre || selectedPunto.name} />
+                      <div className="hero-overlay">
+                        <span className="material-symbols-outlined">photo_library</span>
+                        <span>{t("view", "Ver")} {selectedPunto.imagenes.length} {t("photos", "fotos")}</span>
                       </div>
-                      <span>{t("howToGetThere", "¿Cómo llegar?")}</span>
-                    </div>
-                  ) : (
-                    <div className="action-btn-wrapper" onClick={limpiarRuta}>
-                      <div className="action-circle danger">
-                        <span className="material-symbols-outlined">close</span>
-                      </div>
-                      <span>{t("cancel", "Cancelar")}</span>
                     </div>
                   )}
-                </div>
 
-                {!rutaActiva && selectedPunto.menu && selectedPunto.menu.length > 0 && (
-                  <div className="detail-menu">
-                    <strong>{t("availableMenu", "Menú disponible:")}</strong>
-                    <ul>
-                      {(selectedPunto.id 
-                        ? t(`points.${selectedPunto.id}.menu`, { returnObjects: true, defaultValue: selectedPunto.menu }) 
-                        : selectedPunto.menu
-                      ).map((item, idx) => (
-                        <li key={idx}>{item}</li>
-                      ))}
-                    </ul>
+                  <div className="detail-body">
+                    <div className="detail-header-text">
+                      <h2 className="detail-title">
+                        {selectedPunto.id 
+                          ? t(`points.${selectedPunto.id}.name`, selectedPunto.nombre || selectedPunto.name) 
+                          : (selectedPunto.nombre || selectedPunto.name)}
+                      </h2>
+                      
+                      {!rutaActiva && (
+                        <p className="detail-subtitle">
+                          {selectedPunto.id 
+                            ? t(`points.${selectedPunto.id}.description`, selectedPunto.description) 
+                            : (selectedPunto.description || t("pointOfInterest", "Punto de interés"))}
+                        </p>
+                      )}
+                    </div>
+                    
+                    <div className="action-buttons-row">
+                      {!rutaActiva ? (
+                        <div className="action-btn-wrapper" onClick={() => {
+                          if (mapRef.current?.dibujarRutaDesdeGps) {
+                            mapRef.current.dibujarRutaDesdeGps({ lat: selectedPunto.lat, lng: selectedPunto.lng });
+                            setRutaActiva(true);
+                          }
+                        }}>
+                          <div className="action-circle primary">
+                            <span className="material-symbols-outlined">directions</span>
+                          </div>
+                          <span>{t("howToGetThere", "¿Cómo llegar?")}</span>
+                        </div>
+                      ) : (
+                        <div className="action-btn-wrapper" onClick={limpiarRuta}>
+                          <div className="action-circle danger">
+                            <span className="material-symbols-outlined">close</span>
+                          </div>
+                          <span>{t("cancel", "Cancelar")}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {!rutaActiva && selectedPunto.menu && selectedPunto.menu.length > 0 && (
+                      <div className="detail-menu">
+                        <strong>{t("availableMenu", "Menú disponible:")}</strong>
+                        <ul>
+                          {(selectedPunto.id 
+                            ? t(`points.${selectedPunto.id}.menu`, { returnObjects: true, defaultValue: selectedPunto.menu }) 
+                            : selectedPunto.menu
+                          ).map((item, idx) => (
+                            <li key={idx}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </>
+              )}
             </div>
           ) : (
             <>

@@ -69,6 +69,10 @@
     "17": "Capilla"
   },
   "points": {
+    "Hotel_Mitad_del_Mundo": {
+      "name": "Hotel Mitad del Mundo",
+      "description": "Hospédate en un hotel temático con experiencias únicas y una vista privilegiada al Monumento Ecuatorial."
+    },
     "centro_medico": {
       "name": "Centro Médico",
       "description": "Asistencia médica"
@@ -171,35 +175,78 @@
     },
     "nuca_llacta": {
       "name": "Ñuca Llacta Restaurant",
-      "description": "Comida tradicional ecuatoriana"
+      "description": "Comida tradicional ecuatoriana",
+      "menu": [
+        "cuy",
+        "fritada",
+        "locro de papa",
+        "empanadas"
+      ]
     },
     "restaurante": {
       "name": "RESTAURANTE",
-      "description": "Restaurante general con variedad de platos"
+      "description": "Restaurante general con variedad de platos",
+      "menu": [
+        "humitas",
+        "caldo de gallina",
+        "crema de zanahoria",
+        "pristiños"
+      ]
     },
     "calima": {
       "name": "Calima",
-      "description": "Restaurante con menú regional"
+      "description": "Restaurante con menú regional",
+      "menu": [
+        "seco de chivo",
+        "arroz con menestra",
+        "canelazo",
+        "morocho"
+      ]
     },
     "cafe_sinchi_warmi": {
       "name": "Café Sinchi Warmi",
-      "description": "Cafetería con ambiente cálido"
+      "description": "Cafetería con ambiente cálido",
+      "menu": [
+        "café",
+        "té",
+        "smoothies"
+      ]
     },
     "raqeri_cacao": {
       "name": "raqeri cacao",
-      "description": "Cafetería especializada en cacao"
+      "description": "Cafetería especializada en cacao",
+      "menu": [
+        "cacao",
+        "chocolate",
+        "postres"
+      ]
     },
     "restaurante_balcon_al_mundo": {
       "name": "Restaurante Balcon al Mundo",
-      "description": "Vista panorámica al monumento"
+      "description": "Vista panorámica al monumento",
+      "menu": [
+        "platos principales",
+        "ensaladas",
+        "bebidas"
+      ]
     },
-    "el_orgánico_star_coffee": {
+    "el_organico_star_coffee": {
       "name": "El Orgánico Star Coffee",
-      "description": "Cafetería especializada en café orgánico"
+      "description": "Cafetería especializada en café orgánico",
+      "menu": [
+        "café orgánico",
+        "tés",
+        "smoothies"
+      ]
     },
     "cafe_guayasamin": {
       "name": "Café Guayasamin",
-      "description": "Cafetería con productos locales"
+      "description": "Cafetería con productos locales",
+      "menu": [
+        "café local",
+        "postres",
+        "bebidas"
+      ]
     },
     "tienda_delicatessen_rosita": {
       "name": "Tienda Delicatessen Rosita",
