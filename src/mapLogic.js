@@ -353,7 +353,7 @@ function encontrarNodoMasCercano(lat, lng) {
   let distMinima = Infinity;
   for (let key in grafoCaminos) {
     const [nLng, nLat] = grafoCaminos[key].coord;
-    const d = calculateDistance(lat, lng, nLat, nLng); // Actualizado aquí
+    const d = calculateDistance(lat, lng, nLat, nLng);
     if (d < distMinima) {
       distMinima = d;
       nodoMasCercano = key;
@@ -416,16 +416,12 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact, initia
     container: container,
     center: [-78.454012, -0.003140],
     zoom: 17.9,
-    
-    
     minZoom: 15, 
     maxZoom: 20,
-
     maxBounds: [
-      [-78.45828782728766, -0.004058080652012074] ,
+      [-78.45828782728766, -0.004058080652012074],
       [-78.4519053008872,  -0.0015405158945393312]  
     ],
-    
     pitch: 50,
     style: {
       version: 8,
@@ -438,10 +434,10 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact, initia
           tileSize: 256,
           maxzoom: 19,
           bounds: [
-            -78.45909813943788, // Oeste (SW lng)
-            -0.004892657378941716,  // Sur (SW lat)
-            -78.44923186974154, // Este (NE lng)
-            0.00025025128775921907 // Norte (NE lat)
+            -78.45909813943788,
+            -0.004892657378941716,
+            -78.44923186974154,
+            0.00025025128775921907
           ]
         }
       },
@@ -449,31 +445,30 @@ export function startMap(container, maskOptions = {}, onMarkerClickReact, initia
         {
           id: "background-base",
           type: "background",
-          paint: {
-            "background-color": "#ffffff" 
-          }
+          paint: { "background-color": "#ffffff" }
         },
         { id: "satellite", type: "raster", source: "satellite" }
       ]
     }
   });
 
-let marcadoresCategorias = [];
+  // -------------------------------------------------------
+  // FIX: diff de marcadores — Map<id, { marker, el, textDiv, mutableData }>
+  // en lugar de un array que se vacía y recrea completamente.
+  // -------------------------------------------------------
+  let marcadoresMap = new Map();
 
   const userEl = document.createElement("div");
   userEl.style.width = "85px";
   userEl.style.height = "250px";
-  // 2. Quitamos el backgroundImage quemado de aquí
   userEl.style.backgroundSize = "contain";
   userEl.style.backgroundRepeat = "no-repeat";
   userEl.style.backgroundPosition = "center";
   userEl.style.backgroundColor = "transparent";
   userEl.style.display = "none";
 
-  // 3. NUEVA FUNCIÓN: Actualiza la imagen según el idioma pasado
   function actualizarImagenUsuario(lng) {
     if (lng === 'en') {
-      // Reemplaza esto con el nombre de tu imagen en inglés
       userEl.style.backgroundImage = "url('/images/ingles.png')"; 
     } else {
       userEl.style.backgroundImage = "url('/images/español.png')";
@@ -506,26 +501,26 @@ let marcadoresCategorias = [];
         [-78.45736631985848, -0.001120821264123606], [-78.45735017679192, -0.0011238105713999857]
       ];
 
-const exteriorMask = [
-  [-78.45942261292699, -0.006626470159685912], // SW
-  [-78.44891908276314, -0.006626470159685912], // SE
-  [-78.44891908276314, 0.00040374536742011913], // NE
-  [-78.45942261292699, 0.0016454623011196194], // NW
-  [-78.45942261292699, -0.006626470159685912] // cierre
-];
+      const exteriorMask = [
+        [-78.45942261292699, -0.006626470159685912],
+        [-78.44891908276314, -0.006626470159685912],
+        [-78.44891908276314, 0.00040374536742011913],
+        [-78.45942261292699, 0.0016454623011196194],
+        [-78.45942261292699, -0.006626470159685912]
+      ];
 
-map.addSource("mask", {
-  type: "geojson",
-  tolerance: 0,
-  lineMetrics: false,
-  data: {
-    type: "Feature",
-    geometry: {
-      type: "Polygon",
-      coordinates: [exteriorMask, polygonHole]
-    }
-  }
-});
+      map.addSource("mask", {
+        type: "geojson",
+        tolerance: 0,
+        lineMetrics: false,
+        data: {
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: [exteriorMask, polygonHole]
+          }
+        }
+      });
 
       map.addLayer({
         id: "mask-layer",
@@ -668,7 +663,6 @@ map.addSource("mask", {
       return;
     }
 
-    // Diferimos el cálculo pesado para no bloquear el Main Thread
     setTimeout(() => {
       const nodoInicio = encontrarNodoMasCercano(userLngLat.lat, userLngLat.lng);
       const nodoFin = encontrarNodoMasCercano(destino.lat, destino.lng);
@@ -724,66 +718,98 @@ map.addSource("mask", {
     map.fitBounds(bounds, { padding: 50 });
   }
 
- // === REEMPLAZA dibujarPuntos ===
+  // -------------------------------------------------------
+  // FIX: dibujarPuntos con patrón diff
+  //
+  // En vez de vaciar y recrear todos los marcadores, calcula
+  // la diferencia entre la lista actual y la nueva:
+  //   • Elimina solo los que desaparecen
+  //   • Actualiza (clase selected + texto) los que permanecen
+  //   • Crea solo los que son nuevos
+  //
+  // Cada entrada guarda `mutableData.current` para que el
+  // listener de click siempre use los datos más frescos
+  // (útil cuando cambia el idioma sin recrear el marcador).
+  // -------------------------------------------------------
   function dibujarPuntos(lista, onMarkerClickReact, selectedId) {
-    // requestAnimationFrame agrupa las actualizaciones del DOM para no penalizar el INP
     requestAnimationFrame(() => {
-      marcadoresCategorias.forEach(marker => marker.remove());
-      marcadoresCategorias = [];
+      const listaMap = new Map(lista.map(p => [p.id, p]));
 
+      // 1. Eliminar marcadores que ya no están en la nueva lista
+      for (const [id, entry] of marcadoresMap) {
+        if (!listaMap.has(id)) {
+          entry.marker.remove();
+          marcadoresMap.delete(id);
+        }
+      }
+
+      // 2. Actualizar existentes o crear nuevos
       lista.forEach(p => {
-        const container = document.createElement("div");
-        container.style.display = "flex";
-        container.style.flexDirection = "column";
-        container.style.alignItems = "center";
-        container.style.cursor = "pointer";
+        if (marcadoresMap.has(p.id)) {
+          // -- Actualizar sin tocar el DOM más de lo necesario --
+          const entry = marcadoresMap.get(p.id);
+          entry.el.classList.toggle("marker-selected", p.id === selectedId);
+          entry.textDiv.innerText = p.name;
+          entry.mutableData.current = p; // referencia fresca para el click
+        } else {
+          // -- Crear marcador nuevo --
+          const container = document.createElement("div");
+          container.style.display = "flex";
+          container.style.flexDirection = "column";
+          container.style.alignItems = "center";
+          container.style.cursor = "pointer";
 
-        const el = document.createElement("div");
-        el.style.width = "24px";
-        el.style.height = "24px";
-        el.style.backgroundColor = p.color;
-        el.style.border = "2px solid #fff";
-        el.style.borderRadius = "50%";
-        el.style.boxShadow = "0 0 4px rgba(0,0,0,0.5)";
-        el.style.display = "flex";
-        el.style.justifyContent = "center";
-        el.style.alignItems = "center";
-        el.style.color = "#fff";
+          const el = document.createElement("div");
+          el.style.width = "24px";
+          el.style.height = "24px";
+          el.style.backgroundColor = p.color;
+          el.style.border = "2px solid #fff";
+          el.style.borderRadius = "50%";
+          el.style.boxShadow = "0 0 4px rgba(0,0,0,0.5)";
+          el.style.display = "flex";
+          el.style.justifyContent = "center";
+          el.style.alignItems = "center";
+          el.style.color = "#fff";
 
-        if (p.id === selectedId) {
-          el.classList.add("marker-selected");
-        }
-
-        if (p.icon) {
-          if (p.icon.includes('/')) {
-            el.innerHTML = `<img src="${p.icon}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
-            el.style.backgroundColor = "transparent"; 
-            el.style.border = "none";                  
-          } else {
-            el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
+          if (p.id === selectedId) {
+            el.classList.add("marker-selected");
           }
+
+          if (p.icon) {
+            if (p.icon.includes('/')) {
+              el.innerHTML = `<img src="${p.icon}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />`;
+              el.style.backgroundColor = "transparent";
+              el.style.border = "none";
+            } else {
+              el.innerHTML = `<span class="material-symbols-outlined" style="font-size: 16px;">${p.icon}</span>`;
+            }
+          }
+
+          container.appendChild(el);
+
+          const textDiv = document.createElement("div");
+          textDiv.className = "custom-text-marker";
+          textDiv.style.marginTop = "2px";
+          textDiv.innerText = p.name;
+          container.appendChild(textDiv);
+
+          // mutableData garantiza que el click siempre tenga
+          // los datos actualizados (nombre en el idioma correcto, etc.)
+          const mutableData = { current: p };
+
+          if (onMarkerClickReact) {
+            container.addEventListener("click", (e) => {
+              e.stopPropagation();
+              onMarkerClickReact(mutableData.current);
+            });
+          }
+
+          const marker = new maplibregl.Marker({ element: container })
+            .setLngLat([p.lng, p.lat])
+            .addTo(map);
+
+          marcadoresMap.set(p.id, { marker, el, textDiv, mutableData });
         }
-
-        container.appendChild(el);
-
-        const textDiv = document.createElement("div");
-        textDiv.className = "custom-text-marker";
-        textDiv.style.marginTop = "2px";
-        textDiv.innerText = p.name;
-        container.appendChild(textDiv);
-
-        if (onMarkerClickReact) {
-          container.addEventListener("click", (e) => {
-            e.stopPropagation();
-            onMarkerClickReact(p);
-          });
-        }
-
-        const marker = new maplibregl.Marker({ element: container })
-          .setLngLat([p.lng, p.lat])
-          .addTo(map);
-
-        marcadoresCategorias.push(marker);
       });
     });
   }
@@ -815,31 +841,21 @@ map.addSource("mask", {
       essential: true
     });
   }
+
   function dibujarLineaFija(geoJson, sourceId, color) {
     const agregarCapa = () => {
       if (!map.getSource(sourceId)) {
-        map.addSource(sourceId, {
-          type: 'geojson',
-          data: geoJson
-        });
-
+        map.addSource(sourceId, { type: 'geojson', data: geoJson });
         map.addLayer({
           id: sourceId,
           type: 'line',
           source: sourceId,
-          layout: {
-            'line-join': 'round',
-            'line-cap': 'round'
-          },
-          paint: {
-            'line-color': color,
-            'line-width': 7
-          }
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: { 'line-color': color, 'line-width': 7 }
         });
       }
     };
 
-    // Verificamos si el estilo del mapa ya terminó de cargar
     if (map.loaded()) {
       agregarCapa();
     } else {
@@ -996,8 +1012,11 @@ map.addSource("mask", {
         essential: true
       });
     },
+    // FIX: cleanup también vacía el Map de marcadores
     cleanup: () => {
       stopCompass();
+      marcadoresMap.forEach(entry => entry.marker.remove());
+      marcadoresMap.clear();
       map.remove();
       if (watchId) {
         Geolocation.clearWatch({ id: watchId }).catch(console.error);

@@ -12,18 +12,9 @@ const LINEA_EQUINOCCIAL = {
       "properties": {},
       "geometry": {
         "coordinates": [
-          [
-            -78.4593326,
-            -0.0020944
-          ],
-          [
-            -78.4541878,
-            -0.0021865
-          ],
-          [
-            -78.4490476,
-            -0.0023089
-          ]
+          [-78.4593326, -0.0020944],
+          [-78.4541878, -0.0021865],
+          [-78.4490476, -0.0023089]
         ],
         "type": "LineString"
       }
@@ -45,6 +36,11 @@ export default function MapView() {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const isMapInitialized = useRef(false);
+  // FIX: ref para rastrear el inicio del gesto de swipe en la galería
+  const touchStartX = useRef(null);
+  // ref para enfocar el botón de cierre al abrir la galería (accesibilidad)
+  const lightboxCloseRef = useRef(null);
+
   const { t, i18n } = useTranslation();
   
   const [menuAbierto, setMenuAbierto] = useState(false);
@@ -81,7 +77,43 @@ export default function MapView() {
     mapRef.current?.flyTo(punto.lng, punto.lat);
   }, []);
 
-/* ===============================
+  /* ===============================
+     GALERÍA
+  =============================== */
+
+  // FIX: useCallback para que el useEffect del teclado no se recree en cada render
+  const galeriaSiguiente = useCallback(() => {
+    setGaleria(prev => ({ ...prev, indice: (prev.indice + 1) % prev.imagenes.length }));
+  }, []);
+
+  const galeriaAnterior = useCallback(() => {
+    setGaleria(prev => ({ ...prev, indice: (prev.indice - 1 + prev.imagenes.length) % prev.imagenes.length }));
+  }, []);
+
+  const cerrarGaleria = useCallback(() => {
+    setGaleria({ activa: false, imagenes: [], indice: 0 });
+  }, []);
+
+  // FIX: navegación por teclado cuando la galería está activa
+  useEffect(() => {
+    if (!galeria.activa) return;
+    const handleKey = (e) => {
+      if (e.key === 'ArrowRight') galeriaSiguiente();
+      else if (e.key === 'ArrowLeft') galeriaAnterior();
+      else if (e.key === 'Escape') cerrarGaleria();
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [galeria.activa, galeriaSiguiente, galeriaAnterior, cerrarGaleria]);
+
+  // FIX: enfocar el botón de cierre al abrir la galería para que el teclado funcione
+  useEffect(() => {
+    if (galeria.activa && lightboxCloseRef.current) {
+      lightboxCloseRef.current.focus();
+    }
+  }, [galeria.activa]);
+
+  /* ===============================
      INICIALIZAR MAPA
   =============================== */
   useEffect(() => {
@@ -134,18 +166,6 @@ export default function MapView() {
     }
   }, [i18n.language]);
 
-  const galeriaSiguiente = () => {
-    setGaleria(prev => ({ ...prev, indice: (prev.indice + 1) % prev.imagenes.length }));
-  };
-
-  const galeriaAnterior = () => {
-    setGaleria(prev => ({ ...prev, indice: (prev.indice - 1 + prev.imagenes.length) % prev.imagenes.length }));
-  };
-
-  const cerrarGaleria = () => {
-    setGaleria({ activa: false, imagenes: [], indice: 0 });
-  };
-
   /* ===============================
      CIRCUITOS
   =============================== */
@@ -173,6 +193,9 @@ export default function MapView() {
     });
   };
 
+  // FIX: eliminada `i18n.language` de las dependencias — `t` ya cambia
+  // cuando el idioma cambia, por lo que incluir `i18n.language` causaba
+  // un recálculo doble innecesario en cada cambio de idioma.
   const puntosVisiblesTraducidos = useMemo(() => {
     let puntosParaDibujar = [];
 
@@ -203,7 +226,7 @@ export default function MapView() {
       description: p.id ? t(`points.${p.id}.description`, p.description) : p.description,
       menu: p.id && p.menu ? t(`points.${p.id}.menu`, { returnObjects: true, defaultValue: p.menu }) : p.menu
     }));
-  }, [activeCategories, debouncedSearch, i18n.language, t]);
+  }, [activeCategories, debouncedSearch, t]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -240,6 +263,7 @@ export default function MapView() {
           type="text"
           className="search-input"
           placeholder={t("searchPlaceholder", "Busca lugar, plato o servicio...")}
+          aria-label={t("searchPlaceholder", "Busca lugar, plato o servicio...")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") e.target.blur(); }}
@@ -249,12 +273,13 @@ export default function MapView() {
             <button
               className="search-clear-btn"
               onClick={() => setSearchTerm("")}
+              aria-label={t("clearSearch", "Limpiar búsqueda")}
               title={t("clearSearch", "Limpiar búsqueda")}
             >
-              <span className="material-symbols-outlined">close</span>
+              <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
           ) : (
-            <span className="material-symbols-outlined">search</span>
+            <span className="material-symbols-outlined" aria-hidden="true">search</span>
           )}
         </div>
       </div>
@@ -266,23 +291,32 @@ export default function MapView() {
           {selectedPunto ? (
             <div className={`point-detail-view ${rutaActiva ? "modo-ruta" : ""}`}>
               
-              {/* HEADER CON BOTÓN ATRÁS Y LÍNEA PARA MINIMIZAR */}
+              {/* HEADER CON BOTÓN ATRÁS Y CONTROL PARA MINIMIZAR */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                <button className="back-btn" onClick={() => setSelectedPunto(null)}>
-                  <span className="material-symbols-outlined">arrow_back</span>
+                {/* FIX: aria-label en botón de retroceso */}
+                <button
+                  className="back-btn"
+                  onClick={() => setSelectedPunto(null)}
+                  aria-label={t("back", "Volver al listado")}
+                >
+                  <span className="material-symbols-outlined" aria-hidden="true">arrow_back</span>
                 </button>
                 
-                <div 
+                {/* FIX: div interactivo convertido a button para accesibilidad */}
+                <button
                   onClick={() => setPanelMinimizado(!panelMinimizado)}
+                  aria-label={panelMinimizado ? t("expand", "Expandir panel") : t("minimize", "Minimizar panel")}
+                  aria-expanded={!panelMinimizado}
                   style={{
                     width: '35px',
                     height: '5px',
                     backgroundColor: '#cbd5e1',
                     borderRadius: '10px',
                     cursor: 'pointer',
-                    marginRight: '10px'
+                    marginRight: '10px',
+                    border: 'none',
+                    padding: 0,
                   }}
-                  title={panelMinimizado ? t("expand", "Expandir") : t("minimize", "Minimizar")}
                 />
               </div>
               
@@ -296,7 +330,7 @@ export default function MapView() {
                     >
                       <img src={selectedPunto.imagenes[0]} alt={selectedPunto.nombre || selectedPunto.name} />
                       <div className="hero-overlay">
-                        <span className="material-symbols-outlined">photo_library</span>
+                        <span className="material-symbols-outlined" aria-hidden="true">photo_library</span>
                         <span>{t("view", "Ver")} {selectedPunto.imagenes.length} {t("photos", "fotos")}</span>
                       </div>
                     </div>
@@ -328,14 +362,14 @@ export default function MapView() {
                           }
                         }}>
                           <div className="action-circle primary">
-                            <span className="material-symbols-outlined">directions</span>
+                            <span className="material-symbols-outlined" aria-hidden="true">directions</span>
                           </div>
                           <span>{t("howToGetThere", "¿Cómo llegar?")}</span>
                         </div>
                       ) : (
                         <div className="action-btn-wrapper" onClick={limpiarRuta}>
                           <div className="action-circle danger">
-                            <span className="material-symbols-outlined">close</span>
+                            <span className="material-symbols-outlined" aria-hidden="true">close</span>
                           </div>
                           <span>{t("cancel", "Cancelar")}</span>
                         </div>
@@ -363,12 +397,15 @@ export default function MapView() {
             <>
               <div className="results-header">
                 <h3>{t("listTitle", "Lugares")} ({puntosVisibles.length})</h3>
+                {/* FIX: aria-label en botón de minimizar */}
                 <button
                   className="panel-minimize-btn"
                   onClick={() => setPanelMinimizado(!panelMinimizado)}
+                  aria-label={panelMinimizado ? t("expand", "Expandir panel") : t("minimize", "Minimizar panel")}
+                  aria-expanded={!panelMinimizado}
                   title={panelMinimizado ? t("expand", "Expandir") : t("minimize", "Minimizar")}
                 >
-                  <span className="material-symbols-outlined">
+                  <span className="material-symbols-outlined" aria-hidden="true">
                     {panelMinimizado ? "expand_more" : "expand_less"}
                   </span>
                 </button>
@@ -394,40 +431,69 @@ export default function MapView() {
       
       {/* ===== BARRA LATERAL DERECHA ===== */}
       <div className={`sidebar-toolbar ${toolbarOpen ? "open" : ""}`}>
-        <button className="settings-btn" onClick={() => setToolbarOpen(!toolbarOpen)} title={t("tools", "Herramientas")}>
-          <span className="material-symbols-outlined">settings</span>
+        {/* FIX: aria-label en botón de configuración */}
+        <button
+          className="settings-btn"
+          onClick={() => setToolbarOpen(!toolbarOpen)}
+          aria-label={t("tools", "Herramientas")}
+          aria-expanded={toolbarOpen}
+          title={t("tools", "Herramientas")}
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">settings</span>
         </button>
         
         <div className="sidebar-items">
           <div style={{ position: "relative" }}>
-            <button className="sidebar-icon icon-lang" onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)} title={t("language", "Idioma")}>
-              <span className="material-symbols-outlined">g_translate</span>
+            {/* FIX: aria-label en botón de idioma */}
+            <button
+              className="sidebar-icon icon-lang"
+              onClick={() => setIdiomaMenuAbierto(!idiomaMenuAbierto)}
+              aria-label={t("language", "Idioma")}
+              aria-expanded={idiomaMenuAbierto}
+              title={t("language", "Idioma")}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">g_translate</span>
             </button>
             {idiomaMenuAbierto && (
-              <div className="language-menu">
-                <button onClick={() => cambiarIdioma("es")}>Español</button>
-                <button onClick={() => cambiarIdioma("en")}>English</button>
+              <div className="language-menu" role="menu">
+                <button role="menuitem" onClick={() => cambiarIdioma("es")}>Español</button>
+                <button role="menuitem" onClick={() => cambiarIdioma("en")}>English</button>
               </div>
             )}
           </div>
 
+          {/* FIX: aria-label en botón de brújula */}
           <button 
-            className={`sidebar-icon icon-compass ${compassActive ? "active" : ""}`} 
-            onClick={toggleCompass} 
+            className={`sidebar-icon icon-compass ${compassActive ? "active" : ""}`}
+            onClick={toggleCompass}
+            aria-label={t("compassMode", "Modo brújula")}
+            aria-pressed={compassActive}
             title={t("compassMode", "Modo brújula")}
           >
-            <span className="material-symbols-outlined">explore</span>
+            <span className="material-symbols-outlined" aria-hidden="true">explore</span>
           </button>
 
-          <button className="sidebar-icon icon-location" onClick={centrarCamara} title={t("centerLocation", "Centrar en mi ubicación")}>
-            <span className="material-symbols-outlined">my_location</span>
+          {/* FIX: aria-label en botón de ubicación */}
+          <button
+            className="sidebar-icon icon-location"
+            onClick={centrarCamara}
+            aria-label={t("centerLocation", "Centrar en mi ubicación")}
+            title={t("centerLocation", "Centrar en mi ubicación")}
+          >
+            <span className="material-symbols-outlined" aria-hidden="true">my_location</span>
           </button>
         </div>
       </div>
 
       {/* ===== BOTÓN MENÚ ===== */}
-      <button className="toggle-btn" onClick={() => setMenuAbierto(!menuAbierto)}>
-        <span className="material-symbols-outlined">
+      {/* FIX: aria-label en botón de menú principal */}
+      <button
+        className="toggle-btn"
+        onClick={() => setMenuAbierto(!menuAbierto)}
+        aria-label={menuAbierto ? t("closeMenu", "Cerrar menú") : t("openMenu", "Abrir menú")}
+        aria-expanded={menuAbierto}
+      >
+        <span className="material-symbols-outlined" aria-hidden="true">
           {menuAbierto ? "close" : "menu"}
         </span>
       </button>
@@ -435,10 +501,8 @@ export default function MapView() {
       {/* ===== PANEL DE CONTROLES INFERIOR ===== */}
       <div className={`controls-panel ${menuAbierto ? "open" : "closed"}`}>
         
-        {/* TÍTULO PRINCIPAL ESTILO COMUNICACIÓN */}
         <h3 className="panel-section-title">{t("whatAreYouLookingFor", "¿Qué buscas?")}</h3>
         
-        {/* PUNTOS DE INTERÉS - 4 COLUMNAS */}
         <div className="categories-grid-comunicacion">
           {Object.entries(CATEGORY_DETAILS).map(([key, config]) => {
             const isActive = activeCategories.includes(key);
@@ -448,17 +512,17 @@ export default function MapView() {
                 className={`category-square-btn ${isActive ? "active" : ""}`}
                 style={{ backgroundColor: config.color }}
                 onClick={() => toggleCategory(key)}
+                aria-pressed={isActive}
               >
                 <div className="cat-icon-circle">
-                  <span className="material-symbols-outlined" style={{ color: config.color }}>
+                  <span className="material-symbols-outlined" aria-hidden="true" style={{ color: config.color }}>
                     {config.icon || "place"}
                   </span>
                 </div>
                 <span className="cat-label">{t(`categories.${key}`)}</span>
                 
-                {/* Visto bueno flotante */}
                 {isActive && (
-                  <div className="cat-check-badge">
+                  <div className="cat-check-badge" aria-hidden="true">
                     <span className="material-symbols-outlined">check</span>
                   </div>
                 )}
@@ -469,7 +533,6 @@ export default function MapView() {
 
         <div className="divider" style={{ margin: "16px 0" }}></div>
 
-        {/* RUTAS TURÍSTICAS */}
         <h3 className="panel-section-title">{t("touristCircuits", "Rutas Turísticas")}</h3>
         
         <div className="circuits-column">
@@ -484,16 +547,17 @@ export default function MapView() {
                 key={key}
                 className={`circuit-card ${isActive ? "active" : ""}`}
                 onClick={() => toggleCircuito(key)}
+                aria-pressed={isActive}
               >
                 <div className={`circuit-icon-block ${cls}`}>
-                  <span className="material-symbols-outlined">{icon}</span>
+                  <span className="material-symbols-outlined" aria-hidden="true">{icon}</span>
                 </div>
                 <div className="circuit-text">
                   <span className={`circuit-title ${cls}-text`}>
                     {t(`circuits.${key}`)}
                   </span>
                 </div>
-                <div className="circuit-chevron">
+                <div className="circuit-chevron" aria-hidden="true">
                   <span className="material-symbols-outlined">chevron_right</span>
                 </div>
               </button>
@@ -504,27 +568,67 @@ export default function MapView() {
 
       {/* ===== GALERÍA ===== */}
       {galeria.activa && galeria.imagenes.length > 0 && (
-        <div className="lightbox-overlay">
+        // FIX: role="dialog" + aria-modal para lectores de pantalla
+        // FIX: onTouchStart / onTouchEnd para swipe en móvil
+        <div
+          className="lightbox-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("gallery", "Galería de imágenes")}
+          onTouchStart={(e) => {
+            touchStartX.current = e.touches[0].clientX;
+          }}
+          onTouchEnd={(e) => {
+            if (touchStartX.current === null) return;
+            const delta = e.changedTouches[0].clientX - touchStartX.current;
+            // umbral de 50 px para distinguir swipe de tap
+            if (Math.abs(delta) > 50) {
+              if (delta < 0) galeriaSiguiente();
+              else galeriaAnterior();
+            }
+            touchStartX.current = null;
+          }}
+        >
           <div className="lightbox-header">
-            <span className="lightbox-counter">
+            <span className="lightbox-counter" aria-live="polite" aria-atomic="true">
               {galeria.indice + 1} / {galeria.imagenes.length}
             </span>
-            <button className="lightbox-close" onClick={cerrarGaleria}>
-              <span className="material-symbols-outlined">close</span>
+            {/* FIX: aria-label en botón de cerrar galería + ref para foco inicial */}
+            <button
+              className="lightbox-close"
+              onClick={cerrarGaleria}
+              ref={lightboxCloseRef}
+              aria-label={t("close", "Cerrar galería")}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
           </div>
 
           {galeria.imagenes.length > 1 && (
-            <button className="lightbox-nav left" onClick={galeriaAnterior}>
-              <span className="material-symbols-outlined">chevron_left</span>
+            // FIX: aria-label en botón de navegación anterior
+            <button
+              className="lightbox-nav left"
+              onClick={galeriaAnterior}
+              aria-label={t("previousPhoto", "Foto anterior")}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">chevron_left</span>
             </button>
           )}
 
-          <img src={galeria.imagenes[galeria.indice]} alt={t("detailedView", "Vista detallada")} className="lightbox-main-img" />
+          <img
+            src={galeria.imagenes[galeria.indice]}
+            alt={t("photoOf", { defaultValue: `Foto {{num}} de {{total}}`, num: galeria.indice + 1, total: galeria.imagenes.length })}
+            className="lightbox-main-img"
+          />
 
           {galeria.imagenes.length > 1 && (
-            <button className="lightbox-nav right" onClick={galeriaSiguiente}>
-              <span className="material-symbols-outlined">chevron_right</span>
+            // FIX: aria-label en botón de navegación siguiente
+            <button
+              className="lightbox-nav right"
+              onClick={galeriaSiguiente}
+              aria-label={t("nextPhoto", "Siguiente foto")}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">chevron_right</span>
             </button>
           )}
         </div>

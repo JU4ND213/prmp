@@ -8,7 +8,7 @@ export const POINTS_BY_COLOR = {
     { id: "centro_medico", name: "Centro Médico", description: "Asistencia médica", lat: -0.0024711, lng: -78.4541513, color: "#fe0000", icon: "local_hospital" },
     { id: "lactario", name: "Lactario", description: "Lactario para lactantes", lat: -0.0024388, lng: -78.4541916, color: "#ffd600", icon: "stroller" },
     { id: "cajero_bg", name: "Cajero banco Guayaquil", description: "Cajero automático del banco Guayaquil", lat: -0.0024103, lng: -78.4545376, color: "#c90b77", icon: "account_balance" },
-    { id: "Hotel_Mitad_del_Mundo", name: "Hotel Mitad del Mundo", description: "Hospédate en un hotel temático con experiencias únicas y una vista privilegiada al Monumento Ecuatorial.", lat: -0.002392598709234328, lng: -78.45463179284593, color: "#041a78", icon: "/images/log-foot.PNG" , imagenes: imgs("18.HOTEL", ["HOTEL.png"]) },
+    { id: "Hotel_Mitad_del_Mundo", name: "Hotel Mitad del Mundo", description: "Hospédate en un hotel temático con experiencias únicas y una vista privilegiada al Monumento Ecuatorial.", lat: -0.0023893251437348707,  lng:  -78.45464746077039, color: "#041a78", icon: "/images/log-foot.PNG" , imagenes: imgs("18.HOTEL", ["HOTEL.png"]) },
   ],
 
   // Baños
