@@ -57,6 +57,37 @@ export default function MapView() {
   
   const [galeria, setGaleria] = useState({ activa: false, imagenes: [], indice: 0 });
 
+  // --- NUEVO ESTADO PARA DRIVE ---
+  const [imagenesDrive, setImagenesDrive] = useState({});
+
+  useEffect(() => {
+    // Tu URL exacta del script de Google
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjqfPInT5hLAppqzj4vpPQPGBu9AZdiNcUZ6Yn2Bt89HbAGUjkd7Z1mJ2CSEfknpWgEw/exec";
+    
+    fetch(SCRIPT_URL)
+      .then(res => res.json())
+      .then(data => {
+        console.log("Fotos cargadas desde Drive:", data);
+        setImagenesDrive(data);
+      })
+      .catch(err => console.error("Error cargando fotos desde Drive:", err));
+  }, []);
+
+  // --- NUEVO: PRECARGADOR DE IMÁGENES EN SEGUNDO PLANO ---
+  useEffect(() => {
+    // Si ya tenemos datos de Drive, empezamos a precargar
+    if (Object.keys(imagenesDrive).length > 0) {
+      Object.values(imagenesDrive).forEach(imagenesLugar => {
+        if (imagenesLugar && imagenesLugar.length > 0) {
+          // Precargamos solo la portada de cada sitio para no saturar la red
+          const img = new Image();
+          img.src = `https://images.weserv.nl/?url=${encodeURIComponent(imagenesLugar[0])}`;
+        }
+      });
+    }
+  }, [imagenesDrive]);
+  // -------------------------------------------------------
+
   const cambiarIdioma = (lng) => {
     i18n.changeLanguage(lng);
     setIdiomaMenuAbierto(false);
@@ -323,18 +354,24 @@ export default function MapView() {
               {/* EL CONTENIDO SE OCULTA SI ESTÁ MINIMIZADO */}
               {!panelMinimizado && (
                 <>
-                  {!rutaActiva && selectedPunto.imagenes && selectedPunto.imagenes.length > 0 && (
-                    <div 
-                      className="hero-image-container" 
-                      onClick={() => setGaleria({ activa: true, imagenes: selectedPunto.imagenes, indice: 0 })}
-                    >
-                      <img src={selectedPunto.imagenes[0]} alt={selectedPunto.nombre || selectedPunto.name} />
-                      <div className="hero-overlay">
-                        <span className="material-symbols-outlined" aria-hidden="true">photo_library</span>
-                        <span>{t("view", "Ver")} {selectedPunto.imagenes.length} {t("photos", "fotos")}</span>
+                  {/* --- GALERÍA CON GOOGLE DRIVE --- */}
+                  {(() => {
+                    const fotosActualizadas = imagenesDrive[selectedPunto.id] || selectedPunto.imagenes || [];
+                    
+                    return !rutaActiva && fotosActualizadas.length > 0 ? (
+                      <div 
+                        className="hero-image-container" 
+                        onClick={() => setGaleria({ activa: true, imagenes: fotosActualizadas, indice: 0 })}
+                      >
+                        <img src={`https://images.weserv.nl/?url=${encodeURIComponent(fotosActualizadas[0])}`} alt={selectedPunto.nombre || selectedPunto.name} />
+                        <div className="hero-overlay">
+                          <span className="material-symbols-outlined" aria-hidden="true">photo_library</span>
+                          <span>{t("view", "Ver")} {fotosActualizadas.length} {t("photos", "fotos")}</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    ) : null;
+                  })()}
+                  {/* ------------------------------- */}
 
                   <div className="detail-body">
                     <div className="detail-header-text">
@@ -616,7 +653,7 @@ export default function MapView() {
           )}
 
           <img
-            src={galeria.imagenes[galeria.indice]}
+            src={`https://images.weserv.nl/?url=${encodeURIComponent(galeria.imagenes[galeria.indice])}&w=1000`}
             alt={t("photoOf", { defaultValue: `Foto {{num}} de {{total}}`, num: galeria.indice + 1, total: galeria.imagenes.length })}
             className="lightbox-main-img"
           />

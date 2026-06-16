@@ -61,7 +61,7 @@ export const POINTS_BY_COLOR = {
     { id: "viviendas_ancestrales", name: "Viviendas ancestrales", description: "Descubre cómo vivían los pueblos y nacionalidades indígenas del Ecuador a través de réplicas de viviendas tradicionales, sus materiales de construcción y formas de vida.", lat: -0.0026562, lng: -78.4537317, color: "#ffc800", icon: "attractions", 
       imagenes: imgs("13.VIVI.ANCESTRALES", ["Viviendas.png", "IMG_8852.png", "IMG_8854.png", "IMG_8856.png", "IMG_8857.png", "IMG_8861.png", "IMG_8862.png", "IMG_8865.png", "IMG_8867.png", "IMG_8871.png"]) 
     },
-    { id: "inti_raymi", name: "Inti Raymi Fiesta del sol", description: "Fiesta del sol celebrada en el monumento", lat: -0.0029441, lng: -78.454315, color: "#ffc800", icon: "attractions" },
+    { id: "balbanera", name: "Balbanera", description: "", lat: -0.0029441, lng: -78.454315, color: "#ffc800", icon: "attractions" },
     { id: "Monumento", name: "Monumento a la Mitad del Mundo", description: "Explora la riqueza cultural del Ecuador y conoce la historia del emblemático monumento ubicado en la línea ecuatorial.", lat: -0.0021191507224225577, lng: -78.45583279786655 , color: "#ffc800", icon: "attractions", 
       imagenes: imgs("15.MONUMENRO E INTERIOR", ["Mitad_del_Mundo_01.png", "IMG_9046.png", "IMG_9085.png", "IMG_9087.png"]) 
     },
